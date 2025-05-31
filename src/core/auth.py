@@ -5,6 +5,9 @@
 
 from typing import Optional, Dict, Any
 from datetime import datetime, timedelta
+import json
+import os
+from pathlib import Path
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -22,34 +25,62 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token", auto_error=False)
 # 密码加密上下文
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-# 模拟用户数据库（实际项目中应使用真实数据库）
-fake_users_db: Dict[str, UserInDB] = {
-    "admin": UserInDB(
-        username="admin",
-        hashed_password=pwd_context.hash("adminpass"),
-        role="admin",
-        email="admin@example.com",
-        is_active=True,
-        created_at=datetime.now()
-    ),
-    "analyst": UserInDB(
-        username="analyst",
-        hashed_password=pwd_context.hash("analyst123"),
-        role="analyst",
-        email="analyst@example.com",
-        is_active=True,
-        created_at=datetime.now()
-    ),
-    "viewer": UserInDB(
-        username="viewer",
-        hashed_password=pwd_context.hash("viewer123"),
-        role="viewer",
-        email="viewer@example.com",
-        is_active=True,
-        created_at=datetime.now()
-    )
-}
+# 用户数据文件路径
+USERS_FILE = settings.DATA_DIR / "users.json"
 
+class DateTimeEncoder(json.JSONEncoder):
+    """处理 datetime 序列化"""
+    def default(self, obj):
+        if isinstance(obj, datetime):
+            return obj.isoformat()
+        return super().default(obj)
+
+def load_users() -> Dict[str, UserInDB]:
+    """加载用户数据"""
+    if not USERS_FILE.exists():
+        # 初始化默认用户
+        default_users = {
+            "admin": UserInDB(
+                username="admin",
+                hashed_password=pwd_context.hash("adminpass"),
+                role="admin",
+                email="admin@example.com",
+                is_active=True,
+                created_at=datetime.now()
+            ),
+            "analyst": UserInDB(
+                username="analyst",
+                hashed_password=pwd_context.hash("analyst123"),
+                role="analyst",
+                email="analyst@example.com",
+                is_active=True,
+                created_at=datetime.now()
+            ),
+            "viewer": UserInDB(
+                username="viewer",
+                hashed_password=pwd_context.hash("viewer123"),
+                role="viewer",
+                email="viewer@example.com",
+                is_active=True,
+                created_at=datetime.now()
+            )
+        }
+        
+        # 保存默认用户数据
+        USERS_FILE.parent.mkdir(parents=True, exist_ok=True)
+        with open(USERS_FILE, "w", encoding="utf-8") as f:
+            json.dump({k: v.dict() for k, v in default_users.items()}, f, ensure_ascii=False, indent=2, cls=DateTimeEncoder)
+        
+        return default_users
+    
+    # 加载现有用户数据
+    with open(USERS_FILE, "r", encoding="utf-8") as f:
+        users_data = json.load(f)
+    
+    return {k: UserInDB(**v) for k, v in users_data.items()}
+
+# 加载用户数据
+users_db = load_users()
 
 class AuthService:
     """认证服务类"""
@@ -67,7 +98,7 @@ class AuthService:
     @staticmethod
     def get_user(username: str) -> Optional[UserInDB]:
         """获取用户信息"""
-        return fake_users_db.get(username)
+        return users_db.get(username)
     
     @staticmethod
     def authenticate_user(username: str, password: str) -> Optional[UserInDB]:
@@ -89,7 +120,7 @@ class AuthService:
         email: Optional[str] = None
     ) -> bool:
         """创建新用户"""
-        if username in fake_users_db:
+        if username in users_db:
             return False
         
         hashed_password = AuthService.get_password_hash(password)
@@ -102,17 +133,22 @@ class AuthService:
             created_at=datetime.now()
         )
         
-        fake_users_db[username] = user
+        users_db[username] = user
+        
+        # 保存到文件
+        with open(USERS_FILE, "w", encoding="utf-8") as f:
+            json.dump({k: v.dict() for k, v in users_db.items()}, f, ensure_ascii=False, indent=2, cls=DateTimeEncoder)
+        
         system_logger.info("新用户创建成功", username=username, role=role)
         return True
     
     @staticmethod
     def update_user(username: str, **kwargs) -> bool:
         """更新用户信息"""
-        if username not in fake_users_db:
+        if username not in users_db:
             return False
         
-        user = fake_users_db[username]
+        user = users_db[username]
         for key, value in kwargs.items():
             if hasattr(user, key):
                 setattr(user, key, value)
@@ -124,11 +160,11 @@ class AuthService:
     @staticmethod
     def delete_user(username: str) -> bool:
         """删除用户（软删除）"""
-        if username not in fake_users_db:
+        if username not in users_db:
             return False
         
-        fake_users_db[username].is_active = False
-        fake_users_db[username].updated_at = datetime.now()
+        users_db[username].is_active = False
+        users_db[username].updated_at = datetime.now()
         system_logger.info("用户已停用", username=username)
         return True
     
@@ -144,7 +180,7 @@ class AuthService:
                 created_at=user.created_at,
                 updated_at=user.updated_at
             )
-            for user in fake_users_db.values()
+            for user in users_db.values()
         ]
 
 
@@ -204,8 +240,7 @@ def get_current_user(token: str = Depends(oauth2_scheme)) -> Optional[User]:
         return None
     
     try:
-        # 在简化版本中，token就是用户名
-        user_data = fake_users_db.get(token)
+        user_data = users_db.get(token)
         if not user_data:
             raise TokenError("Token无效")
         

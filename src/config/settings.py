@@ -31,7 +31,7 @@ class Settings:
     TEMPLATES_DIR = SRC_ROOT / "templates"
     REPORTS_DIR = PROJECT_ROOT / "output" / "reports"
     PDF_REPORTS_DIR = PROJECT_ROOT / "pdf_reports"
-    DATA_DIR = PROJECT_ROOT / "data"
+    DATA_DIR = SRC_ROOT / "data"
     LOGS_DIR = PROJECT_ROOT / "logs"
     
     # 上传配置
