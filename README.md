@@ -1,122 +1,119 @@
-# 分析报告系统 (Analysis Report System)
+# 数据分析报告系统
 
-一个基于Python和Vue.js的数据分析和报告生成系统，提供数据处理、分析、可视化和报告生成功能。
+## 项目概述
+数据分析报告系统是一个用于数据导入、分析、可视化和报告生成的综合平台。系统支持多种数据格式，提供丰富的分析功能，并能生成多种格式的分析报告。
 
 ## 功能特性
-
-### 1. 数据处理
-- 支持CSV、Excel、JSON格式数据导入
-- 数据预处理（缺失值处理、异常值处理、数据类型转换）
-- 数据验证和清洗
-- 数据导出功能
-
-### 2. 数据分析
-- 描述性统计分析
-- 相关性分析
-- 趋势分析
-- 预测分析
-- 客户分群分析
-
-### 3. 报告生成
-- 可视化报告生成
-- 分析报告生成
-- 执行摘要生成
-- 支持多种输出格式（HTML、PDF、Markdown、JSON）
-
-### 4. 系统管理
-- 用户认证和授权
-- 权限管理
-- 系统日志记录
-- 系统备份和恢复
+- 数据管理：支持 CSV、Excel、JSON 格式的数据导入和管理
+- 数据分析：提供描述性分析、相关性分析、趋势分析和预测分析
+- 报告生成：支持生成可视化报告和分析报告，输出格式包括 HTML、PDF、Markdown 和 JSON
+- 系统管理：用户管理、日志查看和系统备份恢复
 
 ## 技术栈
-
 ### 后端
 - Python 3.8+
 - FastAPI
 - Pandas
 - NumPy
-- JWT认证
-- WeasyPrint (PDF生成)
+- Scikit-learn
+- Jinja2
+- WeasyPrint
 
 ### 前端
-- Vue.js 3
+- Vue 3
+- Vue Router
 - Element Plus
 - Axios
 - ECharts
 
-## 安装说明
-
-1. 克隆项目
-```bash
-git clone https://github.com/yourusername/analysis_report_system.git
-cd analysis_report_system
+## 项目结构
+```
+analysis_report_system/
+├── src/
+│   ├── api/            # API 接口
+│   ├── core/           # 核心功能模块
+│   ├── static/         # 静态资源
+│   ├── templates/      # 模板文件
+│   └── utils/          # 工具函数
+├── tests/              # 单元测试
+├── frontend/           # 前端项目
+│   ├── src/
+│   │   ├── views/      # 页面组件
+│   │   ├── router/     # 路由配置
+│   │   └── assets/     # 静态资源
+│   └── public/         # 公共资源
+└── docs/              # 项目文档
 ```
 
-2. 安装后端依赖
+## 实现进度
+### 后端实现
+- [x] 数据处理器 (DataProcessor)
+- [x] 分析引擎 (AnalysisEngine)
+- [x] 报告生成器 (ReportGenerator)
+- [x] 系统管理器 (SystemManager)
+- [x] API 接口实现
+- [x] 单元测试
+
+### 前端实现
+- [x] 项目初始化
+- [x] 路由配置
+- [x] 登录页面
+- [x] 仪表盘页面
+  - [x] 数据管理模块
+  - [x] 数据分析模块
+  - [x] 报告管理模块
+  - [x] 系统管理模块
+- [ ] 数据预览组件
+- [ ] 图表展示组件
+- [ ] 错误处理优化
+- [ ] 加载状态优化
+- [ ] UI/UX 优化
+
+## 安装和运行
+### 后端
+1. 创建虚拟环境：
+```bash
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+venv\Scripts\activate     # Windows
+```
+
+2. 安装依赖：
 ```bash
 pip install -r requirements.txt
 ```
 
-3. 安装前端依赖
+3. 运行服务：
+```bash
+uvicorn src.api.main:app --host 0.0.0.0 --port 8000
+```
+
+### 前端
+1. 进入前端目录：
 ```bash
 cd frontend
+```
+
+2. 安装依赖：
+```bash
 npm install
 ```
 
-## 使用方法
-
-1. 启动后端服务
+3. 运行开发服务器：
 ```bash
-python src/api/main.py
+npm run dev
 ```
 
-2. 启动前端服务
+## API 文档
+启动后端服务后，访问 http://localhost:8000/docs 查看完整的 API 文档。
+
+## 测试
+运行单元测试：
 ```bash
-cd frontend
-npm run serve
+python -m pytest tests/
 ```
-
-3. 访问系统
-打开浏览器访问 http://localhost:8080
-
-## 项目结构
-
-```
-analysis_report_system/
-├── src/
-│   ├── api/            # API接口
-│   ├── core/           # 核心功能模块
-│   ├── static/         # 静态资源
-│   └── templates/      # 模板文件
-├── tests/              # 测试文件
-├── frontend/           # 前端代码
-└── docs/              # 文档
-```
-
-## 开发进度
-
-### 已完成
-- [x] 数据处理模块
-- [x] 分析引擎模块
-- [x] 报告生成模块
-- [x] 系统管理模块
-- [x] API接口实现
-- [x] 前端界面实现
-- [x] 单元测试
-
-### 进行中
-- [ ] 系统集成测试
-- [ ] 性能优化
-- [ ] 文档完善
-
-### 待完成
-- [ ] 部署文档
-- [ ] 用户手册
-- [ ] API文档
 
 ## 贡献指南
-
 1. Fork 项目
 2. 创建特性分支
 3. 提交更改
@@ -124,5 +121,4 @@ analysis_report_system/
 5. 创建 Pull Request
 
 ## 许可证
-
 MIT License
