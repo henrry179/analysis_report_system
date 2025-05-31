@@ -1,0 +1,26 @@
+{
+  "processing_log": [
+    {
+      "timestamp": "2025-05-25T22:03:07.077367",
+      "operation": "数据验证",
+      "details": "验证结果: 通过"
+    },
+    {
+      "timestamp": "2025-05-25T22:03:07.097293",
+      "operation": "数据清洗",
+      "details": "处理了 11 个操作"
+    },
+    {
+      "timestamp": "2025-05-25T22:03:07.100030",
+      "operation": "数据转换",
+      "details": "应用了 1 个转换"
+    },
+    {
+      "timestamp": "2025-05-25T22:03:07.105992",
+      "operation": "完整流水线",
+      "details": "处理完成，耗时 0.03 秒"
+    }
+  ],
+  "data_quality_metrics": {},
+  "export_time": "2025-05-25T22:03:07.106032"
+}

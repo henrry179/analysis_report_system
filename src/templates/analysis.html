@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>专业分析中心 - 业务分析报告系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .analysis-tool-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .analysis-tool-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .analysis-tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .analysis-tool-card:hover::before {
+            left: 100%;
+        }
+        
+        .tool-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--icon-color-1), var(--icon-color-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .category-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 10px;
+        }
+        
+        .analysis-workspace {
+            min-height: 500px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+        
+        .parameter-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .results-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .metric-item {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+        
+        .insight-item {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+        
+        .recommendation-item {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #333;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border-left: 4px solid #00d4ff;
+        }
+        
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 50px;
+        }
+        
+        .progress-indicator {
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            margin: 20px 0;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+        }
+        
+        .step-item {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+        
+        .step-item::after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: #ddd;
+            z-index: 0;
+        }
+        
+        .step-item:last-child::after {
+            display: none;
+        }
+        
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #ddd;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .step-circle.active {
+            background: #667eea;
+        }
+        
+        .step-circle.completed {
+            background: #28a745;
+        }
+        
+        .visualization-container {
+            min-height: 400px;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/"><i class="bi bi-graph-up-arrow"></i> 分析报告系统</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/"><i class="bi bi-house"></i> 首页</a>
+                <a class="nav-link" href="/reports"><i class="bi bi-file-earmark-text"></i> 报告管理</a>
+                <a class="nav-link active" href="/analysis"><i class="bi bi-graph-up"></i> 分析中心</a>
+                <a class="nav-link" href="/dashboard"><i class="bi bi-speedometer2"></i> 仪表盘</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <!-- 面包屑导航 -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/"><i class="bi bi-house"></i> 首页</a></li>
+                <li class="breadcrumb-item active"><i class="bi bi-graph-up"></i> 专业分析中心</li>
+            </ol>
+        </nav>
+
+        <!-- 页面标题 -->
+        <div class="page-header">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="mb-3"><i class="bi bi-cpu"></i> 专业级数据分析中心</h1>
+                    <p class="lead mb-0">企业级分析工具，深度挖掘数据价值，驱动智能决策</p>
+                    <small class="d-block mt-2 opacity-75">
+                        支持机器学习、统计分析、预测建模等专业功能
+                    </small>
+                </div>
+                <div class="col-lg-4 text-end">
+                    <button class="btn btn-light btn-lg" onclick="showQuickStart()">
+                        <i class="bi bi-play-circle"></i> 快速开始
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 工具类别选择 -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="bi bi-funnel"></i> 分析工具分类</h5>
+                        <div class="btn-group" role="group">
+                            <input type="radio" class="btn-check" name="category" id="all" value="all" checked>
+                            <label class="btn btn-outline-primary" for="all">全部工具</label>
+                            
+                            <input type="radio" class="btn-check" name="category" id="data_quality" value="data_quality">
+                            <label class="btn btn-outline-primary" for="data_quality">数据质量</label>
+                            
+                            <input type="radio" class="btn-check" name="category" id="customer_analysis" value="customer_analysis">
+                            <label class="btn btn-outline-primary" for="customer_analysis">客户分析</label>
+                            
+                            <input type="radio" class="btn-check" name="category" id="prediction" value="prediction">
+                            <label class="btn btn-outline-primary" for="prediction">预测建模</label>
+                            
+                            <input type="radio" class="btn-check" name="category" id="statistical" value="statistical">
+                            <label class="btn btn-outline-primary" for="statistical">统计分析</label>
+                            
+                            <input type="radio" class="btn-check" name="category" id="forecasting" value="forecasting">
+                            <label class="btn btn-outline-primary" for="forecasting">时间序列</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 分析工具网格 -->
+        <div class="row" id="analysis-tools-grid">
+            <!-- 工具卡片将通过JavaScript动态加载 -->
+        </div>
+
+        <!-- 分析工作区 -->
+        <div class="analysis-workspace" id="analysis-workspace" style="display: none;">
+            <!-- 步骤指示器 -->
+            <div class="step-indicator">
+                <div class="step-item">
+                    <div class="step-circle" id="step-1">1</div>
+                    <small>选择工具</small>
+                </div>
+                <div class="step-item">
+                    <div class="step-circle" id="step-2">2</div>
+                    <small>配置参数</small>
+                </div>
+                <div class="step-item">
+                    <div class="step-circle" id="step-3">3</div>
+                    <small>执行分析</small>
+                </div>
+                <div class="step-item">
+                    <div class="step-circle" id="step-4">4</div>
+                    <small>查看结果</small>
+                </div>
+            </div>
+            
+            <!-- 进度条 -->
+            <div class="progress-indicator" id="progress-indicator"></div>
+            
+            <!-- 工具配置区域 -->
+            <div id="tool-configuration" style="display: none;">
+                <div class="parameter-card">
+                    <h5><i class="bi bi-gear"></i> 分析参数配置</h5>
+                    <div id="parameter-inputs">
+                        <!-- 参数输入将根据选择的工具动态生成 -->
+                    </div>
+                    <button class="btn btn-primary btn-lg mt-3" onclick="executeAnalysis()">
+                        <i class="bi bi-play-fill"></i> 开始分析
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 加载指示器 -->
+            <div class="loading-spinner" id="loading-spinner">
+                <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                    <span class="visually-hidden">分析中...</span>
+                </div>
+                <h5 class="mt-3">正在分析数据...</h5>
+                <p class="text-muted">请稍候，我们正在使用专业算法分析您的数据</p>
+            </div>
+            
+            <!-- 结果展示区域 -->
+            <div id="analysis-results" style="display: none;">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="results-card">
+                            <h5><i class="bi bi-graph-up"></i> 分析结果</h5>
+                            <div id="results-content">
+                                <!-- 结果内容将动态生成 -->
+                            </div>
+                        </div>
+                        
+                        <!-- 可视化区域 -->
+                        <div class="visualization-container">
+                            <h5><i class="bi bi-pie-chart"></i> 数据可视化</h5>
+                            <div id="visualization-content">
+                                <!-- 图表将在这里显示 -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <!-- 关键指标 -->
+                        <div class="results-card">
+                            <h5><i class="bi bi-speedometer2"></i> 关键指标</h5>
+                            <div id="key-metrics">
+                                <!-- 关键指标将动态生成 -->
+                            </div>
+                        </div>
+                        
+                        <!-- 洞察与建议 -->
+                        <div class="results-card">
+                            <h5><i class="bi bi-lightbulb"></i> 智能洞察</h5>
+                            <div id="insights-content">
+                                <!-- 洞察内容将动态生成 -->
+                            </div>
+                        </div>
+                        
+                        <div class="results-card">
+                            <h5><i class="bi bi-check-circle"></i> 行动建议</h5>
+                            <div id="recommendations-content">
+                                <!-- 建议内容将动态生成 -->
+                            </div>
+                        </div>
+                        
+                        <!-- 导出选项 -->
+                        <div class="results-card">
+                            <h5><i class="bi bi-download"></i> 导出结果</h5>
+                            <button class="btn btn-outline-primary w-100 mb-2" onclick="exportResults('pdf')">
+                                <i class="bi bi-file-earmark-pdf"></i> 导出PDF报告
+                            </button>
+                            <button class="btn btn-outline-success w-100 mb-2" onclick="exportResults('excel')">
+                                <i class="bi bi-file-earmark-excel"></i> 导出Excel
+                            </button>
+                            <button class="btn btn-outline-info w-100" onclick="exportResults('json')">
+                                <i class="bi bi-file-earmark-code"></i> 导出数据(JSON)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 快速数据上传区域 -->
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title mb-0"><i class="bi bi-upload"></i> 数据上传分析</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">支持CSV、Excel、JSON等格式，自动识别数据结构并推荐最适合的分析方法</p>
+                        <div class="mb-3">
+                            <input type="file" class="form-control" id="data-file" accept=".csv,.xlsx,.xls,.json">
+                        </div>
+                        <button class="btn btn-primary w-100" onclick="uploadAndAnalyze()">
+                            <i class="bi bi-cloud-upload"></i> 上传并智能分析
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="card-title mb-0"><i class="bi bi-database"></i> 数据库连接</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">直接连接到您的数据库，实时分析最新的业务数据</p>
+                        <div class="mb-3">
+                            <select class="form-select" id="db-type">
+                                <option value="">选择数据库类型...</option>
+                                <option value="mysql">MySQL</option>
+                                <option value="postgresql">PostgreSQL</option>
+                                <option value="mongodb">MongoDB</option>
+                                <option value="sqlite">SQLite</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-success w-100" onclick="connectDatabase()">
+                            <i class="bi bi-plug"></i> 连接数据库
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-light mt-5 py-4">
+        <div class="container text-center">
+            <p class="text-muted mb-0">&copy; 2024 专业分析报告系统. 企业级数据分析解决方案.</p>
+        </div>
+    </footer>
+
+    <!-- 引入必要的脚本 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        // 全局变量
+        let currentTool = null;
+        let analysisResults = null;
+        let availableTools = [];
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAnalysisTools();
+            initializeEventListeners();
+        });
+        
+        // 加载分析工具
+        async function loadAnalysisTools() {
+            try {
+                const response = await fetch('/api/analysis/tools');
+                const data = await response.json();
+                availableTools = data.tools;
+                renderAnalysisTools(availableTools);
+            } catch (error) {
+                console.error('加载分析工具失败:', error);
+                showFallbackTools();
+            }
+        }
+        
+        // 渲染分析工具
+        function renderAnalysisTools(tools) {
+            const grid = document.getElementById('analysis-tools-grid');
+            grid.innerHTML = '';
+            
+            tools.forEach(tool => {
+                const toolCard = createToolCard(tool);
+                grid.appendChild(toolCard);
+            });
+        }
+        
+        // 创建工具卡片
+        function createToolCard(tool) {
+            const col = document.createElement('div');
+            col.className = 'col-lg-4 col-md-6 mb-4';
+            
+            const iconColors = getIconColors(tool.category);
+            
+            col.innerHTML = `
+                <div class="analysis-tool-card" 
+                     onclick="selectTool('${tool.id}')" 
+                     data-category="${tool.category}"
+                     style="--icon-color-1: ${iconColors[0]}; --icon-color-2: ${iconColors[1]};">
+                    <span class="category-badge bg-${getCategoryBadgeColor(tool.category)} text-white">
+                        ${getCategoryDisplayName(tool.category)}
+                    </span>
+                    <div class="card-body text-center p-4">
+                        <i class="bi ${getToolIcon(tool.id)} tool-icon"></i>
+                        <h5 class="card-title">${tool.name}</h5>
+                        <p class="card-text">${tool.description}</p>
+                        <div class="mt-3">
+                            ${tool.available ? 
+                                '<span class="badge bg-success"><i class="bi bi-check-circle"></i> 可用</span>' : 
+                                '<span class="badge bg-warning"><i class="bi bi-exclamation-triangle"></i> 需要依赖</span>'
+                            }
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            return col;
+        }
+        
+        // 获取工具图标
+        function getToolIcon(toolId) {
+            const icons = {
+                'data_profile': 'bi-clipboard-data',
+                'customer_segmentation': 'bi-people',
+                'predictive_modeling': 'bi-graph-up-arrow',
+                'ab_test': 'bi-bar-chart',
+                'time_series_forecast': 'bi-graph-up',
+                'correlation_analysis': 'bi-diagram-3',
+                'outlier_detection': 'bi-exclamation-diamond'
+            };
+            return icons[toolId] || 'bi-gear';
+        }
+        
+        // 获取图标颜色
+        function getIconColors(category) {
+            const colors = {
+                'data_quality': ['#667eea', '#764ba2'],
+                'customer_analysis': ['#f093fb', '#f5576c'],
+                'prediction': ['#4facfe', '#00f2fe'],
+                'statistical': ['#43e97b', '#38f9d7'],
+                'forecasting': ['#fa709a', '#fee140'],
+                'testing': ['#a8edea', '#fed6e3']
+            };
+            return colors[category] || ['#667eea', '#764ba2'];
+        }
+        
+        // 获取类别徽章颜色
+        function getCategoryBadgeColor(category) {
+            const colors = {
+                'data_quality': 'primary',
+                'customer_analysis': 'danger',
+                'prediction': 'info',
+                'statistical': 'success',
+                'forecasting': 'warning',
+                'testing': 'secondary'
+            };
+            return colors[category] || 'primary';
+        }
+        
+        // 获取类别显示名称
+        function getCategoryDisplayName(category) {
+            const names = {
+                'data_quality': '数据质量',
+                'customer_analysis': '客户分析',
+                'prediction': '预测建模',
+                'statistical': '统计分析',
+                'forecasting': '时间序列',
+                'testing': '测试分析'
+            };
+            return names[category] || category;
+        }
+        
+        // 选择分析工具
+        function selectTool(toolId) {
+            currentTool = availableTools.find(tool => tool.id === toolId);
+            if (!currentTool) return;
+            
+            // 显示工作区
+            document.getElementById('analysis-workspace').style.display = 'block';
+            
+            // 更新步骤指示器
+            updateStepIndicator(1);
+            
+            // 生成参数配置界面
+            generateParameterInputs(currentTool);
+            
+            // 显示配置区域
+            document.getElementById('tool-configuration').style.display = 'block';
+            
+            // 滚动到工作区
+            document.getElementById('analysis-workspace').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+        
+        // 生成参数输入界面
+        function generateParameterInputs(tool) {
+            const container = document.getElementById('parameter-inputs');
+            container.innerHTML = '';
+            
+            // 根据工具类型生成不同的参数输入
+            const parameters = getToolParameters(tool.id);
+            
+            parameters.forEach(param => {
+                const paramDiv = document.createElement('div');
+                paramDiv.className = 'mb-3';
+                paramDiv.innerHTML = createParameterInput(param);
+                container.appendChild(paramDiv);
+            });
+        }
+        
+        // 获取工具参数配置
+        function getToolParameters(toolId) {
+            const parameters = {
+                'data_profile': [
+                    { name: 'target_column', label: '目标列', type: 'text', placeholder: '可选：指定目标分析列' }
+                ],
+                'customer_segmentation': [
+                    { name: 'features', label: '分析特征', type: 'multi-select', 
+                      options: ['revenue', 'frequency', 'recency', 'avg_order_value'], 
+                      default: ['revenue', 'frequency', 'recency'] },
+                    { name: 'method', label: '聚类方法', type: 'select', 
+                      options: [
+                          { value: 'kmeans', label: 'K-Means聚类' },
+                          { value: 'dbscan', label: 'DBSCAN聚类' },
+                          { value: 'hierarchical', label: '层次聚类' }
+                      ], default: 'kmeans' }
+                ],
+                'predictive_modeling': [
+                    { name: 'target_column', label: '目标变量', type: 'text', required: true, placeholder: '要预测的目标列名' },
+                    { name: 'model_type', label: '模型类型', type: 'select', 
+                      options: [
+                          { value: 'auto', label: '自动选择' },
+                          { value: 'classification', label: '分类模型' },
+                          { value: 'regression', label: '回归模型' }
+                      ], default: 'auto' }
+                ],
+                'ab_test': [
+                    { name: 'metric', label: '测试指标', type: 'text', required: true, placeholder: '测试的关键指标' },
+                    { name: 'confidence_level', label: '置信水平', type: 'number', 
+                      min: 0.8, max: 0.99, step: 0.01, default: 0.95 }
+                ],
+                'time_series_forecast': [
+                    { name: 'date_column', label: '日期列', type: 'text', required: true, placeholder: '日期时间列名' },
+                    { name: 'value_column', label: '数值列', type: 'text', required: true, placeholder: '要预测的数值列名' },
+                    { name: 'periods', label: '预测期数', type: 'number', min: 1, max: 36, default: 12 }
+                ]
+            };
+            
+            return parameters[toolId] || [];
+        }
+        
+        // 创建参数输入控件
+        function createParameterInput(param) {
+            switch (param.type) {
+                case 'text':
+                    return `
+                        <label class="form-label">${param.label} ${param.required ? '<span class="text-danger">*</span>' : ''}</label>
+                        <input type="text" class="form-control" name="${param.name}" 
+                               placeholder="${param.placeholder || ''}" 
+                               value="${param.default || ''}"
+                               ${param.required ? 'required' : ''}>
+                    `;
+                case 'number':
+                    return `
+                        <label class="form-label">${param.label}</label>
+                        <input type="number" class="form-control" name="${param.name}" 
+                               min="${param.min || ''}" max="${param.max || ''}" 
+                               step="${param.step || ''}" value="${param.default || ''}">
+                    `;
+                case 'select':
+                    const options = param.options.map(opt => 
+                        `<option value="${opt.value}" ${opt.value === param.default ? 'selected' : ''}>${opt.label}</option>`
+                    ).join('');
+                    return `
+                        <label class="form-label">${param.label}</label>
+                        <select class="form-select" name="${param.name}">
+                            ${options}
+                        </select>
+                    `;
+                case 'multi-select':
+                    const multiOptions = param.options.map(opt => 
+                        `<option value="${opt}" ${param.default && param.default.includes(opt) ? 'selected' : ''}>${opt}</option>`
+                    ).join('');
+                    return `
+                        <label class="form-label">${param.label}</label>
+                        <select class="form-select" name="${param.name}" multiple>
+                            ${multiOptions}
+                        </select>
+                    `;
+                default:
+                    return `<input type="text" class="form-control" name="${param.name}">`;
+            }
+        }
+        
+        // 执行分析
+        async function executeAnalysis() {
+            if (!currentTool) return;
+            
+            // 收集参数
+            const parameters = collectParameters();
+            
+            // 更新步骤指示器
+            updateStepIndicator(2);
+            
+            // 显示加载状态
+            showLoading();
+            
+            try {
+                const result = await callAnalysisAPI(currentTool.id, parameters);
+                analysisResults = result;
+                
+                // 更新步骤指示器
+                updateStepIndicator(3);
+                
+                // 显示结果
+                displayResults(result);
+                
+            } catch (error) {
+                console.error('分析失败:', error);
+                showError('分析失败: ' + error.message);
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        // 收集参数
+        function collectParameters() {
+            const form = document.getElementById('parameter-inputs');
+            const formData = new FormData(form);
+            const parameters = {};
+            
+            for (let [key, value] of formData.entries()) {
+                if (parameters[key]) {
+                    // 处理多选情况
+                    if (!Array.isArray(parameters[key])) {
+                        parameters[key] = [parameters[key]];
+                    }
+                    parameters[key].push(value);
+                } else {
+                    parameters[key] = value;
+                }
+            }
+            
+            return parameters;
+        }
+        
+        // 调用分析API
+        async function callAnalysisAPI(toolId, parameters) {
+            const apiEndpoints = {
+                'data_profile': '/api/analysis/data-profile',
+                'customer_segmentation': '/api/analysis/customer-segmentation',
+                'predictive_modeling': '/api/analysis/predictive-modeling',
+                'ab_test': '/api/analysis/ab-test',
+                'time_series_forecast': '/api/analysis/time-series-forecast'
+            };
+            
+            const endpoint = apiEndpoints[toolId];
+            if (!endpoint) {
+                throw new Error('不支持的分析工具');
+            }
+            
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    ...parameters,
+                    data: generateSampleData(toolId) // 使用模拟数据
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error(`API调用失败: ${response.status}`);
+            }
+            
+            return await response.json();
+        }
+        
+        // 生成示例数据
+        function generateSampleData(toolId) {
+            // 这里应该使用实际上传的数据，现在返回模拟数据
+            return {
+                sample: true,
+                rows: 1000,
+                columns: ['id', 'revenue', 'frequency', 'recency', 'date', 'value']
+            };
+        }
+        
+        // 显示分析结果
+        function displayResults(results) {
+            updateStepIndicator(4);
+            
+            // 显示结果区域
+            document.getElementById('analysis-results').style.display = 'block';
+            
+            // 填充结果内容
+            displayResultsContent(results);
+            displayKeyMetrics(results);
+            displayInsights(results);
+            displayRecommendations(results);
+            
+            // 如果有可视化数据，创建图表
+            if (results.visualization_data) {
+                createVisualization(results.visualization_data);
+            }
+            
+            // 滚动到结果区域
+            document.getElementById('analysis-results').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+        
+        // 显示结果内容
+        function displayResultsContent(results) {
+            const container = document.getElementById('results-content');
+            let content = '';
+            
+            // 根据不同的分析类型显示不同的结果
+            if (results.basic_info) {
+                content += `
+                    <h6>数据概览</h6>
+                    <p>数据行数: ${results.basic_info.rows || 'N/A'}</p>
+                    <p>数据列数: ${results.basic_info.columns || 'N/A'}</p>
+                `;
+            }
+            
+            if (results.performance_metrics) {
+                content += '<h6>模型性能</h6>';
+                Object.entries(results.performance_metrics).forEach(([key, value]) => {
+                    content += `<p>${key}: ${typeof value === 'number' ? value.toFixed(3) : value}</p>`;
+                });
+            }
+            
+            if (results.test_summary) {
+                content += `
+                    <h6>测试概要</h6>
+                    <p>对照组大小: ${results.test_summary.control_size}</p>
+                    <p>实验组大小: ${results.test_summary.treatment_size}</p>
+                    <p>相对差异: ${results.test_summary.relative_difference?.toFixed(2)}%</p>
+                `;
+            }
+            
+            container.innerHTML = content;
+        }
+        
+        // 显示关键指标
+        function displayKeyMetrics(results) {
+            const container = document.getElementById('key-metrics');
+            container.innerHTML = '';
+            
+            const metrics = extractKeyMetrics(results);
+            
+            metrics.forEach(metric => {
+                const metricDiv = document.createElement('div');
+                metricDiv.className = 'metric-item';
+                metricDiv.innerHTML = `
+                    <h4>${metric.value}</h4>
+                    <small>${metric.label}</small>
+                `;
+                container.appendChild(metricDiv);
+            });
+        }
+        
+        // 提取关键指标
+        function extractKeyMetrics(results) {
+            const metrics = [];
+            
+            if (results.data_quality?.overall_score) {
+                metrics.push({
+                    label: '数据质量得分',
+                    value: (results.data_quality.overall_score * 100).toFixed(1) + '%'
+                });
+            }
+            
+            if (results.performance_metrics?.accuracy) {
+                metrics.push({
+                    label: '模型准确率',
+                    value: (results.performance_metrics.accuracy * 100).toFixed(1) + '%'
+                });
+            }
+            
+            if (results.segments?.total_segments) {
+                metrics.push({
+                    label: '客户细分数',
+                    value: results.segments.total_segments
+                });
+            }
+            
+            if (results.statistical_significance?.p_value !== undefined) {
+                metrics.push({
+                    label: 'P值',
+                    value: results.statistical_significance.p_value.toFixed(4)
+                });
+            }
+            
+            if (results.forecast_values?.length) {
+                metrics.push({
+                    label: '预测期数',
+                    value: results.forecast_values.length
+                });
+            }
+            
+            return metrics;
+        }
+        
+        // 显示洞察
+        function displayInsights(results) {
+            const container = document.getElementById('insights-content');
+            container.innerHTML = '';
+            
+            const insights = results.insights || results.model_insights || [];
+            
+            insights.forEach(insight => {
+                const insightDiv = document.createElement('div');
+                insightDiv.className = 'insight-item';
+                insightDiv.innerHTML = `<i class="bi bi-lightbulb me-2"></i>${insight}`;
+                container.appendChild(insightDiv);
+            });
+            
+            if (insights.length === 0) {
+                container.innerHTML = '<p class="text-muted">暂无洞察信息</p>';
+            }
+        }
+        
+        // 显示建议
+        function displayRecommendations(results) {
+            const container = document.getElementById('recommendations-content');
+            container.innerHTML = '';
+            
+            const recommendations = results.recommendations || [];
+            
+            recommendations.forEach(recommendation => {
+                const recDiv = document.createElement('div');
+                recDiv.className = 'recommendation-item';
+                recDiv.innerHTML = `<i class="bi bi-check-circle me-2"></i>${recommendation}`;
+                container.appendChild(recDiv);
+            });
+            
+            if (recommendations.length === 0) {
+                container.innerHTML = '<p class="text-muted">暂无行动建议</p>';
+            }
+        }
+        
+        // 创建可视化
+        function createVisualization(vizData) {
+            const container = document.getElementById('visualization-content');
+            container.innerHTML = '<canvas id="analysisChart" width="400" height="200"></canvas>';
+            
+            const ctx = document.getElementById('analysisChart').getContext('2d');
+            
+            // 根据数据类型创建不同的图表
+            if (vizData.scatter_plot) {
+                createScatterPlot(ctx, vizData);
+            } else {
+                createSampleChart(ctx);
+            }
+        }
+        
+        // 创建散点图
+        function createScatterPlot(ctx, vizData) {
+            const datasets = [];
+            const clusters = [...new Set(vizData.scatter_plot.map(point => point.cluster))];
+            
+            clusters.forEach(cluster => {
+                const clusterData = vizData.scatter_plot.filter(point => point.cluster === cluster);
+                datasets.push({
+                    label: `细分 ${cluster}`,
+                    data: clusterData.map(point => ({ x: point.x, y: point.y })),
+                    backgroundColor: getClusterColor(cluster),
+                    borderColor: getClusterColor(cluster, 0.8),
+                    borderWidth: 1
+                });
+            });
+            
+            new Chart(ctx, {
+                type: 'scatter',
+                data: { datasets },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '客户细分可视化'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: vizData.feature_names?.[0] || 'Feature 1'
+                            }
+                        },
+                        y: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: vizData.feature_names?.[1] || 'Feature 2'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 创建示例图表
+        function createSampleChart(ctx) {
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['1月', '2月', '3月', '4月', '5月', '6月'],
+                    datasets: [{
+                        label: '分析结果趋势',
+                        data: [12, 19, 3, 5, 2, 3],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '分析结果可视化'
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 获取聚类颜色
+        function getClusterColor(cluster, alpha = 0.6) {
+            const colors = [
+                `rgba(102, 126, 234, ${alpha})`,
+                `rgba(240, 147, 251, ${alpha})`,
+                `rgba(79, 172, 254, ${alpha})`,
+                `rgba(67, 233, 123, ${alpha})`,
+                `rgba(250, 112, 154, ${alpha})`
+            ];
+            return colors[cluster % colors.length];
+        }
+        
+        // 更新步骤指示器
+        function updateStepIndicator(currentStep) {
+            for (let i = 1; i <= 4; i++) {
+                const stepCircle = document.getElementById(`step-${i}`);
+                stepCircle.className = 'step-circle';
+                
+                if (i < currentStep) {
+                    stepCircle.className += ' completed';
+                    stepCircle.innerHTML = '<i class="bi bi-check"></i>';
+                } else if (i === currentStep) {
+                    stepCircle.className += ' active';
+                    stepCircle.innerHTML = i;
+                } else {
+                    stepCircle.innerHTML = i;
+                }
+            }
+            
+            // 更新进度条
+            const progress = document.getElementById('progress-indicator');
+            progress.style.transform = `scaleX(${(currentStep - 1) / 3})`;
+        }
+        
+        // 显示加载状态
+        function showLoading() {
+            document.getElementById('loading-spinner').style.display = 'block';
+            document.getElementById('tool-configuration').style.display = 'none';
+        }
+        
+        // 隐藏加载状态
+        function hideLoading() {
+            document.getElementById('loading-spinner').style.display = 'none';
+        }
+        
+        // 显示错误信息
+        function showError(message) {
+            alert('错误: ' + message);
+            updateStepIndicator(2); // 回退到参数配置步骤
+            document.getElementById('tool-configuration').style.display = 'block';
+        }
+        
+        // 初始化事件监听器
+        function initializeEventListeners() {
+            // 分类筛选
+            document.querySelectorAll('input[name="category"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    filterToolsByCategory(this.value);
+                });
+            });
+        }
+        
+        // 按分类筛选工具
+        function filterToolsByCategory(category) {
+            const cards = document.querySelectorAll('.analysis-tool-card');
+            
+            cards.forEach(card => {
+                const cardCategory = card.getAttribute('data-category');
+                const parentCol = card.closest('.col-lg-4');
+                
+                if (category === 'all' || cardCategory === category) {
+                    parentCol.style.display = 'block';
+                } else {
+                    parentCol.style.display = 'none';
+                }
+            });
+        }
+        
+        // 显示快速开始指南
+        function showQuickStart() {
+            alert('快速开始:\n1. 选择分析工具\n2. 配置参数\n3. 执行分析\n4. 查看结果');
+        }
+        
+        // 上传数据并分析
+        async function uploadAndAnalyze() {
+            const fileInput = document.getElementById('data-file');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('请先选择数据文件');
+                return;
+            }
+            
+            try {
+                const result = await fetch('/api/analysis/upload-data', {
+                    method: 'POST'
+                });
+                
+                const data = await result.json();
+                alert('数据上传成功!\n' + data.message);
+                
+            } catch (error) {
+                console.error('上传失败:', error);
+                alert('数据上传失败: ' + error.message);
+            }
+        }
+        
+        // 连接数据库
+        function connectDatabase() {
+            const dbType = document.getElementById('db-type').value;
+            
+            if (!dbType) {
+                alert('请先选择数据库类型');
+                return;
+            }
+            
+            alert('数据库连接功能开发中，敬请期待！');
+        }
+        
+        // 导出结果
+        function exportResults(format) {
+            if (!analysisResults) {
+                alert('没有可导出的结果');
+                return;
+            }
+            
+            switch (format) {
+                case 'pdf':
+                    alert('PDF报告导出功能开发中');
+                    break;
+                case 'excel':
+                    alert('Excel导出功能开发中');
+                    break;
+                case 'json':
+                    downloadJSON(analysisResults, 'analysis_results.json');
+                    break;
+            }
+        }
+        
+        // 下载JSON文件
+        function downloadJSON(data, filename) {
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        // 备用工具显示
+        function showFallbackTools() {
+            const fallbackTools = [
+                {
+                    id: 'data_profile',
+                    name: '数据剖析',
+                    description: '全面分析数据质量、分布和特征',
+                    category: 'data_quality',
+                    available: true
+                },
+                {
+                    id: 'customer_segmentation', 
+                    name: '客户细分',
+                    description: '高级客户细分分析',
+                    category: 'customer_analysis',
+                    available: true
+                }
+            ];
+            
+            renderAnalysisTools(fallbackTools);
+        }
+    </script>
+</body>
+</html> 

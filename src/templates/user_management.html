@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户管理 - 业务分析报告系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .page-header {
+            background: linear-gradient(135deg, #e83e8c 0%, #f8f9fa 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        .user-card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        .user-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+        .role-badge {
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 0.8rem;
+        }
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/"><i class="bi bi-graph-up-arrow"></i> 分析报告系统</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/"><i class="bi bi-house"></i> 首页</a>
+                <a class="nav-link" href="/dashboard"><i class="bi bi-speedometer2"></i> 仪表盘</a>
+                <a class="nav-link" href="/settings"><i class="bi bi-gear"></i> 设置</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- 面包屑导航 -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/"><i class="bi bi-house"></i> 首页</a></li>
+                <li class="breadcrumb-item"><a href="/dashboard"><i class="bi bi-speedometer2"></i> 仪表盘</a></li>
+                <li class="breadcrumb-item active"><i class="bi bi-people"></i> 用户管理</li>
+            </ol>
+        </nav>
+
+        <!-- 页面标题 -->
+        <div class="page-header">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="mb-2"><i class="bi bi-people"></i> 用户管理中心</h1>
+                    <p class="mb-0">管理系统用户和权限设置</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <button class="btn btn-light btn-lg" data-bs-toggle="modal" data-bs-target="#createUserModal">
+                        <i class="bi bi-person-plus"></i> 创建用户
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 用户统计 -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="stats-card text-center">
+                    <i class="bi bi-people display-4 mb-2"></i>
+                    <h4 id="totalUsers">-</h4>
+                    <small>总用户数</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card text-center">
+                    <i class="bi bi-person-check display-4 mb-2"></i>
+                    <h4 id="activeUsers">-</h4>
+                    <small>活跃用户</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card text-center">
+                    <i class="bi bi-shield-check display-4 mb-2"></i>
+                    <h4 id="adminUsers">-</h4>
+                    <small>管理员</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card text-center">
+                    <i class="bi bi-person-plus display-4 mb-2"></i>
+                    <h4 id="newUsersThisMonth">-</h4>
+                    <small>本月新增</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- 用户列表 -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card user-card">
+                    <div class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <h5 class="mb-0"><i class="bi bi-list-ul"></i> 用户列表</h5>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                                    <input type="text" class="form-control" placeholder="搜索用户..." id="searchUser">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>用户</th>
+                                        <th>角色</th>
+                                        <th>状态</th>
+                                        <th>最后登录</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="userTableBody">
+                                    <tr>
+                                        <td colspan="5" class="text-center">加载中...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 返回按钮 -->
+        <div class="row mt-4">
+            <div class="col-12 text-center">
+                <a href="/dashboard" class="btn btn-outline-primary btn-lg me-3">
+                    <i class="bi bi-arrow-left"></i> 返回仪表盘
+                </a>
+                <a href="/" class="btn btn-outline-secondary btn-lg">
+                    <i class="bi bi-house"></i> 返回主页
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 创建用户模态框 -->
+    <div class="modal fade" id="createUserModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-person-plus"></i> 创建新用户</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="createUserForm">
+                        <div class="mb-3">
+                            <label class="form-label">用户名</label>
+                            <input type="text" class="form-control" id="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">密码</label>
+                            <input type="password" class="form-control" id="password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">确认密码</label>
+                            <input type="password" class="form-control" id="confirmPassword" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">角色</label>
+                            <select class="form-select" id="role" required>
+                                <option value="">选择角色...</option>
+                                <option value="admin">管理员</option>
+                                <option value="analyst">分析师</option>
+                                <option value="viewer">查看者</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="createUser()">创建用户</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑用户模态框 -->
+    <div class="modal fade" id="editUserModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-person-gear"></i> 编辑用户</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editUserForm">
+                        <div class="mb-3">
+                            <label class="form-label">用户名</label>
+                            <input type="text" class="form-control" id="editUsername" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">角色</label>
+                            <select class="form-select" id="editRole" required>
+                                <option value="admin">管理员</option>
+                                <option value="analyst">分析师</option>
+                                <option value="viewer">查看者</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">状态</label>
+                            <select class="form-select" id="editStatus" required>
+                                <option value="active">活跃</option>
+                                <option value="inactive">禁用</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="updateUser()">保存更改</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-light mt-5 py-4">
+        <div class="container text-center">
+            <p class="text-muted mb-0">&copy; 2024 业务分析报告系统. 版权所有.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentUsers = [];
+
+        // 获取用户头像字母
+        function getUserInitial(username) {
+            return username.charAt(0).toUpperCase();
+        }
+
+        // 获取角色颜色
+        function getRoleColor(role) {
+            switch (role) {
+                case 'admin': return 'danger';
+                case 'analyst': return 'warning';
+                case 'viewer': return 'info';
+                default: return 'secondary';
+            }
+        }
+
+        // 加载用户列表
+        async function loadUsers() {
+            try {
+                const response = await fetch('/api/users');
+                if (response.ok) {
+                    const data = await response.json();
+                    currentUsers = data.users;
+                    renderUserTable(currentUsers);
+                    updateUserStats(data);
+                } else {
+                    document.getElementById('userTableBody').innerHTML = 
+                        '<tr><td colspan="5" class="text-center text-muted">无权限查看用户列表</td></tr>';
+                }
+            } catch (error) {
+                console.error('加载用户列表失败:', error);
+                document.getElementById('userTableBody').innerHTML = 
+                    '<tr><td colspan="5" class="text-center text-danger">加载失败</td></tr>';
+            }
+        }
+
+        // 渲染用户表格
+        function renderUserTable(users) {
+            const tbody = document.getElementById('userTableBody');
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">暂无用户</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = users.map(user => `
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <div class="user-avatar me-3">
+                                ${getUserInitial(user.username)}
+                            </div>
+                            <div>
+                                <div class="fw-bold">${user.username}</div>
+                                <div class="text-muted small">ID: ${user.username}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="badge bg-${getRoleColor(user.role)} role-badge">
+                            ${user.role}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge bg-success">活跃</span>
+                    </td>
+                    <td>
+                        <div class="text-muted small">2024-05-25 14:30</div>
+                    </td>
+                    <td>
+                        <div class="btn-group btn-group-sm">
+                            <button class="btn btn-outline-primary" onclick="editUser('${user.username}', '${user.role}')">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-outline-info" onclick="viewUserDetails('${user.username}')">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            ${user.username !== 'admin' ? `
+                                <button class="btn btn-outline-danger" onclick="deleteUser('${user.username}')">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            ` : ''}
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // 更新用户统计
+        function updateUserStats(data) {
+            document.getElementById('totalUsers').textContent = data.total;
+            document.getElementById('activeUsers').textContent = data.total;
+            
+            const adminCount = data.users.filter(u => u.role === 'admin').length;
+            document.getElementById('adminUsers').textContent = adminCount;
+            document.getElementById('newUsersThisMonth').textContent = '2';
+        }
+
+        // 创建用户
+        async function createUser() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const role = document.getElementById('role').value;
+
+            if (!username || !password || !role) {
+                alert('请填写所有必填字段');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                alert('两次输入的密码不一致');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/users', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password,
+                        role: role
+                    })
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    alert(result.message);
+                    document.getElementById('createUserForm').reset();
+                    bootstrap.Modal.getInstance(document.getElementById('createUserModal')).hide();
+                    loadUsers();
+                } else {
+                    alert(result.detail || '创建用户失败');
+                }
+            } catch (error) {
+                alert('创建用户失败: ' + error.message);
+            }
+        }
+
+        // 编辑用户
+        function editUser(username, role) {
+            document.getElementById('editUsername').value = username;
+            document.getElementById('editRole').value = role;
+            document.getElementById('editStatus').value = 'active';
+            
+            const modal = new bootstrap.Modal(document.getElementById('editUserModal'));
+            modal.show();
+        }
+
+        // 更新用户
+        function updateUser() {
+            alert('用户信息更新功能正在开发中...');
+            bootstrap.Modal.getInstance(document.getElementById('editUserModal')).hide();
+        }
+
+        // 查看用户详情
+        function viewUserDetails(username) {
+            alert(`查看用户 "${username}" 的详细信息\n\n功能正在开发中...`);
+        }
+
+        // 删除用户
+        function deleteUser(username) {
+            if (confirm(`确定要删除用户 "${username}" 吗？此操作不可撤销。`)) {
+                alert('删除用户功能正在开发中...');
+            }
+        }
+
+        // 搜索用户
+        function searchUsers() {
+            const searchTerm = document.getElementById('searchUser').value.toLowerCase();
+            const filteredUsers = currentUsers.filter(user => 
+                user.username.toLowerCase().includes(searchTerm) ||
+                user.role.toLowerCase().includes(searchTerm)
+            );
+            renderUserTable(filteredUsers);
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUsers();
+            
+            // 绑定搜索事件
+            document.getElementById('searchUser').addEventListener('input', searchUsers);
+        });
+    </script>
+</body>
+</html> 

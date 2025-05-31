@@ -1,0 +1,186 @@
+{
+  "test_summary": {
+    "total_tests": 23,
+    "passed_tests": 21,
+    "failed_tests": 2,
+    "pass_rate": 91.30434782608695,
+    "start_time": "2025-05-23T19:20:12.021846",
+    "end_time": "2025-05-23T19:20:13.148029",
+    "duration": 1.126183
+  },
+  "test_details": [
+    {
+      "name": "数据处理器初始化",
+      "status": "PASS",
+      "duration": 7.152557373046875e-07,
+      "timestamp": "2025-05-23T19:20:12.043179"
+    },
+    {
+      "name": "数据结构验证",
+      "status": "PASS",
+      "duration": 1.9073486328125e-06,
+      "timestamp": "2025-05-23T19:20:12.046415"
+    },
+    {
+      "name": "数据清洗功能",
+      "status": "PASS",
+      "duration": 2.384185791015625e-06,
+      "timestamp": "2025-05-23T19:20:12.046889"
+    },
+    {
+      "name": "数据转换功能",
+      "status": "PASS",
+      "duration": 9.5367431640625e-07,
+      "timestamp": "2025-05-23T19:20:12.047168"
+    },
+    {
+      "name": "数据概况生成",
+      "status": "PASS",
+      "duration": 1.430511474609375e-06,
+      "timestamp": "2025-05-23T19:20:12.047409"
+    },
+    {
+      "name": "完整处理流水线",
+      "status": "PASS",
+      "duration": 7.152557373046875e-07,
+      "timestamp": "2025-05-23T19:20:12.047708"
+    },
+    {
+      "name": "相关性分析",
+      "status": "PASS",
+      "duration": 7.152557373046875e-07,
+      "timestamp": "2025-05-23T19:20:12.110409"
+    },
+    {
+      "name": "趋势分析",
+      "status": "PASS",
+      "duration": 1.1920928955078125e-06,
+      "timestamp": "2025-05-23T19:20:12.110653"
+    },
+    {
+      "name": "异常检测",
+      "status": "PASS",
+      "duration": 4.76837158203125e-07,
+      "timestamp": "2025-05-23T19:20:12.110884"
+    },
+    {
+      "name": "用户分群",
+      "status": "PASS",
+      "duration": 4.76837158203125e-07,
+      "timestamp": "2025-05-23T19:20:12.111078"
+    },
+    {
+      "name": "高级仪表板创建",
+      "status": "PASS",
+      "duration": 1.1920928955078125e-06,
+      "timestamp": "2025-05-23T19:20:12.139315"
+    },
+    {
+      "name": "专业图表创建",
+      "status": "PASS",
+      "duration": 2.384185791015625e-06,
+      "timestamp": "2025-05-23T19:20:12.143336"
+    },
+    {
+      "name": "综合报告生成",
+      "status": "PASS",
+      "duration": 1.430511474609375e-06,
+      "timestamp": "2025-05-23T19:20:12.172172"
+    },
+    {
+      "name": "智能洞察生成",
+      "status": "PASS",
+      "duration": 1.9073486328125e-06,
+      "timestamp": "2025-05-23T19:20:12.172466"
+    },
+    {
+      "name": "行动建议生成",
+      "status": "PASS",
+      "duration": 9.5367431640625e-07,
+      "timestamp": "2025-05-23T19:20:12.172696"
+    },
+    {
+      "name": "主系统运行",
+      "status": "FAIL",
+      "error": "测试条件不满足",
+      "timestamp": "2025-05-23T19:20:12.326193"
+    },
+    {
+      "name": "输出文件生成",
+      "status": "PASS",
+      "duration": 9.5367431640625e-07,
+      "timestamp": "2025-05-23T19:20:12.326744"
+    },
+    {
+      "name": "系统启动性能",
+      "status": "PASS",
+      "duration": 9.5367431640625e-07,
+      "timestamp": "2025-05-23T19:20:12.346925"
+    },
+    {
+      "name": "文件生成性能",
+      "status": "PASS",
+      "duration": 1.1920928955078125e-06,
+      "timestamp": "2025-05-23T19:20:12.354216"
+    },
+    {
+      "name": "None数据处理",
+      "status": "PASS",
+      "duration": 1.1920928955078125e-06,
+      "timestamp": "2025-05-23T19:20:12.355414"
+    },
+    {
+      "name": "空数据处理",
+      "status": "PASS",
+      "duration": 7.152557373046875e-07,
+      "timestamp": "2025-05-23T19:20:12.355590"
+    },
+    {
+      "name": "缺失依赖处理",
+      "status": "FAIL",
+      "error": "测试条件不满足",
+      "timestamp": "2025-05-23T19:20:12.368751"
+    },
+    {
+      "name": "依赖检测功能",
+      "status": "PASS",
+      "duration": 1.1920928955078125e-06,
+      "timestamp": "2025-05-23T19:20:13.147845"
+    }
+  ],
+  "performance_metrics": {
+    "startup_time": 0.0179293155670166,
+    "file_generation_time": 0.0026657581329345703,
+    "dependency_status": {
+      "pandas": {
+        "available": false,
+        "description": "Level 2+ 数据处理"
+      },
+      "matplotlib": {
+        "available": false,
+        "description": "Level 2+ 可视化"
+      },
+      "numpy": {
+        "available": false,
+        "description": "Level 2+ 数值计算"
+      },
+      "jinja2": {
+        "available": false,
+        "description": "Level 2+ 模板引擎"
+      },
+      "fastapi": {
+        "available": true,
+        "description": "Level 2+ Web框架"
+      },
+      "plotly": {
+        "available": false,
+        "description": "Level 3 交互式图表"
+      },
+      "sklearn": {
+        "available": false,
+        "description": "Level 3 机器学习"
+      }
+    },
+    "system_level": "Level 0 (零依赖模式)"
+  }
+}
