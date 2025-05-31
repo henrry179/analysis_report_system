@@ -122,3 +122,6 @@ python -m pytest tests/
 
 ## 许可证
 MIT License
+
+## 最新进展
+- [x] 后端用户认证与配置修复已完成，系统可正常启动并支持多用户登录。
