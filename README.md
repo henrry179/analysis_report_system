@@ -69,69 +69,47 @@ analysis_report_system/
 - [x] 加载状态优化
 - [x] UI/UX 优化
 
-## 安装和运行
-### 环境要求
-- Python 3.8+ (推荐使用 Python 3.11)
-- Node.js 16+ (推荐使用 Node.js 18 LTS)
-- npm 8+ 或 yarn 1.22+
+## 启动系统
 
-### 后端设置
-1. 克隆项目：
-```bash
-git clone https://github.com/henrry179/analysis_report_system.git
-cd analysis_report_system
-```
+### 后端服务启动
+1. 确保已安装依赖并激活虚拟环境：
+   ```bash
+   pip install -r requirements.txt
+   # 或根据需求选择 requirements_minimal.txt/requirements_standard.txt
+   ```
+2. 启动后端服务：
+   ```bash
+   python start_server.py
+   # 或
+   python src/main.py
+   ```
+   服务默认运行在 http://localhost:8000
 
-2. 创建并激活 Python 虚拟环境：
-```bash
-# 使用 conda（推荐）
-conda create -n analysis-py311 python=3.11
-conda activate analysis-py311
-
-# 或使用 venv
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-venv\Scripts\activate     # Windows
-```
-
-3. 安装后端依赖：
-```bash
-pip install -r requirements.txt
-```
-
-4. 启动后端服务：
-```bash
-python start_server.py
-```
-服务将在 http://localhost:8000 启动
-
-### 前端设置
-1. 进入前端目录：
-```bash
-cd frontend
-```
-
-2. 安装前端依赖：
-```bash
-npm install
-# 或使用 yarn
-yarn install
-```
-
-3. 启动开发服务器：
-```bash
-npm run dev
-# 或使用 yarn
-yarn dev
-```
-前端将在 http://localhost:5173 启动
+### 前端服务启动
+1. 进入前端目录并安装依赖：
+   ```bash
+   cd frontend
+   npm install
+   # 或 yarn install
+   ```
+2. 启动前端开发服务器：
+   ```bash
+   npm run dev
+   # 或 yarn dev
+   ```
+   前端默认运行在 http://localhost:5173
 
 ### 访问系统
-1. 打开浏览器访问 http://localhost:5173
-2. 使用以下默认账号登录：
-   - 管理员：admin / adminpass
-   - 分析师：analyst / analyst123
-   - 查看者：viewer / viewer123
+- 浏览器访问 http://localhost:5173
+- 默认账号：
+  - 管理员：admin / adminpass
+  - 分析师：analyst / analyst123
+  - 查看者：viewer / viewer123
+
+### 常见问题排查
+- 端口占用：参考下方“常见问题”章节
+- 依赖安装失败：升级 pip、清理 npm 缓存、重新安装依赖
+- 启动失败：检查 Python 版本、虚拟环境、依赖和日志
 
 ## 常见问题
 ### 1. 端口占用
