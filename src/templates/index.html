@@ -1,40 +1,369 @@
-{% extends "layout.html" %}
-
-{% block title %}首页 - {{ app_name }}{% endblock %}
-
-{% block content %}
-<div class="jumbotron bg-light p-5 rounded">
-    <h1 class="display-4">欢迎使用 {{ app_name }}</h1>
-    <p class="lead">版本 {{ app_version }}</p>
-    <hr class="my-4">
-    <p>这是一个强大的分析报告系统，帮助您轻松创建、管理和分享分析报告。</p>
-    <a class="btn btn-primary btn-lg" href="/reports/new" role="button">创建新报告</a>
-</div>
-
-<div class="row mt-5">
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">智能分析</h5>
-                <p class="card-text">利用先进的算法和机器学习技术，自动分析数据并生成洞察。</p>
-            </div>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分析报告系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/element-plus/dist/index.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- 登录表单 -->
+        <div v-if="!token" class="login-container">
+            <el-card class="login-card">
+                <template #header>
+                    <h2>登录</h2>
+                </template>
+                <el-form :model="loginForm" label-width="80px">
+                    <el-form-item label="用户名">
+                        <el-input v-model="loginForm.username"></el-input>
+                    </el-form-item>
+                    <el-form-item label="密码">
+                        <el-input v-model="loginForm.password" type="password"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="login" :loading="loading">登录</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-card>
         </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">数据驱动</h5>
-                <p class="card-text">支持多种数据格式，轻松导入和处理各类数据源。</p>
-            </div>
+
+        <!-- 主界面 -->
+        <div v-else class="main-container">
+            <!-- 顶部导航栏 -->
+            <el-header>
+                <div class="header-content">
+                    <h1>分析报告系统</h1>
+                    <div class="user-info">
+                        <span>{{ user?.username }}</span>
+                        <el-button @click="logout">退出</el-button>
+                    </div>
+                </div>
+            </el-header>
+
+            <!-- 主要内容区 -->
+            <el-container>
+                <!-- 侧边栏 -->
+                <el-aside width="200px">
+                    <el-menu
+                        :default-active="activeTab"
+                        @select="activeTab = $event"
+                    >
+                        <el-menu-item index="data">
+                            <el-icon><el-icon-upload /></el-icon>
+                            <span>数据管理</span>
+                        </el-menu-item>
+                        <el-menu-item index="analysis">
+                            <el-icon><el-icon-data-analysis /></el-icon>
+                            <span>数据分析</span>
+                        </el-menu-item>
+                        <el-menu-item index="reports">
+                            <el-icon><el-icon-document /></el-icon>
+                            <span>报告管理</span>
+                        </el-menu-item>
+                        <el-menu-item index="system" v-if="user?.role === 'admin'">
+                            <el-icon><el-icon-setting /></el-icon>
+                            <span>系统管理</span>
+                        </el-menu-item>
+                    </el-menu>
+                </el-aside>
+
+                <!-- 内容区 -->
+                <el-main>
+                    <!-- 数据管理 -->
+                    <div v-if="activeTab === 'data'">
+                        <el-card>
+                            <template #header>
+                                <h3>数据导入</h3>
+                            </template>
+                            <el-upload
+                                class="upload-demo"
+                                drag
+                                action="#"
+                                :auto-upload="false"
+                                :on-change="file => uploadForm.file = file.raw"
+                            >
+                                <el-icon class="el-icon--upload"><el-icon-upload /></el-icon>
+                                <div class="el-upload__text">
+                                    拖拽文件到此处或 <em>点击上传</em>
+                                </div>
+                                <template #tip>
+                                    <div class="el-upload__tip">
+                                        支持 CSV、Excel、JSON 格式文件
+                                    </div>
+                                </template>
+                            </el-upload>
+                            <el-button
+                                type="primary"
+                                @click="handleFileUpload"
+                                :loading="loading"
+                                :disabled="!uploadForm.file"
+                            >
+                                开始导入
+                            </el-button>
+                        </el-card>
+
+                        <!-- 数据预览 -->
+                        <el-card v-if="data" class="mt-4">
+                            <template #header>
+                                <h3>数据预览</h3>
+                            </template>
+                            <el-table :data="data.slice(0, 10)" height="400">
+                                <el-table-column
+                                    v-for="col in Object.keys(data[0])"
+                                    :key="col"
+                                    :prop="col"
+                                    :label="col"
+                                />
+                            </el-table>
+                        </el-card>
+                    </div>
+
+                    <!-- 数据分析 -->
+                    <div v-if="activeTab === 'analysis'">
+                        <el-card>
+                            <template #header>
+                                <h3>分析配置</h3>
+                            </template>
+                            <el-form :model="analysisForm" label-width="100px">
+                                <el-form-item label="分析类型">
+                                    <el-select v-model="analysisForm.type">
+                                        <el-option label="描述性统计" value="descriptive" />
+                                        <el-option label="相关性分析" value="correlation" />
+                                        <el-option label="趋势分析" value="trend" />
+                                        <el-option label="预测分析" value="forecast" />
+                                    </el-select>
+                                </el-form-item>
+                                <el-form-item>
+                                    <el-button
+                                        type="primary"
+                                        @click="runAnalysis"
+                                        :loading="loading"
+                                        :disabled="!data"
+                                    >
+                                        开始分析
+                                    </el-button>
+                                </el-form-item>
+                            </el-form>
+                        </el-card>
+
+                        <!-- 分析结果 -->
+                        <el-card v-if="analysisResults" class="mt-4">
+                            <template #header>
+                                <h3>分析结果</h3>
+                            </template>
+                            <div class="analysis-results">
+                                <!-- 描述性统计 -->
+                                <div v-if="analysisForm.type === 'descriptive'">
+                                    <el-table :data="analysisResults.numeric_stats">
+                                        <el-table-column prop="column" label="指标" />
+                                        <el-table-column prop="mean" label="均值" />
+                                        <el-table-column prop="median" label="中位数" />
+                                        <el-table-column prop="std" label="标准差" />
+                                    </el-table>
+                                </div>
+
+                                <!-- 相关性分析 -->
+                                <div v-if="analysisForm.type === 'correlation'">
+                                    <div id="correlation-heatmap"></div>
+                                </div>
+
+                                <!-- 趋势分析 -->
+                                <div v-if="analysisForm.type === 'trend'">
+                                    <div id="trend-chart"></div>
+                                </div>
+
+                                <!-- 预测分析 -->
+                                <div v-if="analysisForm.type === 'forecast'">
+                                    <div id="forecast-chart"></div>
+                                </div>
+                            </div>
+                        </el-card>
+                    </div>
+
+                    <!-- 报告管理 -->
+                    <div v-if="activeTab === 'reports'">
+                        <el-card>
+                            <template #header>
+                                <h3>报告生成</h3>
+                            </template>
+                            <el-button-group>
+                                <el-button
+                                    type="primary"
+                                    @click="generateReport('visualization')"
+                                    :loading="loading"
+                                    :disabled="!data"
+                                >
+                                    生成可视化报告
+                                </el-button>
+                                <el-button
+                                    type="primary"
+                                    @click="generateReport('analysis')"
+                                    :loading="loading"
+                                    :disabled="!analysisResults"
+                                >
+                                    生成分析报告
+                                </el-button>
+                            </el-button-group>
+                        </el-card>
+
+                        <!-- 报告列表 -->
+                        <el-card class="mt-4">
+                            <template #header>
+                                <h3>报告列表</h3>
+                            </template>
+                            <el-table :data="reports">
+                                <el-table-column prop="type" label="类型" />
+                                <el-table-column prop="created_at" label="创建时间" />
+                                <el-table-column label="操作">
+                                    <template #default="{ row }">
+                                        <el-button
+                                            type="primary"
+                                            link
+                                            @click="window.open(row.path)"
+                                        >
+                                            查看
+                                        </el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </el-card>
+                    </div>
+
+                    <!-- 系统管理 -->
+                    <div v-if="activeTab === 'system' && user?.role === 'admin'">
+                        <!-- 用户管理 -->
+                        <el-card>
+                            <template #header>
+                                <h3>用户管理</h3>
+                            </template>
+                            <el-button type="primary" @click="showCreateUserDialog">
+                                创建用户
+                            </el-button>
+                            <el-table :data="users" class="mt-4">
+                                <el-table-column prop="username" label="用户名" />
+                                <el-table-column prop="role" label="角色" />
+                                <el-table-column label="操作">
+                                    <template #default="{ row }">
+                                        <el-button
+                                            type="danger"
+                                            link
+                                            @click="deleteUser(row.username)"
+                                        >
+                                            删除
+                                        </el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </el-card>
+
+                        <!-- 系统日志 -->
+                        <el-card class="mt-4">
+                            <template #header>
+                                <h3>系统日志</h3>
+                            </template>
+                            <el-table :data="logs">
+                                <el-table-column prop="timestamp" label="时间" />
+                                <el-table-column prop="level" label="级别" />
+                                <el-table-column prop="message" label="消息" />
+                            </el-table>
+                        </el-card>
+
+                        <!-- 系统备份 -->
+                        <el-card class="mt-4">
+                            <template #header>
+                                <h3>系统备份</h3>
+                            </template>
+                            <el-button-group>
+                                <el-button
+                                    type="primary"
+                                    @click="backupSystem"
+                                    :loading="loading"
+                                >
+                                    备份系统
+                                </el-button>
+                                <el-button
+                                    type="primary"
+                                    @click="showRestoreDialog"
+                                    :loading="loading"
+                                >
+                                    恢复系统
+                                </el-button>
+                            </el-button-group>
+                        </el-card>
+                    </div>
+                </el-main>
+            </el-container>
         </div>
+
+        <!-- 创建用户对话框 -->
+        <el-dialog
+            v-model="createUserDialogVisible"
+            title="创建用户"
+            width="500px"
+        >
+            <el-form :model="createUserForm" label-width="80px">
+                <el-form-item label="用户名">
+                    <el-input v-model="createUserForm.username"></el-input>
+                </el-form-item>
+                <el-form-item label="密码">
+                    <el-input v-model="createUserForm.password" type="password"></el-input>
+                </el-form-item>
+                <el-form-item label="角色">
+                    <el-select v-model="createUserForm.role">
+                        <el-option label="用户" value="user" />
+                        <el-option label="管理员" value="admin" />
+                    </el-select>
+                </el-form-item>
+            </el-form>
+            <template #footer>
+                <el-button @click="createUserDialogVisible = false">取消</el-button>
+                <el-button type="primary" @click="createUser(createUserForm)">
+                    创建
+                </el-button>
+            </template>
+        </el-dialog>
+
+        <!-- 恢复系统对话框 -->
+        <el-dialog
+            v-model="restoreDialogVisible"
+            title="恢复系统"
+            width="500px"
+        >
+            <el-form :model="restoreForm" label-width="80px">
+                <el-form-item label="备份文件">
+                    <el-upload
+                        class="upload-demo"
+                        drag
+                        action="#"
+                        :auto-upload="false"
+                        :on-change="file => restoreForm.file = file.raw"
+                    >
+                        <el-icon class="el-icon--upload"><el-icon-upload /></el-icon>
+                        <div class="el-upload__text">
+                            拖拽备份文件到此处或 <em>点击上传</em>
+                        </div>
+                    </el-upload>
+                </el-form-item>
+            </el-form>
+            <template #footer>
+                <el-button @click="restoreDialogVisible = false">取消</el-button>
+                <el-button
+                    type="primary"
+                    @click="restoreSystem(restoreForm.file)"
+                    :disabled="!restoreForm.file"
+                >
+                    恢复
+                </el-button>
+            </template>
+        </el-dialog>
     </div>
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">未来洞察</h5>
-                <p class="card-text">通过趋势分析和预测模型，帮助您把握未来发展方向。</p>
-            </div>
-        </div>
-    </div>
-</div>
-{% endblock %} 
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/element-plus"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html> 

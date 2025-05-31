@@ -1,123 +1,102 @@
-import pytest
+import unittest
 import pandas as pd
 import numpy as np
-from src.data.data_processor import clean_data
+from src.core.data_processor import DataProcessor
 
-class TestDataProcessor:
-    """测试数据清洗模块的完整性"""
-
-    def test_normal_data_cleaning(self):
-        """测试标准数据清洗流程"""
-        test_data = pd.DataFrame({
-            'gmv': [100, 200, 300, 400],
-            'dau': [50, 60, 70, 80],
-            'conversion_rate': [12.5, 15.0, 18.2, 20.1]
+class TestDataProcessor(unittest.TestCase):
+    def setUp(self):
+        self.processor = DataProcessor()
+        self.sample_data = pd.DataFrame({
+            'numeric_col': [1, 2, 3, np.nan, 5],
+            'categorical_col': ['A', 'B', 'A', 'C', 'B'],
+            'date_col': pd.date_range(start='2023-01-01', periods=5)
         })
         
-        cleaned = clean_data(test_data)
+    def test_import_data(self):
+        # 测试CSV导入
+        df = self.processor.import_data('tests/data/sample.csv', 'csv')
+        self.assertIsInstance(df, pd.DataFrame)
+        self.assertFalse(df.empty)
         
-        assert len(cleaned) == 4
-        assert cleaned['gmv'].min() > 0
-        assert cleaned['dau'].min() > 0
-        assert not cleaned.isnull().any().any()
-
-    def test_handle_null_values(self):
-        """测试空值填充逻辑"""
-        test_data = pd.DataFrame({
-            'gmv': [100, np.nan, 300],
-            'dau': [np.nan, 60, 70],
-            'conversion_rate': [12.5, np.nan, 18.2]
-        })
+        # 测试Excel导入
+        df = self.processor.import_data('tests/data/sample.xlsx', 'xlsx')
+        self.assertIsInstance(df, pd.DataFrame)
+        self.assertFalse(df.empty)
         
-        cleaned = clean_data(test_data)
+        # 测试JSON导入
+        df = self.processor.import_data('tests/data/sample.json', 'json')
+        self.assertIsInstance(df, pd.DataFrame)
+        self.assertFalse(df.empty)
         
-        # 检查空值是否被正确填充
-        assert not cleaned.isnull().any().any()
-        # 检查填充后的数据是否合理
-        assert all(cleaned['gmv'] >= 0)
-        assert all(cleaned['dau'] >= 0)
-
-    def test_invalid_conversion_rate(self):
-        """测试转化率边界值处理"""
-        test_data = pd.DataFrame({
-            'gmv': [100, 200, 300],
-            'dau': [50, 60, 70],
-            'conversion_rate': [120, -5, 15]  # 120%和-5%为非法值
-        })
+    def test_preprocess_data(self):
+        # 测试预处理
+        processed_df = self.processor.preprocess_data(self.sample_data)
         
-        # 如果data_processor中实现了转化率验证
-        cleaned = clean_data(test_data)
+        # 检查缺失值处理
+        self.assertFalse(processed_df.isnull().any().any())
         
-        # 至少应该保留gmv和dau都大于0的行
-        valid_rows = cleaned[(cleaned['gmv'] > 0) & (cleaned['dau'] > 0)]
-        assert len(valid_rows) >= 1
-
-    def test_zero_values_filtering(self):
-        """测试零值和负值过滤"""
-        test_data = pd.DataFrame({
-            'gmv': [0, -10, 200, 300],
-            'dau': [50, 60, 0, 80],
-            'conversion_rate': [12.5, 15.0, 18.2, 20.1]
-        })
+        # 检查数据类型转换
+        self.assertTrue(pd.api.types.is_numeric_dtype(processed_df['numeric_col']))
+        self.assertTrue(pd.api.types.is_categorical_dtype(processed_df['categorical_col']))
+        self.assertTrue(pd.api.types.is_datetime64_any_dtype(processed_df['date_col']))
         
-        cleaned = clean_data(test_data)
+    def test_validate_data(self):
+        # 测试数据验证
+        validation_results = self.processor.validate_data(self.sample_data)
         
-        # 应该只保留gmv>0 且 dau>0的行
-        assert all(cleaned['gmv'] > 0)
-        assert all(cleaned['dau'] > 0)
-        assert len(cleaned) == 1  # 只有最后一行符合条件
-
-    def test_all_invalid_data(self):
-        """测试全无效数据清洗"""
-        test_data = pd.DataFrame({
-            'gmv': [0, -1, 0],
-            'dau': [-5, 0, 0],
-            'conversion_rate': [150, -20, 200]
-        })
+        # 检查验证结果
+        self.assertIn('total_rows', validation_results)
+        self.assertIn('total_columns', validation_results)
+        self.assertIn('missing_values', validation_results)
+        self.assertIn('data_types', validation_results)
+        self.assertIn('duplicates', validation_results)
         
-        cleaned = clean_data(test_data)
+        # 验证具体值
+        self.assertEqual(validation_results['total_rows'], 5)
+        self.assertEqual(validation_results['total_columns'], 3)
+        self.assertEqual(validation_results['missing_values']['numeric_col'], 1)
         
-        # 全无效数据应返回空DataFrame
-        assert cleaned.empty or len(cleaned) == 0
-
-    def test_mixed_valid_invalid_data(self):
-        """测试混合有效无效数据"""
-        test_data = pd.DataFrame({
-            'gmv': [100, 0, 300, -50, 500],
-            'dau': [50, 60, 0, 80, 90],
-            'conversion_rate': [12.5, 15.0, 18.2, 20.1, 25.0]
-        })
+    def test_export_data(self):
+        # 测试数据导出
+        output_path = 'tests/output/test_export.csv'
+        self.processor.export_data(self.sample_data, output_path, 'csv')
         
-        cleaned = clean_data(test_data)
+        # 验证导出文件
+        exported_df = pd.read_csv(output_path)
+        self.assertTrue(exported_df.equals(self.sample_data))
         
-        # 应该保留第1行和第5行 (gmv>0 且 dau>0)
-        assert len(cleaned) == 2
-        assert all(cleaned['gmv'] > 0)
-        assert all(cleaned['dau'] > 0)
-
-    def test_empty_dataframe(self):
-        """测试空DataFrame输入"""
-        test_data = pd.DataFrame()
+    def test_handle_missing_values(self):
+        # 测试缺失值处理
+        df_with_missing = self.sample_data.copy()
+        df_with_missing.loc[0, 'numeric_col'] = np.nan
         
-        # 根据实际实现调整预期行为
-        try:
-            cleaned = clean_data(test_data)
-            # 如果能处理空DataFrame，应该返回空DataFrame
-            assert cleaned.empty
-        except (ValueError, KeyError):
-            # 如果抛出异常，这也是合理的
-            pass
-
-    def test_single_row_valid_data(self):
-        """测试单行有效数据"""
-        test_data = pd.DataFrame({
-            'gmv': [100],
-            'dau': [50],
-            'conversion_rate': [15.0]
-        })
+        processed_df = self.processor._handle_missing_values(df_with_missing)
+        self.assertFalse(processed_df.isnull().any().any())
         
-        cleaned = clean_data(test_data)
+    def test_handle_outliers(self):
+        # 测试异常值处理
+        df_with_outliers = self.sample_data.copy()
+        df_with_outliers.loc[0, 'numeric_col'] = 1000  # 添加异常值
         
-        assert len(cleaned) == 1
-        assert cleaned['gmv'].iloc[0] == 100
-        assert cleaned['dau'].iloc[0] == 50 
+        processed_df = self.processor._handle_outliers(df_with_outliers)
+        self.assertTrue(processed_df['numeric_col'].max() < 1000)
+        
+    def test_convert_data_types(self):
+        # 测试数据类型转换
+        df = self.sample_data.copy()
+        df['numeric_col'] = df['numeric_col'].astype(str)
+        
+        processed_df = self.processor._convert_data_types(df)
+        self.assertTrue(pd.api.types.is_numeric_dtype(processed_df['numeric_col']))
+        
+    def test_normalize_data(self):
+        # 测试数据标准化
+        df = self.sample_data.copy()
+        processed_df = self.processor._normalize_data(df)
+        
+        # 检查标准化后的数据
+        self.assertTrue(processed_df['numeric_col'].mean() < 1)
+        self.assertTrue(processed_df['numeric_col'].std() < 1)
+        
+if __name__ == '__main__':
+    unittest.main() 
