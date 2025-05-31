@@ -1,0 +1,160 @@
+import pandas as pd
+import numpy as np
+from typing import Dict, List, Optional
+from datetime import datetime, timedelta
+
+class DataProcessor:
+    """数据处理类，负责数据的读取、清洗和预处理"""
+    
+    def __init__(self, input_file: str):
+        """
+        初始化数据处理器
+        
+        Args:
+            input_file: 输入数据文件路径
+        """
+        self.input_file = input_file
+        self.data = None
+        self.processed_data = None
+        
+    def load_data(self) -> None:
+        """加载数据文件"""
+        try:
+            self.data = pd.read_csv(self.input_file)
+        except Exception as e:
+            raise Exception(f"数据加载失败: {str(e)}")
+            
+    def preprocess_data(self) -> None:
+        """数据预处理"""
+        if self.data is None:
+            raise Exception("请先加载数据")
+            
+        # 处理缺失值
+        self.data = self.data.fillna(0)
+        
+        # 转换日期格式
+        if 'date' in self.data.columns:
+            self.data['date'] = pd.to_datetime(self.data['date'])
+            
+        # 确保数值列的类型正确
+        numeric_columns = ['gmv', 'dau', 'order_price', 'conversion_rate']
+        for col in numeric_columns:
+            if col in self.data.columns:
+                self.data[col] = pd.to_numeric(self.data[col], errors='coerce')
+                
+        self.processed_data = self.data.copy()
+        
+    def calculate_metrics(self) -> Dict:
+        """
+        计算关键指标
+        
+        Returns:
+            包含计算结果的字典
+        """
+        if self.processed_data is None:
+            raise Exception("请先进行数据预处理")
+            
+        metrics = {}
+        
+        # 计算环比变化
+        current_data = self.processed_data[self.processed_data['date'] == self.processed_data['date'].max()]
+        previous_data = self.processed_data[self.processed_data['date'] == self.processed_data['date'].max() - timedelta(days=7)]
+        
+        # GMV相关指标
+        metrics['gmv'] = {
+            'current': current_data['gmv'].sum(),
+            'previous': previous_data['gmv'].sum(),
+            'change_rate': (current_data['gmv'].sum() - previous_data['gmv'].sum()) / previous_data['gmv'].sum() * 100
+        }
+        
+        # 笔单价相关指标
+        metrics['order_price'] = {
+            'current': current_data['order_price'].mean(),
+            'previous': previous_data['order_price'].mean(),
+            'change_rate': (current_data['order_price'].mean() - previous_data['order_price'].mean()) / previous_data['order_price'].mean() * 100
+        }
+        
+        # 转化率相关指标
+        metrics['conversion_rate'] = {
+            'current': current_data['conversion_rate'].mean(),
+            'previous': previous_data['conversion_rate'].mean(),
+            'change_rate': (current_data['conversion_rate'].mean() - previous_data['conversion_rate'].mean()) / previous_data['conversion_rate'].mean() * 100
+        }
+        
+        return metrics
+        
+    def get_category_analysis(self) -> pd.DataFrame:
+        """
+        获取品类维度分析结果
+        
+        Returns:
+            品类分析DataFrame
+        """
+        if self.processed_data is None:
+            raise Exception("请先进行数据预处理")
+            
+        current_data = self.processed_data[self.processed_data['date'] == self.processed_data['date'].max()]
+        previous_data = self.processed_data[self.processed_data['date'] == self.processed_data['date'].max() - timedelta(days=7)]
+        
+        category_analysis = pd.DataFrame()
+        
+        # 计算每个品类的指标
+        for category in current_data['category'].unique():
+            current_cat = current_data[current_data['category'] == category]
+            previous_cat = previous_data[previous_data['category'] == category]
+            
+            analysis = {
+                'category': category,
+                'current_order_price': current_cat['order_price'].mean(),
+                'previous_order_price': previous_cat['order_price'].mean(),
+                'change_rate': (current_cat['order_price'].mean() - previous_cat['order_price'].mean()) / previous_cat['order_price'].mean() * 100,
+                'current_sales_share': current_cat['gmv'].sum() / current_data['gmv'].sum() * 100,
+                'previous_sales_share': previous_cat['gmv'].sum() / previous_data['gmv'].sum() * 100,
+                'structure_change_rate': (current_cat['gmv'].sum() / current_data['gmv'].sum() - 
+                                        previous_cat['gmv'].sum() / previous_data['gmv'].sum()) * 100
+            }
+            category_analysis = category_analysis.append(analysis, ignore_index=True)
+            
+        return category_analysis
+        
+    def get_region_analysis(self) -> pd.DataFrame:
+        """
+        获取区域维度分析结果
+        
+        Returns:
+            区域分析DataFrame
+        """
+        if self.processed_data is None:
+            raise Exception("请先进行数据预处理")
+            
+        current_data = self.processed_data[self.processed_data['date'] == self.processed_data['date'].max()]
+        previous_data = self.processed_data[self.processed_data['date'] == self.processed_data['date'].max() - timedelta(days=7)]
+        
+        region_analysis = pd.DataFrame()
+        
+        # 计算每个区域的指标
+        for region in current_data['region'].unique():
+            current_reg = current_data[current_data['region'] == region]
+            previous_reg = previous_data[previous_data['region'] == region]
+            
+            analysis = {
+                'region': region,
+                'current_order_price': current_reg['order_price'].mean(),
+                'previous_order_price': previous_reg['order_price'].mean(),
+                'change_rate': (current_reg['order_price'].mean() - previous_reg['order_price'].mean()) / previous_reg['order_price'].mean() * 100,
+                'current_conversion_rate': current_reg['conversion_rate'].mean(),
+                'previous_conversion_rate': previous_reg['conversion_rate'].mean(),
+                'conversion_rate_change': (current_reg['conversion_rate'].mean() - previous_reg['conversion_rate'].mean()) / previous_reg['conversion_rate'].mean() * 100
+            }
+            region_analysis = region_analysis.append(analysis, ignore_index=True)
+            
+        return region_analysis
+
+def clean_data(df):
+    """数据清洗逻辑（新增空值填充）"""
+    df.fillna({
+        'gmv': 0,
+        'dau': 0,
+        'conversion_rate': df['conversion_rate'].median()  # 特殊列用中位数填充
+    }, inplace=True)
+    return df[(df['gmv'] > 0) & (df['dau'] > 0)] 

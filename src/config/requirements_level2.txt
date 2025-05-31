@@ -1,0 +1,33 @@
+# Level 2 标准功能依赖 - Web界面 + 可视化
+# 直接安装，无文件引用
+
+# 基础数据处理
+pandas>=1.5.0
+numpy>=1.21.0
+
+# 基础模板
+jinja2>=3.0.0
+
+# 可视化增强
+matplotlib>=3.5.0
+seaborn>=0.11.0
+
+# Web框架
+fastapi>=0.100.0
+uvicorn>=0.22.0
+python-multipart>=0.0.6
+
+# 认证和安全
+passlib[bcrypt]>=1.7.4
+
+# 报告生成
+markdown>=3.3.0
+
+# HTTP客户端
+requests>=2.26.0
+
+# 测试工具
+pytest>=7.0.0
+
+# 代码质量
+black>=22.0.0 

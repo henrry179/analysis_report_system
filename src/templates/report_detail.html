@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ report.title }} - 报告详情</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        .detail-card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .status-badge {
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+        .report-type {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            background: #f8f9fa;
+            margin-bottom: 15px;
+        }
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .summary-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/"><i class="bi bi-graph-up-arrow"></i> 分析报告系统</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/"><i class="bi bi-house"></i> 首页</a>
+                <a class="nav-link" href="/reports"><i class="bi bi-file-earmark-text"></i> 报告管理</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- 面包屑导航 -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/"><i class="bi bi-house"></i> 首页</a></li>
+                <li class="breadcrumb-item"><a href="/reports"><i class="bi bi-file-earmark-text"></i> 报告管理</a></li>
+                <li class="breadcrumb-item active">{{ report.title }}</li>
+            </ol>
+        </nav>
+
+        <div class="row">
+            <!-- 主内容区 -->
+            <div class="col-lg-8">
+                <!-- 报告标题和状态 -->
+                <div class="page-header">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <span class="report-type mb-3">{{ report.type }}</span>
+                            <h1 class="mb-3">{{ report.title }}</h1>
+                            <p class="lead mb-0">{{ report.description }}</p>
+                        </div>
+                        <div class="text-end">
+                            {% if report.status == '已完成' %}
+                            <span class="badge bg-success status-badge">
+                                <i class="bi bi-check-circle"></i> {{ report.status }}
+                            </span>
+                            {% elif report.status == '草稿' %}
+                            <span class="badge bg-warning status-badge">
+                                <i class="bi bi-clock"></i> {{ report.status }}
+                            </span>
+                            {% else %}
+                            <span class="badge bg-info status-badge">
+                                <i class="bi bi-arrow-clockwise"></i> {{ report.status }}
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 报告摘要 -->
+                <div class="summary-box">
+                    <h4><i class="bi bi-lightbulb"></i> 报告摘要</h4>
+                    <p class="mb-0">{{ report.summary }}</p>
+                </div>
+
+                <!-- 报告统计信息 -->
+                <div class="card detail-card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-bar-chart"></i> 报告统计</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="stat-item">
+                                    <i class="bi bi-file-text stat-icon text-primary"></i>
+                                    <h4>{{ report.pages }}</h4>
+                                    <small class="text-muted">总页数</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-item">
+                                    <i class="bi bi-pie-chart stat-icon text-success"></i>
+                                    <h4>{{ report.charts_count }}</h4>
+                                    <small class="text-muted">图表数量</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-item">
+                                    <i class="bi bi-hdd stat-icon text-warning"></i>
+                                    <h4>{{ report.file_size }}</h4>
+                                    <small class="text-muted">文件大小</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-item">
+                                    <i class="bi bi-calendar stat-icon text-info"></i>
+                                    <h4>{{ report.create_date }}</h4>
+                                    <small class="text-muted">创建日期</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 侧边栏 -->
+            <div class="col-lg-4">
+                <!-- 操作按钮 -->
+                <div class="card detail-card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-tools"></i> 操作</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if report.status == '已完成' %}
+                        <!-- 下载选项 -->
+                        <div class="dropdown w-100 mb-2">
+                            <button class="btn btn-primary btn-lg w-100 dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-download"></i> 下载报告
+                            </button>
+                            <ul class="dropdown-menu w-100">
+                                <li><a class="dropdown-item" href="/api/reports/{{ report.id }}/download/pdf" target="_blank">
+                                    <i class="bi bi-file-earmark-pdf"></i> PDF格式</a></li>
+                                <li><a class="dropdown-item" href="/api/reports/{{ report.id }}/download/html" target="_blank">
+                                    <i class="bi bi-file-earmark-code"></i> HTML格式</a></li>
+                                {% if report.md_file %}
+                                <li><a class="dropdown-item" href="/api/reports/{{ report.id }}/download/md" target="_blank">
+                                    <i class="bi bi-file-earmark-text"></i> Markdown格式</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        
+                        <!-- 生成PDF按钮 -->
+                        <button class="btn btn-success w-100 mb-2" onclick="generatePDF({{ report.id }})">
+                            <i class="bi bi-filetype-pdf"></i> 生成PDF
+                        </button>
+                        {% elif report.status == '草稿' %}
+                        <button class="btn btn-success btn-lg w-100 mb-2" onclick="generateReport({{ report.id }})">
+                            <i class="bi bi-play"></i> 生成报告
+                        </button>
+                        {% endif %}
+                        
+                        <!-- 在线预览 -->
+                        <button class="btn btn-outline-info w-100 mb-2" onclick="previewReport({{ report.id }})">
+                            <i class="bi bi-eye"></i> 在线预览
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 导航按钮 -->
+                <div class="card detail-card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-arrow-left-right"></i> 导航</h5>
+                    </div>
+                    <div class="card-body">
+                        <a href="/reports" class="btn btn-outline-primary w-100 mb-2">
+                            <i class="bi bi-arrow-left"></i> 返回报告列表
+                        </a>
+                        <a href="/" class="btn btn-outline-secondary w-100 mb-2">
+                            <i class="bi bi-house"></i> 返回主页
+                        </a>
+                        <a href="/dashboard" class="btn btn-outline-info w-100">
+                            <i class="bi bi-speedometer2"></i> 系统仪表盘
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-light mt-5 py-4">
+        <div class="container text-center">
+            <p class="text-muted mb-0">&copy; 2024 业务分析报告系统. 版权所有.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 生成报告
+        async function generateReport(reportId) {
+            try {
+                const response = await fetch(`/api/reports/${reportId}/generate`, {
+                    method: 'POST'
+                });
+                const result = await response.json();
+                alert(result.message);
+                if (result.status === '生成中') {
+                    setTimeout(() => location.reload(), 2000);
+                }
+            } catch (error) {
+                alert('生成报告失败: ' + error.message);
+            }
+        }
+
+        // 生成PDF
+        async function generatePDF(reportId) {
+            try {
+                const button = window.event ? window.event.target : document.activeElement;
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="bi bi-arrow-clockwise"></i> 生成中...';
+                button.disabled = true;
+
+                const response = await fetch('/api/reports/' + reportId + '/generate-pdf', {
+                    method: 'POST'
+                });
+                const result = await response.json();
+                
+                if (result.status === 'completed') {
+                    alert('PDF生成成功！即将开始下载...');
+                    window.open(result.download_url, '_blank');
+                } else {
+                    alert(result.message + '\n建议：' + (result.suggestion || ''));
+                }
+                
+                button.innerHTML = originalText;
+                button.disabled = false;
+            } catch (error) {
+                alert('PDF生成失败: ' + error.message);
+                if (typeof button !== 'undefined') {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                }
+            }
+        }
+
+        // 在线预览
+        function previewReport(reportId) {
+            const previewUrl = `/api/reports/${reportId}/preview`;
+            window.open(previewUrl, '_blank', 'width=1200,height=800,scrollbars=yes,resizable=yes');
+        }
+    </script>
+</body>
+</html> 

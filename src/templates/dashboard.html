@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统仪表盘 - 业务分析报告系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .dashboard-header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border: none;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        .progress-circle {
+            position: relative;
+            width: 120px;
+            height: 120px;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-bottom: 20px;
+        }
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+        .performance-meter {
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .performance-bar {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        .quick-action {
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+        }
+        .quick-action:hover {
+            color: inherit;
+            transform: scale(1.05);
+        }
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        .status-online { background-color: #28a745; }
+        .status-warning { background-color: #ffc107; }
+        .status-offline { background-color: #dc3545; }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/"><i class="bi bi-graph-up-arrow"></i> 分析报告系统</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"><i class="bi bi-house"></i> 首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/reports"><i class="bi bi-file-earmark-text"></i> 报告管理</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/analysis"><i class="bi bi-graph-up"></i> 分析中心</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/dashboard"><i class="bi bi-speedometer2"></i> 仪表盘</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/api-docs"><i class="bi bi-rocket-takeoff"></i> API开发者中心</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-code-square"></i> 开发工具
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/docs" target="_blank"><i class="bi bi-braces"></i> Swagger API</a></li>
+                            <li><a class="dropdown-item" href="/api-docs"><i class="bi bi-book"></i> 完整文档</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/settings"><i class="bi bi-gear"></i> 设置</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <!-- 面包屑导航 -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/"><i class="bi bi-house"></i> 首页</a></li>
+                <li class="breadcrumb-item active"><i class="bi bi-speedometer2"></i> 系统仪表盘</li>
+            </ol>
+        </nav>
+
+        <!-- 仪表盘标题 -->
+        <div class="dashboard-header">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="mb-2"><i class="bi bi-speedometer2"></i> 系统仪表盘</h1>
+                    <p class="mb-0 lead">实时监控系统状态和业务指标</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="d-flex align-items-center justify-content-end">
+                        <span class="status-indicator status-online"></span>
+                        <span class="me-3">系统正常运行</span>
+                        <button class="btn btn-light" onclick="refreshDashboard()">
+                            <i class="bi bi-arrow-clockwise"></i> 刷新
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 核心指标卡片 -->
+        <div class="row mb-4">
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card stat-card">
+                    <div class="d-flex align-items-center">
+                        <div class="stat-icon bg-primary text-white">
+                            <i class="bi bi-files"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="text-muted small">总报告数</div>
+                            <div class="h4 mb-0" id="totalReports">-</div>
+                            <div class="text-success small">
+                                <i class="bi bi-arrow-up"></i> <span id="reportsGrowth">-</span>% 本月
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card stat-card">
+                    <div class="d-flex align-items-center">
+                        <div class="stat-icon bg-success text-white">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="text-muted small">活跃用户</div>
+                            <div class="h4 mb-0" id="activeUsers">-</div>
+                            <div class="text-info small">
+                                <i class="bi bi-person-plus"></i> <span id="newUsers">-</span> 新用户
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card stat-card">
+                    <div class="d-flex align-items-center">
+                        <div class="stat-icon bg-warning text-white">
+                            <i class="bi bi-clock"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="text-muted small">响应时间</div>
+                            <div class="h4 mb-0" id="responseTime">-</div>
+                            <div class="text-warning small">
+                                <i class="bi bi-lightning"></i> 平均响应
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card stat-card">
+                    <div class="d-flex align-items-center">
+                        <div class="stat-icon bg-info text-white">
+                            <i class="bi bi-graph-up"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="text-muted small">系统负载</div>
+                            <div class="h4 mb-0" id="systemLoad">-</div>
+                            <div class="text-success small">
+                                <i class="bi bi-check-circle"></i> 正常
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 系统资源监控 -->
+        <div class="row mb-4">
+            <div class="col-xl-8">
+                <div class="card stat-card">
+                    <div class="card-header bg-transparent border-0">
+                        <h5 class="mb-0"><i class="bi bi-cpu"></i> 系统资源使用率</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <div class="text-center">
+                                    <div class="progress-circle">
+                                        <canvas id="cpuChart" width="120" height="120"></canvas>
+                                    </div>
+                                    <h6 class="mt-2">CPU</h6>
+                                    <span id="cpuPercent" class="text-primary">-%</span>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="text-center">
+                                    <div class="progress-circle">
+                                        <canvas id="memoryChart" width="120" height="120"></canvas>
+                                    </div>
+                                    <h6 class="mt-2">内存</h6>
+                                    <span id="memoryPercent" class="text-success">-%</span>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="text-center">
+                                    <div class="progress-circle">
+                                        <canvas id="diskChart" width="120" height="120"></canvas>
+                                    </div>
+                                    <h6 class="mt-2">磁盘</h6>
+                                    <span id="diskPercent" class="text-warning">-%</span>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="text-center">
+                                    <div class="metric-card">
+                                        <h6><i class="bi bi-speedometer2"></i> 系统信息</h6>
+                                        <div class="small">
+                                            <div class="mb-2">
+                                                <i class="bi bi-server"></i> 
+                                                <span id="systemPlatform">-</span>
+                                            </div>
+                                            <div class="mb-2">
+                                                <i class="bi bi-clock"></i> 
+                                                运行时间: <span id="systemUptime">-</span>
+                                            </div>
+                                            <div>
+                                                <i class="bi bi-code-slash"></i> 
+                                                Python <span id="pythonVersion">-</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4">
+                <div class="card stat-card">
+                    <div class="card-header bg-transparent border-0">
+                        <h5 class="mb-0"><i class="bi bi-activity"></i> 实时活动</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="activityList">
+                            <div class="activity-item">
+                                <div class="activity-icon bg-primary text-white">
+                                    <i class="bi bi-file-earmark-plus"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold">新报告生成</div>
+                                    <div class="text-muted small">2分钟前</div>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon bg-success text-white">
+                                    <i class="bi bi-person-check"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold">用户登录</div>
+                                    <div class="text-muted small">5分钟前</div>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon bg-info text-white">
+                                    <i class="bi bi-graph-up"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold">数据分析完成</div>
+                                    <div class="text-muted small">8分钟前</div>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon bg-warning text-white">
+                                    <i class="bi bi-gear"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold">系统配置更新</div>
+                                    <div class="text-muted small">15分钟前</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 业务数据图表 -->
+        <div class="row mb-4">
+            <div class="col-xl-8">
+                <div class="card stat-card">
+                    <div class="card-header bg-transparent border-0">
+                        <h5 class="mb-0"><i class="bi bi-bar-chart"></i> 用户活跃度趋势</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="userActivityChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4">
+                <div class="card stat-card">
+                    <div class="card-header bg-transparent border-0">
+                        <h5 class="mb-0"><i class="bi bi-pie-chart"></i> 报告类型分布</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="reportTypesChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 快捷操作 -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card stat-card">
+                    <div class="card-header bg-transparent border-0">
+                        <h5 class="mb-0"><i class="bi bi-lightning"></i> 快捷操作</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-6 mb-3">
+                                <a href="/reports" class="quick-action">
+                                    <div class="text-center p-3 border rounded">
+                                        <i class="bi bi-file-earmark-plus display-6 text-primary"></i>
+                                        <div class="mt-2 fw-bold">生成新报告</div>
+                                        <div class="text-muted small">创建业务分析报告</div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-lg-3 col-md-6 mb-3">
+                                <a href="/analysis" class="quick-action">
+                                    <div class="text-center p-3 border rounded">
+                                        <i class="bi bi-graph-up display-6 text-success"></i>
+                                        <div class="mt-2 fw-bold">数据分析</div>
+                                        <div class="text-muted small">启动数据分析任务</div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-lg-3 col-md-6 mb-3">
+                                <a href="/users" class="quick-action">
+                                    <div class="text-center p-3 border rounded">
+                                        <i class="bi bi-people display-6 text-danger"></i>
+                                        <div class="mt-2 fw-bold">用户管理</div>
+                                        <div class="text-muted small">管理系统用户权限</div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-lg-3 col-md-6 mb-3">
+                                <a href="/settings" class="quick-action">
+                                    <div class="text-center p-3 border rounded">
+                                        <i class="bi bi-gear display-6 text-warning"></i>
+                                        <div class="mt-2 fw-bold">系统设置</div>
+                                        <div class="text-muted small">配置系统参数</div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-lg-3 col-md-6 mb-3">
+                                <a href="/api-docs" class="quick-action">
+                                    <div class="text-center p-3 border rounded">
+                                        <i class="bi bi-rocket-takeoff display-6 text-info"></i>
+                                        <div class="mt-2 fw-bold">API开发者中心</div>
+                                        <div class="text-muted small">专业API文档和指南</div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-lg-3 col-md-6 mb-3">
+                                <a href="/charts" class="quick-action">
+                                    <div class="text-center p-3 border rounded">
+                                        <i class="bi bi-bar-chart display-6 text-dark"></i>
+                                        <div class="mt-2 fw-bold">数据图表</div>
+                                        <div class="text-muted small">查看可视化图表</div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-lg-3 col-md-6 mb-3">
+                                <a href="/docs" target="_blank" class="quick-action">
+                                    <div class="text-center p-3 border rounded">
+                                        <i class="bi bi-braces display-6 text-secondary"></i>
+                                        <div class="mt-2 fw-bold">Swagger API</div>
+                                        <div class="text-muted small">交互式API测试</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 返回按钮 -->
+        <div class="row mt-4">
+            <div class="col-12 text-center">
+                <a href="/" class="btn btn-outline-primary btn-lg">
+                    <i class="bi bi-house"></i> 返回主页
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-light mt-5 py-4">
+        <div class="container text-center">
+            <p class="text-muted mb-0">&copy; 2024 业务分析报告系统. 版权所有.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let userActivityChart = null;
+        let reportTypesChart = null;
+
+        // 创建环形进度图表
+        function createDoughnutChart(canvasId, percentage, color) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            return new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [percentage, 100 - percentage],
+                        backgroundColor: [color, '#e9ecef'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: false,
+                    maintainAspectRatio: false,
+                    cutout: '80%',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: false }
+                    }
+                }
+            });
+        }
+
+        // 加载仪表盘数据
+        async function loadDashboardData() {
+            try {
+                const response = await fetch('/api/dashboard/overview');
+                const data = await response.json();
+                
+                // 更新核心指标
+                document.getElementById('totalReports').textContent = data.reports.total;
+                document.getElementById('reportsGrowth').textContent = data.reports.completion_rate;
+                document.getElementById('activeUsers').textContent = data.users.active;
+                document.getElementById('newUsers').textContent = data.users.admin;
+                document.getElementById('responseTime').textContent = data.performance.response_time;
+                document.getElementById('systemLoad').textContent = data.performance.throughput;
+                
+                // 更新系统资源信息
+                document.getElementById('cpuPercent').textContent = data.system.cpu_percent + '%';
+                document.getElementById('memoryPercent').textContent = data.system.memory_percent + '%';
+                document.getElementById('diskPercent').textContent = data.system.disk_percent + '%';
+                document.getElementById('systemPlatform').textContent = data.system.platform;
+                document.getElementById('systemUptime').textContent = data.system.uptime;
+                document.getElementById('pythonVersion').textContent = data.system.python_version;
+                
+                // 创建环形图表
+                createDoughnutChart('cpuChart', data.system.cpu_percent, '#007bff');
+                createDoughnutChart('memoryChart', data.system.memory_percent, '#28a745');
+                createDoughnutChart('diskChart', data.system.disk_percent, '#ffc107');
+                
+            } catch (error) {
+                console.error('加载仪表盘数据失败:', error);
+            }
+        }
+
+        // 加载图表数据
+        async function loadChartData() {
+            try {
+                const response = await fetch('/api/dashboard/charts');
+                const data = await response.json();
+                
+                // 销毁现有图表
+                if (userActivityChart) userActivityChart.destroy();
+                if (reportTypesChart) reportTypesChart.destroy();
+                
+                // 用户活跃度趋势图
+                const activityCtx = document.getElementById('userActivityChart').getContext('2d');
+                userActivityChart = new Chart(activityCtx, {
+                    type: 'line',
+                    data: {
+                        labels: data.user_activity.labels,
+                        datasets: [{
+                            label: '活跃用户数',
+                            data: data.user_activity.values,
+                            borderColor: '#007bff',
+                            backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: { beginAtZero: true }
+                        }
+                    }
+                });
+                
+                // 报告类型分布图
+                const reportCtx = document.getElementById('reportTypesChart').getContext('2d');
+                reportTypesChart = new Chart(reportCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: data.report_types.labels,
+                        datasets: [{
+                            data: data.report_types.values,
+                            backgroundColor: [
+                                '#007bff',
+                                '#28a745',
+                                '#ffc107',
+                                '#dc3545'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+                
+            } catch (error) {
+                console.error('加载图表数据失败:', error);
+            }
+        }
+
+        // 刷新仪表盘
+        function refreshDashboard() {
+            loadDashboardData();
+            loadChartData();
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboardData();
+            loadChartData();
+            
+            // 定期刷新数据 (每30秒)
+            setInterval(refreshDashboard, 30000);
+        });
+    </script>
+</body>
+</html> 
