@@ -6,7 +6,10 @@ from pathlib import Path
 import argparse
 from typing import Optional
 
-from src.main import AnalysisReportSystem
+project_root = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+from src.core.main import AnalysisReportSystem
 
 # 配置日志
 logging.basicConfig(
@@ -60,7 +63,7 @@ def main(input_file: Optional[str] = None, output_dir: Optional[str] = None) -> 
         
         # 设置默认值
         if input_file is None:
-            input_file = os.path.join(current_dir, 'data', 'example_data.csv')
+            input_file = os.path.join(project_root, 'data', 'example_data.csv')
         if output_dir is None:
             output_dir = os.path.join(current_dir, 'output')
             
@@ -103,4 +106,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
     
     # 运行系统
-    main(args.input, args.output) 
+    main(args.input, args.output)

@@ -1,0 +1,286 @@
+{% extends "layout.html" %}
+
+{% block title %}仪表盘 - {{ app_name }}{% endblock %}
+
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>仪表盘</h1>
+    <div class="btn-group">
+        <button type="button" class="btn btn-outline-primary" onclick="refreshDashboard()">
+            <i class="bi bi-arrow-clockwise"></i> 刷新
+        </button>
+        <button type="button" class="btn btn-outline-secondary" onclick="exportDashboard()">
+            <i class="bi bi-download"></i> 导出
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <!-- 统计卡片 -->
+    <div class="col-md-3">
+        <div class="card bg-primary text-white mb-4">
+            <div class="card-body">
+                <h5 class="card-title">总报告数</h5>
+                <h2 class="card-text">{{ stats.total_reports }}</h2>
+                <p class="card-text">
+                    <small>较上月 {{ stats.reports_change }}%</small>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white mb-4">
+            <div class="card-body">
+                <h5 class="card-title">本月新增</h5>
+                <h2 class="card-text">{{ stats.new_reports }}</h2>
+                <p class="card-text">
+                    <small>较上月 {{ stats.new_reports_change }}%</small>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white mb-4">
+            <div class="card-body">
+                <h5 class="card-title">活跃用户</h5>
+                <h2 class="card-text">{{ stats.active_users }}</h2>
+                <p class="card-text">
+                    <small>较上月 {{ stats.active_users_change }}%</small>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-white mb-4">
+            <div class="card-body">
+                <h5 class="card-title">数据量</h5>
+                <h2 class="card-text">{{ stats.total_data }}</h2>
+                <p class="card-text">
+                    <small>较上月 {{ stats.data_change }}%</small>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- 报告类型分布 -->
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">报告类型分布</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="reportTypeChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- 报告趋势 -->
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">报告趋势</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="reportTrendChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- 最近报告 -->
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">最近报告</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>报告名称</th>
+                                <th>类型</th>
+                                <th>创建者</th>
+                                <th>创建时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for report in recent_reports %}
+                            <tr>
+                                <td>
+                                    <a href="/reports/{{ report.id }}" class="text-decoration-none">
+                                        {{ report.name }}
+                                    </a>
+                                </td>
+                                <td>{{ report.type }}</td>
+                                <td>{{ report.creator }}</td>
+                                <td>{{ report.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="/reports/{{ report.id }}/edit" class="btn btn-sm btn-outline-primary">
+                                            编辑
+                                        </a>
+                                        <a href="/reports/{{ report.id }}/export" class="btn btn-sm btn-outline-success">
+                                            导出
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 系统状态 -->
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">系统状态</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">CPU 使用率</h6>
+                            <small>{{ system_status.cpu_usage }}%</small>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: {{ system_status.cpu_usage }}%"></div>
+                        </div>
+                    </div>
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">内存使用率</h6>
+                            <small>{{ system_status.memory_usage }}%</small>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: {{ system_status.memory_usage }}%"></div>
+                        </div>
+                    </div>
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">磁盘使用率</h6>
+                            <small>{{ system_status.disk_usage }}%</small>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: {{ system_status.disk_usage }}%"></div>
+                        </div>
+                    </div>
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">系统运行时间</h6>
+                            <small>{{ system_status.uptime }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+<script>
+// 报告类型分布图表
+new Chart(document.getElementById('reportTypeChart'), {
+    type: 'doughnut',
+    data: {
+        labels: {{ report_types | tojson }},
+        datasets: [{
+            data: {{ report_type_counts | tojson }},
+            backgroundColor: [
+                '#4e73df',
+                '#1cc88a',
+                '#36b9cc',
+                '#f6c23e',
+                '#e74a3b'
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            }
+        }
+    }
+});
+
+// 报告趋势图表
+new Chart(document.getElementById('reportTrendChart'), {
+    type: 'line',
+    data: {
+        labels: {{ trend_dates | tojson }},
+        datasets: [{
+            label: '报告数量',
+            data: {{ trend_counts | tojson }},
+            borderColor: '#4e73df',
+            tension: 0.1
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+// 刷新仪表盘
+function refreshDashboard() {
+    showLoading();
+    fetch('/dashboard/refresh')
+        .then(response => response.json())
+        .then(data => {
+            hideLoading();
+            window.location.reload();
+        })
+        .catch(error => {
+            hideLoading();
+            showNotification('刷新失败，请重试', 'danger');
+        });
+}
+
+// 导出仪表盘
+function exportDashboard() {
+    showLoading();
+    fetch('/dashboard/export')
+        .then(response => response.blob())
+        .then(blob => {
+            hideLoading();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'dashboard-report.xlsx';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            a.remove();
+        })
+        .catch(error => {
+            hideLoading();
+            showNotification('导出失败，请重试', 'danger');
+        });
+}
+</script>
+{% endblock %} 
