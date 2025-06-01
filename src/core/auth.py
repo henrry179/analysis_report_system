@@ -40,32 +40,32 @@ def load_users() -> Dict[str, UserInDB]:
     if not USERS_FILE.exists():
         # 初始化默认用户
         default_users = {
-            "admin": UserInDB(
-                username="admin",
-                hashed_password=pwd_context.hash("adminpass"),
-                role="admin",
-                email="admin@example.com",
-                is_active=True,
-                created_at=datetime.now()
-            ),
-            "analyst": UserInDB(
-                username="analyst",
-                hashed_password=pwd_context.hash("analyst123"),
-                role="analyst",
-                email="analyst@example.com",
-                is_active=True,
-                created_at=datetime.now()
-            ),
-            "viewer": UserInDB(
-                username="viewer",
-                hashed_password=pwd_context.hash("viewer123"),
-                role="viewer",
-                email="viewer@example.com",
-                is_active=True,
-                created_at=datetime.now()
-            )
-        }
-        
+    "admin": UserInDB(
+        username="admin",
+        hashed_password=pwd_context.hash("adminpass"),
+        role="admin",
+        email="admin@example.com",
+        is_active=True,
+        created_at=datetime.now()
+    ),
+    "analyst": UserInDB(
+        username="analyst",
+        hashed_password=pwd_context.hash("analyst123"),
+        role="analyst",
+        email="analyst@example.com",
+        is_active=True,
+        created_at=datetime.now()
+    ),
+    "viewer": UserInDB(
+        username="viewer",
+        hashed_password=pwd_context.hash("viewer123"),
+        role="viewer",
+        email="viewer@example.com",
+        is_active=True,
+        created_at=datetime.now()
+    )
+}
+
         # 保存默认用户数据
         USERS_FILE.parent.mkdir(parents=True, exist_ok=True)
         with open(USERS_FILE, "w", encoding="utf-8") as f:

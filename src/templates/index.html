@@ -87,11 +87,11 @@
                                 <el-icon class="el-icon--upload"><el-icon-upload /></el-icon>
                                 <div class="el-upload__text">
                                     拖拽文件到此处或 <em>点击上传</em>
-                                </div>
+            </div>
                                 <template #tip>
                                     <div class="el-upload__tip">
                                         支持 CSV、Excel、JSON 格式文件
-                                    </div>
+                    </div>
                                 </template>
                             </el-upload>
                             <el-button
@@ -162,23 +162,23 @@
                                         <el-table-column prop="median" label="中位数" />
                                         <el-table-column prop="std" label="标准差" />
                                     </el-table>
-                                </div>
+                </div>
 
                                 <!-- 相关性分析 -->
                                 <div v-if="analysisForm.type === 'correlation'">
                                     <div id="correlation-heatmap"></div>
-                                </div>
+        </div>
 
                                 <!-- 趋势分析 -->
                                 <div v-if="analysisForm.type === 'trend'">
                                     <div id="trend-chart"></div>
-                                </div>
+        </div>
 
                                 <!-- 预测分析 -->
                                 <div v-if="analysisForm.type === 'forecast'">
                                     <div id="forecast-chart"></div>
-                                </div>
-                            </div>
+            </div>
+        </div>
                         </el-card>
                     </div>
 

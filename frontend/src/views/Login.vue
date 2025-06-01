@@ -6,22 +6,22 @@
       </template>
       
       <el-form
-        ref="loginForm"
-        :model="loginForm"
+        ref="loginFormRef"
+        :model="formModel"
         :rules="rules"
         label-width="80px"
         @submit.prevent="handleLogin"
       >
         <el-form-item label="用户名" prop="username">
           <el-input
-            v-model="loginForm.username"
+            v-model="formModel.username"
             placeholder="请输入用户名"
           />
         </el-form-item>
         
         <el-form-item label="密码" prop="password">
           <el-input
-            v-model="loginForm.password"
+            v-model="formModel.password"
             type="password"
             placeholder="请输入密码"
             show-password
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { ref, reactive } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import axios from 'axios'
@@ -53,7 +53,8 @@ export default {
   name: 'Login',
   setup() {
     const router = useRouter()
-    const loginForm = reactive({
+    const loginFormRef = ref(null)
+    const formModel = ref({
       username: '',
       password: ''
     })
@@ -68,29 +69,31 @@ export default {
       ]
     }
     
-    const handleLogin = async () => {
-      loading.value = true
-      try {
-        const response = await axios.post('http://localhost:8000/api/auth/token', {
-          username: loginForm.username,
-          password: loginForm.password
-        })
-        
-        const { access_token } = response.data
-        localStorage.setItem('token', access_token)
-        axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`
-        
-        ElMessage.success('登录成功')
-        router.push('/dashboard')
-      } catch (error) {
-        ElMessage.error(error.response?.data?.detail || '登录失败')
-      } finally {
-        loading.value = false
-      }
+    const handleLogin = () => {
+      loginFormRef.value.validate(async (valid) => {
+        if (!valid) return
+        loading.value = true
+        try {
+          const response = await axios.post('http://localhost:8000/api/auth/token', {
+            username: formModel.value.username,
+            password: formModel.value.password
+          })
+          const { access_token } = response.data
+          localStorage.setItem('token', access_token)
+          axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`
+          ElMessage.success('登录成功')
+          router.push('/dashboard')
+        } catch (error) {
+          ElMessage.error(error.response?.data?.detail || '登录失败')
+        } finally {
+          loading.value = false
+        }
+      })
     }
     
     return {
-      loginForm,
+      loginFormRef,
+      formModel,
       loading,
       rules,
       handleLogin
