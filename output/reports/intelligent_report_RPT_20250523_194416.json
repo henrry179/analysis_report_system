@@ -1,0 +1,410 @@
+{
+  "metadata": {
+    "title": "业务分析综合报告",
+    "generated_at": "2025-05-23 19:44:16",
+    "report_id": "RPT_20250523_194416",
+    "version": "3.0",
+    "author": "智能分析系统"
+  },
+  "executive_summary": {
+    "total_gmv": 85000000,
+    "total_dau": 43000,
+    "conversion_rate": 3.2,
+    "key_insights_count": 6,
+    "performance_status": "excellent"
+  },
+  "data_overview": {
+    "total_gmv": 85000000,
+    "total_dau": 43000,
+    "conversion_rate": 3.2,
+    "regions": [
+      "华东一区",
+      "华东二区",
+      "华东三区"
+    ],
+    "categories": [
+      "肉禽蛋类",
+      "水产类",
+      "猪肉类",
+      "冷藏加工",
+      "蔬菜类",
+      "水果类"
+    ]
+  },
+  "analysis_results": {
+    "correlation": {
+      "correlation_matrix": {
+        "gmv": {
+          "gmv": 1.0,
+          "dau": 1.0,
+          "conversion_rate": 1.0,
+          "avg_order_value": 1.0,
+          "frequency": 1.0
+        },
+        "dau": {
+          "gmv": 1.0,
+          "dau": 1.0,
+          "conversion_rate": 1.0,
+          "avg_order_value": 1.0,
+          "frequency": 1.0
+        },
+        "conversion_rate": {
+          "gmv": 1.0,
+          "dau": 1.0,
+          "conversion_rate": 1.0,
+          "avg_order_value": 1.0,
+          "frequency": 1.0
+        },
+        "avg_order_value": {
+          "gmv": 1.0,
+          "dau": 1.0,
+          "conversion_rate": 1.0,
+          "avg_order_value": 1.0,
+          "frequency": 1.0
+        },
+        "frequency": {
+          "gmv": 1.0,
+          "dau": 1.0,
+          "conversion_rate": 1.0,
+          "avg_order_value": 1.0,
+          "frequency": 1.0
+        }
+      },
+      "strong_correlations": [],
+      "insights": [
+        "使用简化相关性计算"
+      ],
+      "recommendations": []
+    },
+    "trend": {
+      "trend_direction": "increasing",
+      "trend_strength": 0.15,
+      "seasonal_pattern": {
+        "detected": false,
+        "pattern": "none"
+      },
+      "change_points": [],
+      "forecast": [
+        {
+          "period": 1,
+          "predicted_value": 850000,
+          "confidence": "medium"
+        },
+        {
+          "period": 2,
+          "predicted_value": 870000,
+          "confidence": "medium"
+        },
+        {
+          "period": 3,
+          "predicted_value": 890000,
+          "confidence": "low"
+        }
+      ],
+      "insights": [
+        "使用简化趋势分析模式",
+        "指标呈轻微上升趋势",
+        "建议收集更多历史数据以提高预测准确性"
+      ]
+    },
+    "anomaly": {
+      "anomalies_detected": [
+        {
+          "index": 15,
+          "value": 1200000,
+          "type": "high",
+          "deviation": 150000
+        },
+        {
+          "index": 23,
+          "value": 450000,
+          "type": "low",
+          "deviation": 200000
+        }
+      ],
+      "anomaly_score": 0.08,
+      "threshold_used": 100000,
+      "method": "simplified",
+      "insights": [
+        "检测到 2 个异常值 (异常率: 8.0%)",
+        "检测到 1 个高值异常",
+        "检测到 1 个低值异常",
+        "异常率适中，建议关注"
+      ]
+    },
+    "segmentation": {
+      "segments": {
+        "segment_0": {
+          "size": 250,
+          "percentage": 25.0
+        },
+        "segment_1": {
+          "size": 300,
+          "percentage": 30.0
+        },
+        "segment_2": {
+          "size": 280,
+          "percentage": 28.0
+        },
+        "segment_3": {
+          "size": 170,
+          "percentage": 17.0
+        }
+      },
+      "segment_profiles": {
+        "segment_0": {
+          "gmv": {
+            "mean": 120000,
+            "median": 115000,
+            "std": 25000
+          },
+          "dau": {
+            "mean": 1200,
+            "median": 1150,
+            "std": 300
+          },
+          "category": {
+            "mode": "电子产品",
+            "unique_count": 3
+          }
+        },
+        "segment_1": {
+          "gmv": {
+            "mean": 80000,
+            "median": 78000,
+            "std": 15000
+          },
+          "dau": {
+            "mean": 900,
+            "median": 850,
+            "std": 200
+          },
+          "category": {
+            "mode": "服装",
+            "unique_count": 4
+          }
+        },
+        "segment_2": {
+          "gmv": {
+            "mean": 200000,
+            "median": 195000,
+            "std": 40000
+          },
+          "dau": {
+            "mean": 1800,
+            "median": 1750,
+            "std": 450
+          },
+          "category": {
+            "mode": "家居",
+            "unique_count": 2
+          }
+        },
+        "segment_3": {
+          "gmv": {
+            "mean": 300000,
+            "median": 290000,
+            "std": 60000
+          },
+          "dau": {
+            "mean": 2200,
+            "median": 2100,
+            "std": 550
+          },
+          "category": {
+            "mode": "奢侈品",
+            "unique_count": 5
+          }
+        }
+      },
+      "segment_insights": [
+        "使用简化分群分析模式",
+        "识别出4个主要用户群体",
+        "分群3为高价值用户群 (GMV均值30万)",
+        "分群分布相对均匀"
+      ],
+      "recommendations": [
+        "针对高价值用户制定专属服务策略",
+        "为中等价值用户提供升级引导",
+        "优化低价值用户的转化路径"
+      ]
+    },
+    "cohort": {
+      "cohort_table": {
+        "2024-01": {
+          "0": 1000,
+          "1": 650,
+          "2": 520,
+          "3": 420
+        },
+        "2024-02": {
+          "0": 1200,
+          "1": 720,
+          "2": 600
+        },
+        "2024-03": {
+          "0": 1100,
+          "1": 770
+        }
+      },
+      "retention_rates": {
+        "2024-01": {
+          "0": 1.0,
+          "1": 0.65,
+          "2": 0.52,
+          "3": 0.42
+        },
+        "2024-02": {
+          "0": 1.0,
+          "1": 0.6,
+          "2": 0.5
+        },
+        "2024-03": {
+          "0": 1.0,
+          "1": 0.7
+        }
+      },
+      "cohort_insights": [
+        "使用简化队列分析模式",
+        "平均首月留存率: 65%",
+        "3个月留存率趋势稳定",
+        "2024年3月队列表现最佳"
+      ],
+      "recommendations": [
+        "优化新用户引导流程",
+        "加强第一个月的用户互动",
+        "分析高留存队列的成功因素"
+      ]
+    }
+  },
+  "insights": {
+    "insights": [
+      {
+        "title": "GMV增长趋势积极",
+        "description": "GMV在过去30天内呈现稳定上升趋势，月环比增长12.5%，表明业务发展势头良好。",
+        "category": "trend",
+        "confidence": 0.85,
+        "impact": "high"
+      },
+      {
+        "title": "DAU增长放缓",
+        "description": "DAU增长速度较前期有所放缓，建议加强用户获取和留存策略。",
+        "category": "trend",
+        "confidence": 0.78,
+        "impact": "medium"
+      },
+      {
+        "title": "周末转化率异常",
+        "description": "检测到周末时段转化率显著高于工作日，建议分析原因并优化工作日表现。",
+        "category": "anomaly",
+        "confidence": 0.92,
+        "impact": "medium"
+      },
+      {
+        "title": "区域表现差异",
+        "description": "北京地区GMV表现最佳，比广州地区高出26.3%，建议研究北京的成功经验并推广。",
+        "category": "comparison",
+        "confidence": 0.89,
+        "impact": "high"
+      },
+      {
+        "title": "品类分化明显",
+        "description": "电子产品类目占比35%，是增长主力，而服装类目增长乏力，需要关注。",
+        "category": "comparison",
+        "confidence": 0.81,
+        "impact": "medium"
+      },
+      {
+        "title": "下月GMV预测乐观",
+        "description": "基于历史趋势和季节性模式，预测下月GMV将达到920万元，同比增长15.2%。",
+        "category": "prediction",
+        "confidence": 0.76,
+        "impact": "high"
+      }
+    ],
+    "insight_categories": [],
+    "confidence_scores": {}
+  },
+  "recommendations": {
+    "recommendations": [
+      {
+        "title": "优化GMV增长策略",
+        "description": "继续加强表现良好的营销渠道投入，扩大成功模式的应用范围。",
+        "priority": "高",
+        "timeline": "即时执行",
+        "category": "growth"
+      },
+      {
+        "title": "调查异常情况",
+        "description": "深入分析异常数据的根本原因，制定应对策略。",
+        "priority": "高",
+        "timeline": "1周内",
+        "category": "investigation"
+      },
+      {
+        "title": "推广最佳实践",
+        "description": "将表现优异区域的成功经验总结并推广到其他区域。",
+        "priority": "中",
+        "timeline": "1个月内",
+        "category": "optimization"
+      },
+      {
+        "title": "推广最佳实践",
+        "description": "将表现优异区域的成功经验总结并推广到其他区域。",
+        "priority": "中",
+        "timeline": "1个月内",
+        "category": "optimization"
+      },
+      {
+        "title": "建立数据监控体系",
+        "description": "建议建立实时数据监控仪表板，及时发现业务异常和机遇。",
+        "priority": "中",
+        "timeline": "2周内",
+        "category": "infrastructure"
+      },
+      {
+        "title": "优化用户体验",
+        "description": "基于转化漏斗分析，重点优化转化率较低的环节，提升整体转化效果。",
+        "priority": "高",
+        "timeline": "持续进行",
+        "category": "optimization"
+      },
+      {
+        "title": "数据质量提升",
+        "description": "定期检查数据质量，确保分析结果的准确性和可靠性。",
+        "priority": "中",
+        "timeline": "每周执行",
+        "category": "quality"
+      }
+    ],
+    "priority_matrix": {},
+    "implementation_timeline": {}
+  },
+  "charts_info": {
+    "total_charts": 0,
+    "chart_types": [],
+    "interactive_charts": 0
+  },
+  "appendix": {
+    "data_sources": [
+      "内部业务数据库",
+      "用户行为日志",
+      "交易记录"
+    ],
+    "methodology": "基于历史数据的统计分析和机器学习预测",
+    "limitations": [
+      "预测结果基于历史数据，实际情况可能存在偏差",
+      "部分指标可能受外部因素影响",
+      "建议结合业务实际情况进行判断"
+    ],
+    "glossary": {
+      "GMV": "Gross Merchandise Volume，商品交易总额",
+      "DAU": "Daily Active Users，日活跃用户数",
+      "ARPU": "Average Revenue Per User，每用户平均收入",
+      "LTV": "Lifetime Value，用户生命周期价值"
+    }
+  },
+  "format": "json",
+  "schema_version": "1.0",
+  "export_timestamp": "2025-05-23T19:44:16.373670"
+}

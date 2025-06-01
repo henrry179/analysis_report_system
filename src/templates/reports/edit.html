@@ -1,0 +1,196 @@
+{% extends "layout.html" %}
+
+{% block title %}编辑报告 - {{ report.name }}{% endblock %}
+
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1>编辑报告</h1>
+        <p class="text-muted">
+            报告ID: {{ report.id }}
+        </p>
+    </div>
+    <div>
+        <a href="/reports/{{ report.id }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> 返回详情
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form id="editReportForm" method="POST" action="/reports/{{ report.id }}" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <input type="hidden" name="_method" value="PUT">
+            
+            <div class="mb-3">
+                <label for="reportName" class="form-label">报告名称</label>
+                <input type="text" class="form-control" id="reportName" name="name" value="{{ report.name }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="reportType" class="form-label">报告类型</label>
+                <select class="form-select" id="reportType" name="type" required>
+                    <option value="">请选择报告类型</option>
+                    <option value="business" {% if report.type == 'business' %}selected{% endif %}>业务分析</option>
+                    <option value="financial" {% if report.type == 'financial' %}selected{% endif %}>财务分析</option>
+                    <option value="market" {% if report.type == 'market' %}selected{% endif %}>市场分析</option>
+                    <option value="custom" {% if report.type == 'custom' %}selected{% endif %}>自定义分析</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="reportTemplate" class="form-label">报告模板</label>
+                <select class="form-select" id="reportTemplate" name="template" required>
+                    <option value="">请选择报告模板</option>
+                    <option value="standard" {% if report.template == 'standard' %}selected{% endif %}>标准模板</option>
+                    <option value="detailed" {% if report.template == 'detailed' %}selected{% endif %}>详细模板</option>
+                    <option value="executive" {% if report.template == 'executive' %}selected{% endif %}>执行摘要</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="dataSource" class="form-label">数据源</label>
+                <select class="form-select" id="dataSource" name="data_source" required>
+                    <option value="">请选择数据源</option>
+                    <option value="upload" {% if report.data_source == 'upload' %}selected{% endif %}>上传文件</option>
+                    <option value="database" {% if report.data_source == 'database' %}selected{% endif %}>数据库</option>
+                    <option value="api" {% if report.data_source == 'api' %}selected{% endif %}>API接口</option>
+                </select>
+            </div>
+
+            <div id="uploadSection" class="mb-3" style="display: {% if report.data_source == 'upload' %}block{% else %}none{% endif %};">
+                <label for="dataFile" class="form-label">上传数据文件</label>
+                <input type="file" class="form-control" id="dataFile" name="data_file" accept=".csv,.xlsx,.xls">
+                <div class="form-text">支持的文件格式：CSV, Excel</div>
+                {% if report.data_file %}
+                <div class="mt-2">
+                    <p class="mb-1">当前文件：{{ report.data_file }}</p>
+                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeDataFile()">
+                        移除文件
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label for="reportDescription" class="form-label">报告描述</label>
+                <textarea class="form-control" id="reportDescription" name="description" rows="3">{{ report.description }}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">分析选项</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="includeCharts" name="include_charts" 
+                           {% if report.include_charts %}checked{% endif %}>
+                    <label class="form-check-label" for="includeCharts">
+                        包含图表
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="includeTrends" name="include_trends"
+                           {% if report.include_trends %}checked{% endif %}>
+                    <label class="form-check-label" for="includeTrends">
+                        包含趋势分析
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="includeForecast" name="include_forecast"
+                           {% if report.include_forecast %}checked{% endif %}>
+                    <label class="form-check-label" for="includeForecast">
+                        包含预测分析
+                    </label>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button type="button" class="btn btn-secondary" onclick="window.location.href='/reports/{{ report.id }}'">取消</button>
+                <button type="submit" class="btn btn-primary">保存更改</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+$(document).ready(function() {
+    // 初始化 Select2
+    $('#reportType, #reportTemplate, #dataSource').select2({
+        theme: 'bootstrap-5'
+    });
+
+    // 监听数据源选择
+    $('#dataSource').on('change', function() {
+        const selectedValue = $(this).val();
+        if (selectedValue === 'upload') {
+            $('#uploadSection').show();
+        } else {
+            $('#uploadSection').hide();
+        }
+    });
+
+    // 表单提交处理
+    $('#editReportForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        
+        showLoading();
+        
+        fetch('/reports/{{ report.id }}', {
+            method: 'PUT',
+            body: formData,
+            headers: {
+                'X-CSRF-Token': '{{ csrf_token }}'
+            }
+        })
+        .then(response => {
+            hideLoading();
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('更新报告失败');
+        })
+        .then(data => {
+            showNotification('报告更新成功', 'success');
+            setTimeout(() => {
+                window.location.href = '/reports/{{ report.id }}';
+            }, 1500);
+        })
+        .catch(error => {
+            hideLoading();
+            showNotification(error.message, 'danger');
+        });
+    });
+});
+
+function removeDataFile() {
+    if (confirm('确定要移除当前数据文件吗？')) {
+        fetch('/reports/{{ report.id }}/data-file', {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-Token': '{{ csrf_token }}'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                showNotification('移除数据文件失败，请重试', 'danger');
+            }
+        })
+        .catch(error => {
+            showNotification('移除数据文件失败，请重试', 'danger');
+        });
+    }
+}
+</script>
+{% endblock %} 

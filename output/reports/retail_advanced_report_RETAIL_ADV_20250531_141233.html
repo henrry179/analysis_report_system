@@ -1,0 +1,269 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏪 零售行业深度分析报告 - 2024年5月</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .metric-card { background: linear-gradient(135deg, var(--bs-primary) 0%, rgba(var(--bs-primary-rgb), 0.8) 100%); color: white; }
+        .chart-container { height: 350px; margin: 15px 0; }
+        .insight-box { background: #f8f9fa; padding: 20px; border-left: 4px solid var(--bs-primary); margin: 15px 0; border-radius: 5px; }
+        .data-table { font-size: 0.9rem; }
+        .trend-positive { color: #28a745; font-weight: bold; }
+        .trend-negative { color: #dc3545; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h1 class="text-center">🏪 零售行业深度分析报告</h1>
+                <p class="text-center text-muted">报告期间: 2024年5月 | 报告编号: RETAIL_ADV_20250531_141233</p>
+            </div>
+        </div>
+
+        
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card metric-card text-center">
+                    <div class="card-body">
+                        <h3>¥158,960,000</h3>
+                        <p class="mb-0">总GMV</p>
+                        <small>+15.2%</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card text-center">
+                    <div class="card-body">
+                        <h3>4.8%</h3>
+                        <p class="mb-0">转化率</p>
+                        <small>持续优化</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card text-center">
+                    <div class="card-body">
+                        <h3>5</h3>
+                        <p class="mb-0">覆盖区域</p>
+                        <small>全国布局</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card text-center">
+                    <div class="card-body">
+                        <h3>6</h3>
+                        <p class="mb-0">业务品类</p>
+                        <small>多元发展</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+            
+        
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>📊 主要指标分析</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="mainChart" class="chart-container"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>📈 趋势分析</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="trendChart" class="chart-container"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>📋 详细数据</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped data-table">
+                                <thead>
+                                    <tr>
+                                        <th>区域/城市</th>
+                                        <th>核心指标</th>
+                                        <th>增长率</th>
+                                        <th>市场份额</th>
+                                        <th>状态</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                    <tr>
+                                        <td>华东区</td>
+                                        <td>24522746</td>
+                                        <td><span class="trend-positive">
+                                            +21.6%</span></td>
+                                        <td>28%</td>
+                                        <td><span class="badge bg-success">正常</span></td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>华南区</td>
+                                        <td>37023626</td>
+                                        <td><span class="trend-positive">
+                                            +8.1%</span></td>
+                                        <td>23%</td>
+                                        <td><span class="badge bg-success">正常</span></td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>华北区</td>
+                                        <td>38306883</td>
+                                        <td><span class="trend-positive">
+                                            +16.0%</span></td>
+                                        <td>21%</td>
+                                        <td><span class="badge bg-success">正常</span></td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>华中区</td>
+                                        <td>28622772</td>
+                                        <td><span class="trend-positive">
+                                            +20.7%</span></td>
+                                        <td>25%</td>
+                                        <td><span class="badge bg-success">正常</span></td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>西南区</td>
+                                        <td>30014399</td>
+                                        <td><span class="trend-positive">
+                                            +17.6%</span></td>
+                                        <td>21%</td>
+                                        <td><span class="badge bg-success">正常</span></td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            
+        
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>🔍 深度分析洞察</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="insight-box">
+                            <h6>📈 核心亮点</h6>
+                            <ul>
+                                <li>市场表现超出预期，各项关键指标均实现正增长</li>
+                                <li>用户满意度和留存率持续提升，品牌影响力不断增强</li>
+                                <li>数字化转型成效显著，运营效率大幅提升</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="insight-box">
+                            <h6>⚠️ 关注要点</h6>
+                            <ul>
+                                <li>市场竞争日趋激烈，需要持续创新保持领先优势</li>
+                                <li>成本压力逐步显现，需要优化运营策略提升效率</li>
+                                <li>监管环境变化，需要及时调整合规策略</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="insight-box">
+                            <h6>💡 战略建议</h6>
+                            <ul>
+                                <li><strong>技术创新</strong>: 加大研发投入，提升核心竞争力</li>
+                                <li><strong>市场拓展</strong>: 深化重点区域，探索新兴市场机会</li>
+                                <li><strong>用户体验</strong>: 持续优化产品和服务，提升用户满意度</li>
+                                <li><strong>生态建设</strong>: 构建开放生态，实现合作共赢</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="insight-box">
+                            <h6>🎯 下期目标</h6>
+                            <ul>
+                                <li>核心业务指标增长15-25%</li>
+                                <li>用户满意度提升至4.5+</li>
+                                <li>运营成本优化10-15%</li>
+                                <li>新业务贡献占比达到20%+</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    
+    <script>
+        // 主要指标图表
+        const mainCtx = document.getElementById('mainChart').getContext('2d');
+        new Chart(mainCtx, {
+            type: 'bar',
+            data: {
+                labels: ['华东区', '华南区', '华北区', '华中区', '西南区'],
+                datasets: [{
+                    label: '主要指标',
+                    data: [24522746, 37023626, 38306883, 28622772, 30014399],
+                    backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // 趋势图表
+        const trendCtx = document.getElementById('trendChart').getContext('2d');
+        new Chart(trendCtx, {
+            type: 'line',
+            data: {
+                labels: ['1月', '2月', '3月', '4月', '5月'],
+                datasets: [{
+                    label: '增长趋势',
+                    data: [85, 111, 111, 113, 104],
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    </script>
+        
+</body>
+</html>
+        

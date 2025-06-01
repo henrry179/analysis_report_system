@@ -1,0 +1,156 @@
+{% extends "layout.html" %}
+
+{% block title %}创建新报告 - {{ app_name }}{% endblock %}
+
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>创建新报告</h1>
+    <a href="/reports" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> 返回列表
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form id="createReportForm" method="POST" action="/reports" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            
+            <div class="mb-3">
+                <label for="reportName" class="form-label">报告名称</label>
+                <input type="text" class="form-control" id="reportName" name="name" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="reportType" class="form-label">报告类型</label>
+                <select class="form-select" id="reportType" name="type" required>
+                    <option value="">请选择报告类型</option>
+                    <option value="business">业务分析</option>
+                    <option value="financial">财务分析</option>
+                    <option value="market">市场分析</option>
+                    <option value="custom">自定义分析</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="reportTemplate" class="form-label">报告模板</label>
+                <select class="form-select" id="reportTemplate" name="template" required>
+                    <option value="">请选择报告模板</option>
+                    <option value="standard">标准模板</option>
+                    <option value="detailed">详细模板</option>
+                    <option value="executive">执行摘要</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="dataSource" class="form-label">数据源</label>
+                <select class="form-select" id="dataSource" name="data_source" required>
+                    <option value="">请选择数据源</option>
+                    <option value="upload">上传文件</option>
+                    <option value="database">数据库</option>
+                    <option value="api">API接口</option>
+                </select>
+            </div>
+
+            <div id="uploadSection" class="mb-3" style="display: none;">
+                <label for="dataFile" class="form-label">上传数据文件</label>
+                <input type="file" class="form-control" id="dataFile" name="data_file" accept=".csv,.xlsx,.xls">
+                <div class="form-text">支持的文件格式：CSV, Excel</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="reportDescription" class="form-label">报告描述</label>
+                <textarea class="form-control" id="reportDescription" name="description" rows="3"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">分析选项</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="includeCharts" name="include_charts" checked>
+                    <label class="form-check-label" for="includeCharts">
+                        包含图表
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="includeTrends" name="include_trends" checked>
+                    <label class="form-check-label" for="includeTrends">
+                        包含趋势分析
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="includeForecast" name="include_forecast">
+                    <label class="form-check-label" for="includeForecast">
+                        包含预测分析
+                    </label>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button type="button" class="btn btn-secondary" onclick="window.location.href='/reports'">取消</button>
+                <button type="submit" class="btn btn-primary">创建报告</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+$(document).ready(function() {
+    // 初始化 Select2
+    $('#reportType, #reportTemplate, #dataSource').select2({
+        theme: 'bootstrap-5'
+    });
+
+    // 监听数据源选择
+    $('#dataSource').on('change', function() {
+        const selectedValue = $(this).val();
+        if (selectedValue === 'upload') {
+            $('#uploadSection').show();
+        } else {
+            $('#uploadSection').hide();
+        }
+    });
+
+    // 表单提交处理
+    $('#createReportForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        
+        showLoading();
+        
+        fetch('/reports', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRF-Token': '{{ csrf_token }}'
+            }
+        })
+        .then(response => {
+            hideLoading();
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('创建报告失败');
+        })
+        .then(data => {
+            showNotification('报告创建成功', 'success');
+            setTimeout(() => {
+                window.location.href = `/reports/${data.report_id}`;
+            }, 1500);
+        })
+        .catch(error => {
+            hideLoading();
+            showNotification(error.message, 'danger');
+        });
+    });
+});
+</script>
+{% endblock %} 

@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏘️ 社区团购行业分析报告 - 2024年5月</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .metric-card { background: linear-gradient(135deg, var(--bs-success) 0%, rgba(var(--bs-success-rgb), 0.8) 100%); color: white; }
+        .chart-container { height: 350px; margin: 15px 0; }
+        .insight-box { background: #f8f9fa; padding: 20px; border-left: 4px solid var(--bs-success); margin: 15px 0; border-radius: 5px; }
+        .data-table { font-size: 0.9rem; }
+        .trend-positive { color: #28a745; font-weight: bold; }
+        .trend-negative { color: #dc3545; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h1 class="text-center">🏘️ 社区团购行业分析报告</h1>
+                <p class="text-center text-muted">报告期间: 2024年5月 | 报告编号: COMMUNITY_GB_20250531_141923</p>
+            </div>
+        </div>
+
+        
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card metric-card text-center">
+                    <div class="card-body">
+                        <h3>2,850,000</h3>
+                        <p class="mb-0">总订单数</p>
+                        <small>+28.6%</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card text-center">
+                    <div class="card-body">
+                        <h3>87.3%</h3>
+                        <p class="mb-0">成团率</p>
+                        <small>稳定增长</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card text-center">
+                    <div class="card-body">
+                        <h3>6</h3>
+                        <p class="mb-0">覆盖城市</p>
+                        <small>快速扩张</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card text-center">
+                    <div class="card-body">
+                        <h3>6,916</h3>
+                        <p class="mb-0">服务社区</p>
+                        <small>深度覆盖</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+            
+        
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>📊 主要指标分析</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="mainChart" class="chart-container"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>📈 趋势分析</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="trendChart" class="chart-container"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>🔍 深度分析洞察</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="insight-box">
+                            <h6>📈 核心亮点</h6>
+                            <ul>
+                                <li>市场表现超出预期，各项关键指标均实现正增长</li>
+                                <li>用户满意度和留存率持续提升，品牌影响力不断增强</li>
+                                <li>数字化转型成效显著，运营效率大幅提升</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="insight-box">
+                            <h6>⚠️ 关注要点</h6>
+                            <ul>
+                                <li>市场竞争日趋激烈，需要持续创新保持领先优势</li>
+                                <li>成本压力逐步显现，需要优化运营策略提升效率</li>
+                                <li>监管环境变化，需要及时调整合规策略</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="insight-box">
+                            <h6>💡 战略建议</h6>
+                            <ul>
+                                <li><strong>技术创新</strong>: 加大研发投入，提升核心竞争力</li>
+                                <li><strong>市场拓展</strong>: 深化重点区域，探索新兴市场机会</li>
+                                <li><strong>用户体验</strong>: 持续优化产品和服务，提升用户满意度</li>
+                                <li><strong>生态建设</strong>: 构建开放生态，实现合作共赢</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="insight-box">
+                            <h6>🎯 下期目标</h6>
+                            <ul>
+                                <li>核心业务指标增长15-25%</li>
+                                <li>用户满意度提升至4.5+</li>
+                                <li>运营成本优化10-15%</li>
+                                <li>新业务贡献占比达到20%+</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    
+    <script>
+        // 主要指标图表
+        const mainCtx = document.getElementById('mainChart').getContext('2d');
+        new Chart(mainCtx, {
+            type: 'bar',
+            data: {
+                labels: ['上海', '北京', '深圳', '广州', '杭州', '成都'],
+                datasets: [{
+                    label: '主要指标',
+                    data: [368615, 539160, 430382, 370569, 462451, 515146],
+                    backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // 趋势图表
+        const trendCtx = document.getElementById('trendChart').getContext('2d');
+        new Chart(trendCtx, {
+            type: 'line',
+            data: {
+                labels: ['1月', '2月', '3月', '4月', '5月'],
+                datasets: [{
+                    label: '增长趋势',
+                    data: [117, 110, 116, 83, 88],
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    </script>
+        
+</body>
+</html>
+        

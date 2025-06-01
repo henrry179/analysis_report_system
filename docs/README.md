@@ -29,45 +29,65 @@
 ## 项目结构
 ```
 analysis_report_system/
-├── src/
-│   ├── api/            # API 接口
-│   ├── core/           # 核心功能模块
-│   ├── static/         # 静态资源
-│   ├── templates/      # 模板文件
-│   └── utils/          # 工具函数
-├── tests/              # 单元测试
-├── frontend/           # 前端项目
-│   ├── src/
-│   │   ├── views/      # 页面组件
-│   │   ├── router/     # 路由配置
-│   │   └── assets/     # 静态资源
-│   └── public/         # 公共资源
-└── docs/              # 项目文档
+├── data/              # 数据目录
+│   ├── logs/         # 日志文件
+│   ├── output/       # 输出文件
+│   └── reports/      # 报告文件
+├── docs/             # 项目文档
+├── frontend/         # 前端项目
+│   ├── src/         # 源代码
+│   ├── dist/        # 构建输出
+│   └── public/      # 静态资源
+├── src/             # 后端源代码
+│   ├── api/         # API 接口
+│   ├── core/        # 核心功能
+│   ├── utils/       # 工具函数
+│   └── templates/   # 模板文件
+├── tests/           # 测试文件
+├── .gitignore      # Git 忽略配置
+├── requirements.txt # Python 依赖
+└── start_server.py  # 启动脚本
 ```
 
-## 实现进度
-### 后端实现
-- [x] 数据处理器 (DataProcessor)
-- [x] 分析引擎 (AnalysisEngine)
-- [x] 报告生成器 (ReportGenerator)
-- [x] 系统管理器 (SystemManager)
-- [x] API 接口实现
-- [x] 单元测试
+## 配置说明
+### 环境配置
+1. Python 虚拟环境：
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate  # Linux/Mac
+   .venv\Scripts\activate     # Windows
+   ```
 
-### 前端实现
-- [x] 项目初始化
-- [x] 路由配置
-- [x] 登录页面
-- [x] 仪表盘页面
-  - [x] 数据管理模块
-  - [x] 数据分析模块
-  - [x] 报告管理模块
-  - [x] 系统管理模块
-- [x] 数据预览组件
-- [x] 图表展示组件
-- [x] 错误处理优化
-- [x] 加载状态优化
-- [x] UI/UX 优化
+2. 依赖安装：
+   ```bash
+   # 使用 pip
+   pip install -r requirements.txt
+   
+   # 或使用 conda
+   conda install numpy pandas fastapi uvicorn pydantic jinja2 passlib python-multipart
+   ```
+
+3. 前端依赖：
+   ```bash
+   cd frontend
+   npm install
+   ```
+
+### 系统配置
+1. 日志配置：
+   - 日志文件位置：`data/logs/`
+   - 日志级别：INFO
+   - 日志轮转：每天
+
+2. 数据存储：
+   - 临时文件：`data/output/`
+   - 报告文件：`data/reports/`
+   - 上传文件：`data/uploads/`
+
+3. 安全配置：
+   - 默认管理员：admin / adminpass
+   - 默认分析师：analyst / analyst123
+   - 默认查看者：viewer / viewer123
 
 ## 启动系统
 
@@ -75,13 +95,13 @@ analysis_report_system/
 1. 确保已安装依赖并激活虚拟环境：
    ```bash
    pip install -r requirements.txt
-   # 或根据需求选择 requirements_minimal.txt/requirements_standard.txt
+   # 或使用 conda 安装依赖
+   conda install numpy pandas fastapi uvicorn pydantic jinja2 passlib python-multipart
    ```
+
 2. 启动后端服务：
    ```bash
    python start_server.py
-   # 或
-   python src/main.py
    ```
    服务默认运行在 http://localhost:8000
 
@@ -90,12 +110,11 @@ analysis_report_system/
    ```bash
    cd frontend
    npm install
-   # 或 yarn install
    ```
+
 2. 启动前端开发服务器：
    ```bash
    npm run dev
-   # 或 yarn dev
    ```
    前端默认运行在 http://localhost:5173
 
@@ -105,11 +124,6 @@ analysis_report_system/
   - 管理员：admin / adminpass
   - 分析师：analyst / analyst123
   - 查看者：viewer / viewer123
-
-### 常见问题排查
-- 端口占用：参考下方“常见问题”章节
-- 依赖安装失败：升级 pip、清理 npm 缓存、重新安装依赖
-- 启动失败：检查 Python 版本、虚拟环境、依赖和日志
 
 ## 常见问题
 ### 1. 端口占用
@@ -143,7 +157,7 @@ npm install
 1. 检查 Python 版本：`python --version`
 2. 确认虚拟环境已激活
 3. 检查依赖是否完整安装
-4. 查看日志文件：`logs/app.log`
+4. 查看日志文件：`data/logs/app.log`
 
 ## API 文档
 启动后端服务后，访问 http://localhost:8000/docs 查看完整的 API 文档。
@@ -165,4 +179,7 @@ python -m pytest tests/
 MIT License
 
 ## 最新进展
-- [x] 后端用户认证与配置修复已完成，系统可正常启动并支持多用户登录。
+- [x] 项目结构优化完成，统一了数据、文档和测试目录
+- [x] 更新了依赖管理，支持 pip 和 conda 安装
+- [x] 完善了系统配置说明
+- [x] 优化了文档结构，增加了配置说明章节

@@ -1,0 +1,261 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ report.name }} - {{ app_name }}{% endblock %}
+
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1>{{ report.name }}</h1>
+        <p class="text-muted">
+            创建于 {{ report.created_at.strftime('%Y-%m-%d %H:%M') }} 
+            由 {{ report.creator }}
+        </p>
+    </div>
+    <div class="btn-group">
+        <a href="/reports/{{ report.id }}/edit" class="btn btn-outline-primary">
+            <i class="bi bi-pencil"></i> 编辑
+        </a>
+        <a href="/reports/{{ report.id }}/export" class="btn btn-outline-success">
+            <i class="bi bi-download"></i> 导出
+        </a>
+        <button type="button" class="btn btn-outline-danger" onclick="deleteReport('{{ report.id }}')">
+            <i class="bi bi-trash"></i> 删除
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <!-- 报告概览 -->
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">报告概览</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">报告类型</dt>
+                    <dd class="col-sm-8">{{ report.type }}</dd>
+                    
+                    <dt class="col-sm-4">报告模板</dt>
+                    <dd class="col-sm-8">{{ report.template }}</dd>
+                    
+                    <dt class="col-sm-4">数据源</dt>
+                    <dd class="col-sm-8">{{ report.data_source }}</dd>
+                    
+                    <dt class="col-sm-4">状态</dt>
+                    <dd class="col-sm-8">
+                        <span class="badge bg-{{ report.status_color }}">
+                            {{ report.status }}
+                        </span>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">报告描述</h5>
+            </div>
+            <div class="card-body">
+                <p>{{ report.description or '暂无描述' }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主要内容 -->
+    <div class="col-md-8">
+        <!-- 数据概览 -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">数据概览</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h3 class="card-title">{{ report.data_summary.total_records }}</h3>
+                                <p class="card-text">总记录数</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h3 class="card-title">{{ report.data_summary.total_columns }}</h3>
+                                <p class="card-text">数据列数</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h3 class="card-title">{{ report.data_summary.last_updated }}</h3>
+                                <p class="card-text">最后更新</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 图表展示 -->
+        {% if report.charts %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">图表分析</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for chart in report.charts %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">{{ chart.title }}</h6>
+                                <canvas id="chart{{ loop.index }}"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- 趋势分析 -->
+        {% if report.trends %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">趋势分析</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>指标</th>
+                                <th>趋势</th>
+                                <th>变化率</th>
+                                <th>分析</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for trend in report.trends %}
+                            <tr>
+                                <td>{{ trend.metric }}</td>
+                                <td>
+                                    <span class="badge bg-{{ trend.trend_color }}">
+                                        {{ trend.trend }}
+                                    </span>
+                                </td>
+                                <td>{{ trend.change_rate }}%</td>
+                                <td>{{ trend.analysis }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- 预测分析 -->
+        {% if report.forecasts %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">预测分析</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for forecast in report.forecasts %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">{{ forecast.metric }}</h6>
+                                <canvas id="forecast{{ loop.index }}"></canvas>
+                                <p class="mt-2">{{ forecast.analysis }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- 删除确认模态框 -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">确认删除</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>确定要删除这个报告吗？此操作无法撤销。</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">删除</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+<script>
+// 初始化图表
+{% if report.charts %}
+{% for chart in report.charts %}
+new Chart(document.getElementById('chart{{ loop.index }}'), {
+    type: '{{ chart.type }}',
+    data: {{ chart.data | tojson }},
+    options: {{ chart.options | tojson }}
+});
+{% endfor %}
+{% endif %}
+
+{% if report.forecasts %}
+{% for forecast in report.forecasts %}
+new Chart(document.getElementById('forecast{{ loop.index }}'), {
+    type: 'line',
+    data: {{ forecast.data | tojson }},
+    options: {{ forecast.options | tojson }}
+});
+{% endfor %}
+{% endif %}
+
+// 删除报告
+function deleteReport(reportId) {
+    const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    deleteModal.show();
+}
+
+document.getElementById('confirmDelete').addEventListener('click', function() {
+    fetch(`/reports/${reportId}`, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRF-Token': '{{ csrf_token }}'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            window.location.href = '/reports';
+        } else {
+            showNotification('删除报告失败，请重试', 'danger');
+        }
+    })
+    .catch(error => {
+        showNotification('删除报告失败，请重试', 'danger');
+    });
+});
+</script>
+{% endblock %} 

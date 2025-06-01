@@ -1,0 +1,234 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>业务分析综合报告</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            color: #007bff;
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        .metadata {
+            background: #e9ecef;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .section {
+            margin: 40px 0;
+        }
+        .section h2 {
+            color: #007bff;
+            border-left: 4px solid #007bff;
+            padding-left: 15px;
+            margin-bottom: 20px;
+        }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .insight-item, .recommendation-item {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #28a745;
+            border-radius: 5px;
+        }
+        .recommendation-item {
+            border-left-color: #ffc107;
+        }
+        .status-excellent { color: #28a745; }
+        .status-good { color: #17a2b8; }
+        .status-average { color: #ffc107; }
+        .status-needs_improvement { color: #dc3545; }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #dee2e6;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 业务分析综合报告</h1>
+            <p>智能分析 · 数据驱动 · 洞察未来</p>
+        </div>
+        
+        <div class="metadata">
+            <h3>📋 报告信息</h3>
+            <p><strong>报告编号:</strong> RPT_20250523_193628</p>
+            <p><strong>生成时间:</strong> 2025-05-23 19:36:28</p>
+            <p><strong>报告版本:</strong> 3.0</p>
+            <p><strong>生成系统:</strong> 智能分析系统</p>
+        </div>
+
+        <div class="section">
+            <h2>📊 执行摘要</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-label">总GMV</div>
+                    <div class="metric-value">85,000,000</div>
+                    <div class="metric-unit">元</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">总DAU</div>
+                    <div class="metric-value">43,000</div>
+                    <div class="metric-unit">人</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">转化率</div>
+                    <div class="metric-value">3.2%</div>
+                    <div class="metric-unit">转化</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">洞察数量</div>
+                    <div class="metric-value">6</div>
+                    <div class="metric-unit">项</div>
+                </div>
+            </div>
+            <p><strong>整体表现:</strong> <span class="status-excellent">🌟 优秀</span></p>
+        </div>
+
+        <div class="section">
+            <h2>🧠 智能洞察</h2>
+            <p>基于数据分析生成的关键洞察，帮助您理解业务现状和趋势。</p>
+
+            <div class="insight-item">
+                <strong>💡 GMV增长趋势积极</strong><br>
+                GMV在过去30天内呈现稳定上升趋势，月环比增长12.5%，表明业务发展势头良好。
+            </div>
+
+            <div class="insight-item">
+                <strong>💡 DAU增长放缓</strong><br>
+                DAU增长速度较前期有所放缓，建议加强用户获取和留存策略。
+            </div>
+
+            <div class="insight-item">
+                <strong>💡 周末转化率异常</strong><br>
+                检测到周末时段转化率显著高于工作日，建议分析原因并优化工作日表现。
+            </div>
+
+            <div class="insight-item">
+                <strong>💡 区域表现差异</strong><br>
+                北京地区GMV表现最佳，比广州地区高出26.3%，建议研究北京的成功经验并推广。
+            </div>
+
+            <div class="insight-item">
+                <strong>💡 品类分化明显</strong><br>
+                电子产品类目占比35%，是增长主力，而服装类目增长乏力，需要关注。
+            </div>
+
+            <div class="insight-item">
+                <strong>💡 下月GMV预测乐观</strong><br>
+                基于历史趋势和季节性模式，预测下月GMV将达到920万元，同比增长15.2%。
+            </div>
+        </div>
+        <div class="section">
+            <h2>🎯 行动建议</h2>
+            <p>基于分析结果提供的可执行建议，指导业务优化方向。</p>
+
+            <div class="recommendation-item">
+                <strong>🚀 优化GMV增长策略</strong><br>
+                继续加强表现良好的营销渠道投入，扩大成功模式的应用范围。
+                <br><small><strong>优先级:</strong> 高</small>
+            </div>
+
+            <div class="recommendation-item">
+                <strong>🚀 调查异常情况</strong><br>
+                深入分析异常数据的根本原因，制定应对策略。
+                <br><small><strong>优先级:</strong> 高</small>
+            </div>
+
+            <div class="recommendation-item">
+                <strong>🚀 推广最佳实践</strong><br>
+                将表现优异区域的成功经验总结并推广到其他区域。
+                <br><small><strong>优先级:</strong> 中</small>
+            </div>
+
+            <div class="recommendation-item">
+                <strong>🚀 推广最佳实践</strong><br>
+                将表现优异区域的成功经验总结并推广到其他区域。
+                <br><small><strong>优先级:</strong> 中</small>
+            </div>
+
+            <div class="recommendation-item">
+                <strong>🚀 建立数据监控体系</strong><br>
+                建议建立实时数据监控仪表板，及时发现业务异常和机遇。
+                <br><small><strong>优先级:</strong> 中</small>
+            </div>
+
+            <div class="recommendation-item">
+                <strong>🚀 优化用户体验</strong><br>
+                基于转化漏斗分析，重点优化转化率较低的环节，提升整体转化效果。
+                <br><small><strong>优先级:</strong> 高</small>
+            </div>
+
+            <div class="recommendation-item">
+                <strong>🚀 数据质量提升</strong><br>
+                定期检查数据质量，确保分析结果的准确性和可靠性。
+                <br><small><strong>优先级:</strong> 中</small>
+            </div>
+        </div>
+        <div class="section">
+            <h2>📈 分析详情</h2>
+            <p>详细的数据分析结果和技术指标。</p>
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; font-family: monospace;">
+                <h4>分析模块覆盖:</h4>
+                <ul>
+                    <li>✅ correlation: 已完成分析</li>                    <li>✅ trend: 已完成分析</li>                    <li>✅ anomaly: 已完成分析</li>                    <li>✅ segmentation: 已完成分析</li>                    <li>✅ cohort: 已完成分析</li>
+                </ul>
+                <h4>图表生成情况:</h4>
+                <p>共生成 0 个图表，
+                包括 0 种类型</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>🤖 此报告由智能分析系统自动生成</p>
+            <p>📅 生成时间: 2025-05-23 19:36:28 | 📊 数据驱动决策</p>
+        </div>
+    </div>
+</body>
+</html>

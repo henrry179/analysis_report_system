@@ -1,0 +1,129 @@
+{% extends "layout.html" %}
+
+{% block title %}报告管理 - {{ app_name }}{% endblock %}
+
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/datatables@1.10.18/media/css/jquery.dataTables.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>报告管理</h1>
+    <a href="/reports/new" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i> 创建新报告
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="reportsTable" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>报告名称</th>
+                        <th>创建时间</th>
+                        <th>状态</th>
+                        <th>创建者</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for report in reports %}
+                    <tr>
+                        <td>
+                            <a href="/reports/{{ report.id }}" class="text-decoration-none">
+                                {{ report.name }}
+                            </a>
+                        </td>
+                        <td>{{ report.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td>
+                            <span class="badge bg-{{ report.status_color }}">
+                                {{ report.status }}
+                            </span>
+                        </td>
+                        <td>{{ report.creator }}</td>
+                        <td>
+                            <div class="btn-group">
+                                <a href="/reports/{{ report.id }}/edit" class="btn btn-sm btn-outline-primary">
+                                    编辑
+                                </a>
+                                <a href="/reports/{{ report.id }}/export" class="btn btn-sm btn-outline-success">
+                                    导出
+                                </a>
+                                <button type="button" class="btn btn-sm btn-outline-danger" 
+                                        onclick="deleteReport('{{ report.id }}')">
+                                    删除
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- 删除确认模态框 -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">确认删除</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>确定要删除这个报告吗？此操作无法撤销。</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">删除</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/datatables@1.10.18/media/js/jquery.dataTables.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#reportsTable').DataTable({
+        language: {
+            url: '//cdn.datatables.net/plug-ins/1.10.24/i18n/Chinese.json'
+        },
+        order: [[1, 'desc']]
+    });
+});
+
+let reportToDelete = null;
+
+function deleteReport(reportId) {
+    reportToDelete = reportId;
+    const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    deleteModal.show();
+}
+
+document.getElementById('confirmDelete').addEventListener('click', function() {
+    if (reportToDelete) {
+        fetch(`/reports/${reportToDelete}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-Token': '{{ csrf_token }}'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                showNotification('删除报告失败，请重试', 'danger');
+            }
+        })
+        .catch(error => {
+            showNotification('删除报告失败，请重试', 'danger');
+        });
+    }
+});
+</script>
+{% endblock %} 
