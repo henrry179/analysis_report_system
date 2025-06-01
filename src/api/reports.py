@@ -585,45 +585,40 @@ async def process_batch_reports(
 
 
 async def generate_multi_industry_reports_task(generator, industries, user_id):
-    """后台任务：生成多行业报告"""
+    """异步生成多行业报告任务"""
     try:
         # 发送开始通知
-        await manager.send_json_to_user({
-            "type": "multi_industry_progress",
-            "status": "started",
-            "message": "开始生成多行业分析报告...",
-            "progress": 0,
-            "total": len(industries)
-        }, user_id)
+        if user_id:
+            await manager.send_json_to_user({
+                "type": "report_generation",
+                "status": "started", 
+                "message": f"开始生成多行业报告，包含{len(industries)}个行业",
+                "industries": industries
+            }, user_id)
         
-        # 执行报告生成
-        generated_reports = generator.generate_all_industry_reports()
-        
-        # 更新报告列表
-        global reports_data
-        reports_data = _refresh_reports_data()
+        # 生成报告
+        reports = generator.generate_all_industry_reports(industries)
         
         # 发送完成通知
-        await manager.send_json_to_user({
-            "type": "multi_industry_progress",
-            "status": "completed",
-            "message": f"成功生成 {len(generated_reports)} 个行业分析报告",
-            "progress": len(industries),
-            "total": len(industries),
-            "reports": [os.path.basename(report) for report in generated_reports]
-        }, user_id)
+        if user_id:
+            await manager.send_json_to_user({
+                "type": "report_generation",
+                "status": "completed",
+                "message": f"多行业报告生成完成，共生成{len(reports)}个报告",
+                "reports": reports,
+                "industries": industries
+            }, user_id)
         
-        system_logger.info("多行业报告生成完成", count=len(generated_reports), user=user_id)
+        system_logger.info("多行业报告生成任务完成", reports_count=len(reports), user=user_id)
         
     except Exception as e:
-        system_logger.error("多行业报告生成失败", error=e, user=user_id)
-        # 发送错误通知
-        await manager.send_json_to_user({
-            "type": "multi_industry_progress",
-            "status": "error",
-            "message": f"生成报告失败: {str(e)}",
-            "error": str(e)
-        }, user_id)
+        system_logger.error("多行业报告生成任务失败", error=e, user=user_id)
+        if user_id:
+            await manager.send_json_to_user({
+                "type": "report_generation",
+                "status": "failed",
+                "message": f"报告生成失败: {str(e)}"
+            }, user_id)
 
 
 def _refresh_reports_data():

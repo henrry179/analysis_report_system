@@ -8,6 +8,7 @@ import asyncio
 import sys
 from pathlib import Path
 from contextlib import asynccontextmanager
+import socket
 
 # 添加项目根目录到路径
 project_root = Path(__file__).parent.parent
@@ -25,6 +26,7 @@ import uvicorn
 
 # 导入配置和工具
 from src.config.settings import settings, PROJECT_ROOT, SRC_ROOT
+from src.config.settings import Settings
 from src.utils.logger import system_logger as logger
 from src.utils.logger import (
     system_logger,
@@ -53,6 +55,30 @@ async def lifespan(app: FastAPI):
         # 验证配置
         settings.validate_settings()
         system_logger.info("✅ 配置验证通过")
+        
+        # 检查端口占用并自动切换空闲端口
+        def _is_port_in_use(host: str, port: int) -> bool:
+            """判断指定端口是否被占用"""
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+                sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+                return sock.connect_ex((host, port)) == 0
+
+        if _is_port_in_use(settings.HOST, settings.PORT):
+            original_port = settings.PORT
+            new_port = original_port + 1
+            # 向上递增寻找可用端口
+            while _is_port_in_use(settings.HOST, new_port):
+                new_port += 1
+
+            system_logger.warning(
+                "检测到端口占用，自动切换端口",
+                original_port=original_port,
+                new_port=new_port
+            )
+
+            # 更新配置供后续使用
+            Settings.PORT = new_port  # 更新类属性
+            settings.PORT = new_port  # 更新实例属性
         
         # 初始化默认用户
         init_default_users()
@@ -102,7 +128,7 @@ app.add_middleware(GZipMiddleware, minimum_size=1000)
 app.mount("/assets", StaticFiles(directory="frontend/dist"))
 
 # Serve the main index.html for the Vue app
-# templates = Jinja2Templates(directory=settings.TEMPLATES_DIR) # Commented out as Vue handles templating
+templates = Jinja2Templates(directory=settings.TEMPLATES_DIR)
 
 # 注册API路由
 app.include_router(reports_router)
@@ -192,17 +218,6 @@ async def read_root(request: Request):
         logger.error(f"Frontend index.html not found at {index_path}")
         return HTMLResponse(content="Frontend not found. Please build the frontend.", status_code=500)
     return FileResponse(index_path)
-
-@app.get("/{catchall:path}", response_class=HTMLResponse)
-async def serve_vue_app(request: Request, catchall: str):
-    """捕获所有其他路径，并提供Vue前端应用，以支持Vue Router的history模式"""
-    logger.info(f"Catchall path accessed: {catchall}, serving Vue app.")
-    index_path = PROJECT_ROOT / "frontend" / "dist" / "index.html"
-    if not index_path.exists():
-        logger.error(f"Frontend index.html not found at {index_path}")
-        return HTMLResponse(content="Frontend not found. Please build the frontend.", status_code=500)
-    return FileResponse(index_path)
-
 
 @app.get("/reports", response_class=HTMLResponse)
 async def reports_page(request: Request):
@@ -296,7 +311,7 @@ async def status_page(request: Request):
                     <h2 class="alert-heading">🚀 业务分析报告系统 v4.0 Optimized</h2>
                     <p class="mb-0">
                         <span class="badge bg-success live-status">● 运行中</span>
-                        服务器正常运行在 <strong>localhost:8000</strong>
+                        服务器正常运行在 <strong>localhost:{settings.PORT}</strong>
                     </p>
                 </div>
             </div>
@@ -555,6 +570,30 @@ def main():
         # 验证配置
         settings.validate_settings()
         
+        # 检查端口占用并自动切换空闲端口
+        def _is_port_in_use(host: str, port: int) -> bool:
+            """判断指定端口是否被占用"""
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+                sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+                return sock.connect_ex((host, port)) == 0
+
+        if _is_port_in_use(settings.HOST, settings.PORT):
+            original_port = settings.PORT
+            new_port = original_port + 1
+            # 向上递增寻找可用端口
+            while _is_port_in_use(settings.HOST, new_port):
+                new_port += 1
+
+            system_logger.warning(
+                "检测到端口占用，自动切换端口",
+                original_port=original_port,
+                new_port=new_port
+            )
+
+            # 更新配置供后续使用
+            Settings.PORT = new_port  # 更新类属性
+            settings.PORT = new_port  # 更新实例属性
+        
         # 启动服务器
         uvicorn.run(
             "src.main:app",
@@ -571,6 +610,18 @@ def main():
     except Exception as e:
         system_logger.error("服务器启动失败", error=e)
         sys.exit(1)
+
+
+# Catchall route for Vue Router (must be last)
+@app.get("/{catchall:path}", response_class=HTMLResponse)
+async def serve_vue_app(request: Request, catchall: str):
+    """捕获所有其他路径，并提供Vue前端应用，以支持Vue Router的history模式"""
+    logger.info(f"Catchall path accessed: {catchall}, serving Vue app.")
+    index_path = PROJECT_ROOT / "frontend" / "dist" / "index.html"
+    if not index_path.exists():
+        logger.error(f"Frontend index.html not found at {index_path}")
+        return HTMLResponse(content="Frontend not found. Please build the frontend.", status_code=500)
+    return FileResponse(index_path)
 
 
 if __name__ == "__main__":
