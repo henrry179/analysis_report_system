@@ -4,26 +4,26 @@
     "role": "admin",
     "email": "admin@example.com",
     "is_active": true,
-    "created_at": "2025-05-31T23:03:55.841113",
+    "created_at": "2025-06-01T00:15:18.105043",
     "updated_at": null,
-    "hashed_password": "$2b$12$wf.7fY/IT4Xw3Wa1pFcza.AnwRzgj7Jgu6/cgiblWwNx0lRwTHsXa"
+    "hashed_password": "$2b$12$vEfgUfBYSxpw411cv6XrLeW7XUH2zj2JayytsAdyrMlkelIVEPIry"
   },
   "analyst": {
     "username": "analyst",
     "role": "analyst",
     "email": "analyst@example.com",
     "is_active": true,
-    "created_at": "2025-05-31T23:03:56.079480",
+    "created_at": "2025-06-01T00:15:18.323428",
     "updated_at": null,
-    "hashed_password": "$2b$12$dxjZT85N9h1s..ruqtz81ONq5cwJky0BIgVEjuq.6mkEIGCrizAHa"
+    "hashed_password": "$2b$12$8jjVCkDmBWtYzc2dCt2ykuCIBjW4ZiFCKJ9WbqYqT94tnua3lBgwu"
   },
   "viewer": {
     "username": "viewer",
     "role": "viewer",
     "email": "viewer@example.com",
     "is_active": true,
-    "created_at": "2025-05-31T23:03:56.363874",
+    "created_at": "2025-06-01T00:15:18.542379",
     "updated_at": null,
-    "hashed_password": "$2b$12$QiD2KoYxImaPObalD.KuEe4FNrbdvnFed3yuZcxz14SEg4C6Jnt2q"
+    "hashed_password": "$2b$12$r4VY0qGa1wh7VlPkeUSdl.6u.6zr6jCehLaiWsAAgJudV.WaSmZTm"
   }
 }

@@ -74,10 +74,12 @@ export default {
         if (!valid) return
         loading.value = true
         try {
-          const response = await axios.post('http://localhost:8000/api/auth/token', {
-            username: formModel.value.username,
-            password: formModel.value.password
-          })
+          const params = new URLSearchParams()
+          params.append('username', formModel.value.username)
+          params.append('password', formModel.value.password)
+          params.append('grant_type', '') // FastAPI OAuth2PasswordRequestForm 需要
+
+          const response = await axios.post('http://localhost:8000/token', params)
           const { access_token } = response.data
           localStorage.setItem('token', access_token)
           axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`

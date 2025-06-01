@@ -14,7 +14,7 @@ project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 from fastapi import FastAPI, Request, HTTPException
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
@@ -24,10 +24,11 @@ from fastapi import Depends
 import uvicorn
 
 # 导入配置和工具
-from src.config.settings import settings
+from src.config.settings import settings, PROJECT_ROOT, SRC_ROOT
+from src.utils.logger import system_logger as logger
 from src.utils.logger import (
-    system_logger, 
-    log_startup_info, 
+    system_logger,
+    log_startup_info,
     log_shutdown_info,
     performance_logger
 )
@@ -97,11 +98,11 @@ app.add_middleware(
 
 app.add_middleware(GZipMiddleware, minimum_size=1000)
 
-# 挂载静态文件
-app.mount("/static", StaticFiles(directory=str(settings.STATIC_DIR)), name="static")
+# 静态文件挂载 (Vue frontend)
+app.mount("/assets", StaticFiles(directory="frontend/dist"))
 
-# 设置模板
-templates = Jinja2Templates(directory=str(settings.TEMPLATES_DIR))
+# Serve the main index.html for the Vue app
+# templates = Jinja2Templates(directory=settings.TEMPLATES_DIR) # Commented out as Vue handles templating
 
 # 注册API路由
 app.include_router(reports_router)
@@ -183,13 +184,24 @@ async def websocket_route(websocket, client_id: str):
 
 # 页面路由
 @app.get("/", response_class=HTMLResponse)
-async def home(request: Request):
-    """首页"""
-    return templates.TemplateResponse("index.html", {
-        "request": request,
-        "app_name": settings.APP_NAME,
-        "app_version": settings.APP_VERSION
-    })
+async def read_root(request: Request):
+    """根路径，提供Vue前端应用"""
+    logger.info("Root path accessed, serving Vue app.")
+    index_path = PROJECT_ROOT / "frontend" / "dist" / "index.html"
+    if not index_path.exists():
+        logger.error(f"Frontend index.html not found at {index_path}")
+        return HTMLResponse(content="Frontend not found. Please build the frontend.", status_code=500)
+    return FileResponse(index_path)
+
+@app.get("/{catchall:path}", response_class=HTMLResponse)
+async def serve_vue_app(request: Request, catchall: str):
+    """捕获所有其他路径，并提供Vue前端应用，以支持Vue Router的history模式"""
+    logger.info(f"Catchall path accessed: {catchall}, serving Vue app.")
+    index_path = PROJECT_ROOT / "frontend" / "dist" / "index.html"
+    if not index_path.exists():
+        logger.error(f"Frontend index.html not found at {index_path}")
+        return HTMLResponse(content="Frontend not found. Please build the frontend.", status_code=500)
+    return FileResponse(index_path)
 
 
 @app.get("/reports", response_class=HTMLResponse)
@@ -562,4 +574,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main() 
+    main()

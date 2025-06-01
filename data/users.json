@@ -1,7 +1,0 @@
-{
-  "admin": {
-    "username": "admin",
-    "role": "admin",
-    "email": "admin@example.com",
-    "is_active": true,
-    "created_at": 
