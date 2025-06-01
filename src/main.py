@@ -43,6 +43,8 @@ from src.core.models import LoginRequest
 
 # 导入API路由
 from src.api.reports import router as reports_router
+from src.api.users import router as users_router
+from src.api.analytics import router as analytics_router
 
 
 @asynccontextmanager
@@ -132,6 +134,8 @@ templates = Jinja2Templates(directory=settings.TEMPLATES_DIR)
 
 # 注册API路由
 app.include_router(reports_router)
+app.include_router(users_router)
+app.include_router(analytics_router)
 
 
 # 异常处理器
