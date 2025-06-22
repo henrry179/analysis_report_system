@@ -22,7 +22,7 @@ class Settings:
     
     # 服务器配置
     HOST = os.getenv("HOST", "0.0.0.0")
-    PORT = int(os.getenv("PORT", 8001))
+    PORT = int(os.getenv("PORT", 8000))
     DEBUG = os.getenv("DEBUG", "false").lower() == "true"
     RELOAD = os.getenv("RELOAD", "false").lower() == "true"
     

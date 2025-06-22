@@ -349,3 +349,25 @@ def init_default_users():
     system_logger.info("默认管理员账户: admin / adminpass")
     system_logger.info("默认分析师账户: analyst / analyst123") 
     system_logger.info("默认查看者账户: viewer / viewer123") 
+
+
+# 导出函数 - 为了兼容其他模块的导入
+def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
+    """创建访问令牌（简化版本）"""
+    # 在简化版本中，我们直接返回用户名作为token
+    # 实际项目中应该使用JWT
+    username = data.get("sub")
+    if not username:
+        raise ValueError("Token数据缺少用户名")
+    
+    return username
+
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """验证密码（导出函数）"""
+    return AuthService.verify_password(plain_password, hashed_password)
+
+
+def get_password_hash(password: str) -> str:
+    """获取密码哈希值（导出函数）"""
+    return AuthService.get_password_hash(password) 

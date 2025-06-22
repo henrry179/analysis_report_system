@@ -317,6 +317,58 @@ class ImportExportError(BusinessError):
         )
 
 
+# 用户相关异常类
+class UserNotFoundError(DataNotFoundError):
+    """用户不存在错误"""
+    
+    def __init__(self, message: str = "用户不存在", username: Optional[str] = None, **kwargs):
+        details = {"username": username} if username else {}
+        super().__init__(
+            message=message,
+            details=details,
+            **kwargs
+        )
+
+
+class UserAlreadyExistsError(DataError):
+    """用户已存在错误"""
+    
+    def __init__(self, message: str = "用户已存在", username: Optional[str] = None, **kwargs):
+        details = {"username": username} if username else {}
+        super().__init__(
+            message=message,
+            error_code=ErrorCode.DATA_DUPLICATE,
+            details=details,
+            **kwargs
+        )
+
+
+class InvalidCredentialsError(AuthenticationError):
+    """无效凭据错误"""
+    
+    def __init__(self, message: str = "用户名或密码错误", **kwargs):
+        super().__init__(
+            message=message,
+            **kwargs
+        )
+
+
+class PermissionDeniedError(PermissionError):
+    """权限拒绝错误（别名）"""
+    pass
+
+
+class DataProcessingError(DataError):
+    """数据处理错误"""
+    
+    def __init__(self, message: str = "数据处理失败", data_type: Optional[str] = None, **kwargs):
+        super().__init__(
+            message=message,
+            data_type=data_type,
+            **kwargs
+        )
+
+
 def handle_exception(func):
     """异常处理装饰器"""
     def wrapper(*args, **kwargs):
