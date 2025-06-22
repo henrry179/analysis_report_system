@@ -127,7 +127,7 @@ app.add_middleware(
 app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 # 静态文件挂载 (Vue frontend)
-app.mount("/assets", StaticFiles(directory="frontend/dist"))
+app.mount("/assets", StaticFiles(directory="frontend/dist/assets"))
 
 # Serve the main index.html for the Vue app
 templates = Jinja2Templates(directory=settings.TEMPLATES_DIR)
