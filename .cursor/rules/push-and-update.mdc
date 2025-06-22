@@ -1,9 +1,355 @@
 ---
-description: update-readme.md
+description: rule02
 globs: 
 alwaysApply: false
 ---
-1.每次进行具体模块实现时，需要将每次的更新进度自动同步到项目文档readme中；
-2.每次当完成一次项目文档readme.md的更新后，自动推送到github上面；
-3.每次完成github的推送后，开始检查项目的实现进度，并按照项目开发的进度实现剩下其他模块的功能开发；
-4.在每次实现一个新的模块的功能后，自动检查实现这个功能模块是否满足项目功能的需求，如果不符合，需要重新实现模块的更新。
+# Cursor 开发流程规则 (v4.0 - 30秒轻音乐提醒系统)
+
+## 🕐 实时时间记录原则
+- **每次开发更新必须使用当前实时日期和时间**，格式严格为 `YYYY-MM-DD HH:MM:SS`
+- **时间获取方式**: 使用当前系统的实时时间，不得使用预设或估算时间
+- **记录内容包括**: 优化的模块名称、具体改进点、技术难点、性能指标
+
+## 📋 核心开发流程
+
+### 1. 实时进度记录要求 ⏰
+- 每次优化任何模块功能，都必须将优化进度详细更新到 `README.md` 文档中
+- 记录格式: 严格使用 `YYYY-MM-DD HH:MM:SS` 格式（24小时制）
+
+### 2. 文档同步推送流程 🚀
+- 每次将优化进度更新到 `README.md` 后，必须立即推送到 GitHub 仓库
+- 标准操作流程:
+  ```bash
+  git add .
+  git commit -m "更新README，记录[模块名称]优化进度 - $(date '+%Y-%m-%d %H:%M:%S')"
+  git push
+  ```
+- 提交信息规范: 必须包含优化的模块名称和当前时间戳
+
+### 3. 持续迭代检查机制 🔄
+- 每次推送到 GitHub 后，需重新检查项目的其他文件和模块功能
+- 审查 `README.md` 的"开发进度"板块，明确剩余开发任务优先级
+- 检查代码目录和模块，识别未完成、可优化的部分
+
+### 4. 30秒轻音乐提醒系统 🎵
+- **每次自动完成进度任务后，必须播放30秒左右的轻音乐提醒用户任务已完成**
+- **分级轻音乐提醒策略**:
+
+#### 🎼 重大成就 - 30秒古典轻音乐
+**适用场景**: 项目重大功能完成、架构升级、版本发布
+```bash
+# 方案1: 使用Music App播放古典轻音乐
+play_achievement_music() {
+    osascript <<EOF
+    tell application "Music"
+        if it is running then
+            set currentVolume to sound volume of (get sound volume settings)
+            set volume output volume 30
+            
+            # 搜索并播放古典轻音乐（如果用户音乐库中有）
+            set searchResults to (search playlist "轻音乐" for "古典")
+            if searchResults is not {} then
+                play (item 1 of searchResults)
+                delay 30
+                pause
+            else
+                # 备用方案：播放预设轻音乐文件
+                do shell script "afplay /Users/mac/Music/LightMusic/achievement.mp3 &"
+            end if
+            
+            set volume output volume currentVolume
+        end if
+    end tell
+EOF
+    say "🎼 重大成就达成！优美的古典轻音乐为您庆祝这个里程碑！" --voice="Ting-Ting" --rate=200
+}
+
+# 方案2: 在线轻音乐播放
+play_online_achievement_music() {
+    # 下载并播放30秒古典轻音乐片段
+    curl -s "https://www.soundjay.com/misc/sounds/clock-chimes-1.mp3" -o /tmp/achievement_music.mp3
+    timeout 30 afplay /tmp/achievement_music.mp3 &
+    sleep 2
+    say "重大功能完成，享受这30秒的古典轻音乐庆祝时刻！" --voice="Ting-Ting"
+}
+```
+
+#### 🎹 代码优化 - 30秒钢琴轻音乐
+**适用场景**: 代码重构、性能优化、算法改进、bug修复
+```bash
+# 优雅的钢琴轻音乐提醒
+play_optimization_music() {
+    osascript <<EOF
+    tell application "Music"
+        if it is running then
+            set currentVolume to sound volume of (get sound volume settings)
+            set volume output volume 25
+            
+            # 搜索钢琴轻音乐
+            set searchResults to (search playlist "轻音乐" for "钢琴")
+            if searchResults is not {} then
+                play (item 1 of searchResults)
+                delay 30
+                pause
+            else
+                # 备用：播放预设钢琴轻音乐
+                do shell script "afplay /Users/mac/Music/LightMusic/piano_light.mp3 &"
+            end if
+            
+            set volume output volume currentVolume
+        end if
+    end tell
+EOF
+    say "🎹 代码优化完成，请欣赏这段优雅的钢琴轻音乐！" --voice="Mei-Jia" --rate=180
+}
+
+# 使用TTS生成30秒音乐般的语音提醒
+play_tts_music_reminder() {
+    # 创建30秒的音乐化语音提醒
+    say "代码优化已完成。" --voice="Mei-Jia" --rate=120 &
+    sleep 3
+    say "这次优化提升了代码的优雅性和性能。" --voice="Mei-Jia" --rate=110 &
+    sleep 5
+    say "就像美妙的钢琴曲一样，代码现在更加和谐。" --voice="Mei-Jia" --rate=100 &
+    sleep 8
+    say "请回来查看这次精彩的改进成果。" --voice="Mei-Jia" --rate=120
+}
+```
+
+#### 🎶 日常任务 - 30秒自然轻音乐
+**适用场景**: 文档更新、配置修改、测试完成、日常提交
+```bash
+# 自然系轻音乐提醒
+play_daily_music() {
+    osascript <<EOF
+    tell application "Music"
+        if it is running then
+            set currentVolume to sound volume of (get sound volume settings)
+            set volume output volume 20
+            
+            # 搜索自然轻音乐或New Age音乐
+            set searchResults to (search playlist "轻音乐" for "自然")
+            if searchResults is not {} then
+                play (item 1 of searchResults)
+                delay 30
+                pause
+            else
+                # 备用：播放预设自然轻音乐
+                do shell script "afplay /Users/mac/Music/LightMusic/nature_light.mp3 &"
+            end if
+            
+            set volume output volume currentVolume
+        end if
+    end tell
+EOF
+    say "🎶 日常任务完成，享受这段舒缓的轻音乐放松时刻！" --voice="Sin-ji" --rate=160
+}
+
+# 创建自然音效+轻音乐的混合提醒
+play_nature_music_reminder() {
+    # 播放30秒的自然音效序列
+    echo "🎶 播放30秒自然轻音乐提醒..."
+    
+    # 鸟鸣声 + 语音
+    (for i in {1..10}; do afplay /System/Library/Sounds/Ping.aiff; sleep 0.8; done) &
+    sleep 2
+    say "日常任务已完成，" --voice="Sin-ji" --rate=100 &
+    sleep 5
+    
+    # 水滴声 + 语音  
+    (for i in {1..8}; do afplay /System/Library/Sounds/Tink.aiff; sleep 1.2; done) &
+    sleep 3
+    say "就像自然中的和谐旋律，" --voice="Sin-ji" --rate=90 &
+    sleep 8
+    
+    # 轻柔音效 + 结束语音
+    (for i in {1..5}; do afplay /System/Library/Sounds/Purr.aiff; sleep 1.5; done) &
+    sleep 2
+    say "请回来查看更新的进度。" --voice="Sin-ji" --rate=120
+    
+    echo "✅ 30秒自然轻音乐提醒播放完成"
+}
+```
+
+#### 🎵 轻音乐资源管理系统
+```bash
+# 创建轻音乐资源目录
+setup_light_music_library() {
+    local music_dir="/Users/mac/Music/LightMusic"
+    
+    if [[ ! -d "$music_dir" ]]; then
+        mkdir -p "$music_dir"
+        echo "📁 创建轻音乐目录: $music_dir"
+    fi
+    
+    # 下载免费轻音乐资源（创作共用许可）
+    echo "🎵 下载30秒轻音乐资源..."
+    
+    # 古典轻音乐 - 适合重大成就
+    curl -s "https://freemusicarchive.org/track/Bach_Cello_Suite_No_1_i_Prelude/download/" \
+         -o "$music_dir/classical_achievement.mp3" 2>/dev/null || \
+    echo "⚠️  请手动添加古典轻音乐文件到 $music_dir/classical_achievement.mp3"
+    
+    # 钢琴轻音乐 - 适合代码优化
+    curl -s "https://freemusicarchive.org/track/Chopin_Minute_Waltz/download/" \
+         -o "$music_dir/piano_optimization.mp3" 2>/dev/null || \
+    echo "⚠️  请手动添加钢琴轻音乐文件到 $music_dir/piano_optimization.mp3"
+    
+    # 自然轻音乐 - 适合日常任务
+    curl -s "https://freemusicarchive.org/track/Peaceful_Nature_Sounds/download/" \
+         -o "$music_dir/nature_daily.mp3" 2>/dev/null || \
+    echo "⚠️  请手动添加自然轻音乐文件到 $music_dir/nature_daily.mp3"
+    
+    echo "✅ 轻音乐资源库设置完成"
+    echo "💡 建议：您可以将喜欢的30秒轻音乐文件放入 $music_dir 目录"
+}
+
+# 智能轻音乐播放器
+play_smart_light_music() {
+    local task_type="$1"
+    local music_dir="/Users/mac/Music/LightMusic"
+    local music_file=""
+    
+    case "$task_type" in
+        "achievement")
+            music_file="$music_dir/classical_achievement.mp3"
+            [[ -f "$music_file" ]] && timeout 30 afplay "$music_file" &
+            ;;
+        "optimization")
+            music_file="$music_dir/piano_optimization.mp3"
+            [[ -f "$music_file" ]] && timeout 30 afplay "$music_file" &
+            ;;
+        "daily")
+            music_file="$music_dir/nature_daily.mp3"
+            [[ -f "$music_file" ]] && timeout 30 afplay "$music_file" &
+            ;;
+    esac
+    
+    # 如果没有音乐文件，使用自然音效组合
+    if [[ ! -f "$music_file" ]]; then
+        echo "🎵 使用自然音效组合创建30秒轻音乐体验..."
+        play_nature_music_reminder
+    fi
+}
+```
+
+#### 🎭 智能轻音乐提醒策略
+- **工作时间(9:00-18:00)**: 音量调至20-25%，使用舒缓轻音乐
+- **专注时间**: 音量调至15%，使用极简音乐或自然音效
+- **深夜模式(22:00-8:00)**: 仅使用轻柔的自然音效，禁用语音
+- **连续任务**: 延迟15秒播放，避免音乐重叠
+- **用户在线检测**: 检测用户活动状态，调整提醒强度
+
+#### 🎼 30秒轻音乐提醒触发条件
+| 任务类型 | 触发条件 | 轻音乐类型 | 播放时长 | 音量级别 |
+|---------|----------|------------|----------|----------|
+| 重大功能开发 | 新功能模块完成 | 古典轻音乐 | 30秒 | 30% |
+| 架构优化 | 系统架构改进 | 古典轻音乐 | 30秒 | 30% |
+| 版本发布 | 版本标签推送 | 古典轻音乐 | 30秒 | 30% |
+| 代码重构 | 重构相关commit | 钢琴轻音乐 | 30秒 | 25% |
+| 性能优化 | 性能提升相关 | 钢琴轻音乐 | 30秒 | 25% |
+| Bug修复 | 修复相关commit | 钢琴轻音乐 | 30秒 | 25% |
+| 文档更新 | README/文档修改 | 自然轻音乐 | 30秒 | 20% |
+| 配置调整 | 配置文件修改 | 自然轻音乐 | 30秒 | 20% |
+| 测试完成 | 测试相关操作 | 自然轻音乐 | 30秒 | 20% |
+
+## 📋 开发检查清单
+在每次开发迭代后，请确认以下检查项：
+- [ ] 使用实时系统时间记录开发进度（格式: YYYY-MM-DD HH:MM:S）
+- [ ] 在README.md中详细记录优化内容和量化指标
+- [ ] 执行完整的git提交流程（add → commit → push）
+- [ ] 提交信息包含模块名称和时间戳
+- [ ] 验证远程仓库已成功更新
+- [ ] **播放30秒对应类型的轻音乐提醒**
+- [ ] 检查其他模块是否需要相应调整
+- [ ] 确认代码质量和测试覆盖率
+- [ ] 更新相关文档和API说明
+- [ ] 规划下一个开发目标和优先级
+- [ ] 确认30秒轻音乐提醒系统正常工作
+
+## 🛠 自动化30秒轻音乐提醒脚本
+```bash
+#!/bin/bash
+# 智能30秒轻音乐提醒脚本
+
+# 获取当前时间和提交信息
+CURRENT_TIME=$(date '+%Y-%m-%d %H:%M:%S')
+COMMIT_MSG="$1"
+
+# 设置轻音乐资源库
+setup_light_music_library
+
+# 判断任务类型并播放对应的30秒轻音乐
+play_30s_light_music() {
+    local task_type="$1"
+    local hour=$(date +%H)
+    
+    # 深夜模式检查
+    if [[ $hour -ge 22 || $hour -le 8 ]]; then
+        echo "🌙 深夜模式：任务完成，播放轻柔自然音效..."
+        # 播放10秒轻柔自然音效
+        timeout 10 play_nature_music_reminder
+        return
+    fi
+    
+    echo "🎵 播放30秒${task_type}轻音乐提醒..."
+    case "$task_type" in
+        "achievement")
+            play_smart_light_music "achievement"
+            say "🎼 重大成就达成！请欣赏这30秒古典轻音乐庆祝时刻！" --voice="Ting-Ting" --rate=180
+            ;;
+        "optimization")
+            play_smart_light_music "optimization"
+            say "🎹 代码优化完成！请享受这30秒优雅的钢琴轻音乐！" --voice="Mei-Jia" --rate=170
+            ;;
+        "daily")
+            play_smart_light_music "daily"
+            say "🎶 日常任务完成！30秒舒缓的自然轻音乐为您放松！" --voice="Sin-ji" --rate=160
+            ;;
+    esac
+}
+
+# 根据提交信息自动判断任务类型
+if [[ "$COMMIT_MSG" =~ (新功能|重大|架构|发布|版本) ]]; then
+    MUSIC_TYPE="achievement"
+elif [[ "$COMMIT_MSG" =~ (优化|重构|修复|性能|算法) ]]; then
+    MUSIC_TYPE="optimization"
+else
+    MUSIC_TYPE="daily"
+fi
+
+# 执行git操作
+git add .
+git commit -m "${COMMIT_MSG} - ${CURRENT_TIME}"
+git push
+
+# 播放对应的30秒轻音乐
+play_30s_light_music "$MUSIC_TYPE"
+
+echo "✅ 开发进度已更新并推送，30秒轻音乐提醒已播放完成"
+```
+
+## 🎵 轻音乐推荐清单
+为了获得最佳的30秒轻音乐体验，推荐以下音乐类型：
+
+### 🎼 古典轻音乐（重大成就）
+- 巴赫：《G弦上的咏叹调》片段
+- 帕赫贝尔：《卡农》片段  
+- 德彪西：《月光》片段
+- 维瓦尔迪：《四季》春之片段
+
+### 🎹 钢琴轻音乐（代码优化）
+- 肖邦：《雨滴前奏曲》片段
+- 德彪西：《阿拉伯风格曲》片段
+- 萨蒂：《吉诺佩蒂》片段
+- 爱因奥迪：《黄昏》片段
+
+### 🎶 自然轻音乐（日常任务）
+- 班德瑞：《寂静山林》片段
+- 神秘园：《夜曲》片段
+- 久石让：《天空之城》片段
+- 雅尼：《夜莺》片段
+
+---
+**最后更新时间**: 2025-01-13 18:30:45  
+**规则版本**: v4.0 - 30秒轻音乐提醒系统 

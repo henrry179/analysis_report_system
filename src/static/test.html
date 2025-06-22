@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>前端测试页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .success { background-color: #d4edda; }
+        .error { background-color: #f8d7da; }
+        .info { background-color: #d1ecf1; }
+        button {
+            margin: 5px;
+            padding: 8px 16px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #result {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            min-height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🔍 前端故障诊断工具</h1>
+        
+        <div class="test-section info">
+            <h3>系统检查</h3>
+            <p>如果您看到这个页面，说明HTML能正常加载。</p>
+            <p><strong>当前时间:</strong> <span id="current-time"></span></p>
+        </div>
+
+        <div class="test-section">
+            <h3>网络连接测试</h3>
+            <button onclick="testConnection()">测试API连接</button>
+            <button onclick="testAssets()">测试静态资源</button>
+            <button onclick="testLogin()">模拟登录</button>
+            <button onclick="setTestToken()">设置测试Token</button>
+        </div>
+
+        <div class="test-section">
+            <h3>前端状态检查</h3>
+            <button onclick="checkLocalStorage()">检查本地存储</button>
+            <button onclick="clearStorage()">清空本地存储</button>
+            <button onclick="redirectToMain()">跳转到主页</button>
+        </div>
+
+        <div id="result" class="test-section">
+            <h3>测试结果</h3>
+            <p>点击上方按钮开始测试...</p>
+        </div>
+    </div>
+
+    <script>
+        // 更新当前时间
+        document.getElementById('current-time').textContent = new Date().toLocaleString('zh-CN');
+
+        function log(message, type = 'info') {
+            const resultDiv = document.getElementById('result');
+            const timestamp = new Date().toLocaleTimeString();
+            resultDiv.className = `test-section ${type}`;
+            resultDiv.innerHTML += `<p>[${timestamp}] ${message}</p>`;
+        }
+
+        function clearLog() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<h3>测试结果</h3>';
+            resultDiv.className = 'test-section';
+        }
+
+        async function testConnection() {
+            clearLog();
+            log('测试API连接...', 'info');
+            
+            try {
+                const response = await fetch('/api/info');
+                const data = await response.json();
+                log(`✅ API连接成功: ${data.name} v${data.version}`, 'success');
+            } catch (error) {
+                log(`❌ API连接失败: ${error.message}`, 'error');
+            }
+        }
+
+        async function testAssets() {
+            clearLog();
+            log('测试静态资源加载...', 'info');
+            
+            try {
+                // 测试CSS文件
+                const cssResponse = await fetch('/assets/index-Dr2bo-mg.css');
+                if (cssResponse.ok) {
+                    log('✅ CSS文件加载正常', 'success');
+                } else {
+                    log(`❌ CSS文件加载失败: ${cssResponse.status}`, 'error');
+                }
+
+                // 测试JS文件
+                const jsResponse = await fetch('/assets/index-D8TOpSku.js');
+                if (jsResponse.ok) {
+                    log('✅ JavaScript文件加载正常', 'success');
+                } else {
+                    log(`❌ JavaScript文件加载失败: ${jsResponse.status}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ 静态资源测试失败: ${error.message}`, 'error');
+            }
+        }
+
+        async function testLogin() {
+            clearLog();
+            log('模拟登录测试...', 'info');
+            
+            try {
+                const params = new URLSearchParams();
+                params.append('username', 'admin');
+                params.append('password', 'adminpass');
+                params.append('grant_type', '');
+
+                const response = await fetch('/token', {
+                    method: 'POST',
+                    body: params
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    log('✅ 登录成功，获取到token', 'success');
+                    localStorage.setItem('token', data.access_token);
+                    localStorage.setItem('userName', 'admin');
+                    localStorage.setItem('userRole', 'admin');
+                    log('✅ Token已保存到本地存储', 'success');
+                } else {
+                    log(`❌ 登录失败: ${response.status}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ 登录测试失败: ${error.message}`, 'error');
+            }
+        }
+
+        function setTestToken() {
+            clearLog();
+            log('设置测试Token...', 'info');
+            
+            localStorage.setItem('token', 'admin');
+            localStorage.setItem('userName', 'admin');
+            localStorage.setItem('userRole', 'admin');
+            
+            log('✅ 测试Token设置完成', 'success');
+            log('现在可以尝试跳转到主页', 'info');
+        }
+
+        function checkLocalStorage() {
+            clearLog();
+            log('检查本地存储...', 'info');
+            
+            const token = localStorage.getItem('token');
+            const userName = localStorage.getItem('userName');
+            const userRole = localStorage.getItem('userRole');
+
+            if (token) {
+                log(`✅ Token: ${token}`, 'success');
+            } else {
+                log('❌ 未找到Token', 'error');
+            }
+
+            if (userName) {
+                log(`✅ 用户名: ${userName}`, 'success');
+            } else {
+                log('❌ 未找到用户名', 'error');
+            }
+
+            if (userRole) {
+                log(`✅ 用户角色: ${userRole}`, 'success');
+            } else {
+                log('❌ 未找到用户角色', 'error');
+            }
+        }
+
+        function clearStorage() {
+            clearLog();
+            log('清空本地存储...', 'info');
+            
+            localStorage.clear();
+            log('✅ 本地存储已清空', 'success');
+        }
+
+        function redirectToMain() {
+            log('跳转到主页...', 'info');
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 1000);
+        }
+    </script>
+</body>
+</html> 
