@@ -12,7 +12,18 @@ from src.core.analysis_engine import AnalysisEngine
 from src.core.report_generator import ReportGenerator
 from src.core.system_manager import SystemManager
 
+# 导入数据库路由
+try:
+    from src.api.database import router as database_router
+    DATABASE_AVAILABLE = True
+except ImportError:
+    DATABASE_AVAILABLE = False
+
 app = FastAPI(title="分析报告系统API")
+
+# 包含数据库路由（如果可用）
+if DATABASE_AVAILABLE:
+    app.include_router(database_router)
 
 # 配置CORS
 app.add_middleware(

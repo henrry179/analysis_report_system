@@ -3,13 +3,18 @@ import pandas as pd
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
 import logging
+import os
+import sys
+
+# 添加项目根目录到路径
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 from .data_collector import DataCollector
 
 logger = logging.getLogger(__name__)
 
 class DatabaseDataCollector(DataCollector):
-    """数据库数据采集器"""
+    """数据库数据采集器 - 支持MySQL和其他数据库"""
     
     def __init__(self, config: Dict[str, Any]):
         """
@@ -18,6 +23,13 @@ class DatabaseDataCollector(DataCollector):
         Args:
             config: 配置信息，包含：
                 - connection_string: 数据库连接字符串
+                - 或者分别提供：
+                  - host: 主机地址
+                  - port: 端口
+                  - user: 用户名
+                  - password: 密码
+                  - database: 数据库名
+                  - db_type: 数据库类型 (mysql, postgresql, sqlite)
                 - query: SQL查询语句
                 - table: 表名（如果使用表名而不是查询语句）
         """
@@ -29,8 +41,10 @@ class DatabaseDataCollector(DataCollector):
         """初始化数据库连接"""
         try:
             connection_string = self.config.get('connection_string')
+            
+            # 如果没有提供连接字符串，则根据配置构建
             if not connection_string:
-                raise ValueError("未指定数据库连接字符串")
+                connection_string = self._build_connection_string()
             
             self.engine = create_engine(connection_string)
             logger.info("数据库连接初始化成功")
@@ -38,6 +52,25 @@ class DatabaseDataCollector(DataCollector):
         except Exception as e:
             logger.error(f"数据库连接初始化失败: {str(e)}")
             raise
+    
+    def _build_connection_string(self) -> str:
+        """根据配置构建数据库连接字符串"""
+        db_type = self.config.get('db_type', 'mysql').lower()
+        host = self.config.get('host', 'localhost')
+        port = self.config.get('port', 3306)
+        user = self.config.get('user', 'root')
+        password = self.config.get('password', '')
+        database = self.config.get('database', 'analysis_system')
+        charset = self.config.get('charset', 'utf8mb4')
+        
+        if db_type == 'mysql':
+            return f"mysql+pymysql://{user}:{password}@{host}:{port}/{database}?charset={charset}"
+        elif db_type == 'postgresql':
+            return f"postgresql://{user}:{password}@{host}:{port}/{database}"
+        elif db_type == 'sqlite':
+            return f"sqlite:///{database}"
+        else:
+            raise ValueError(f"不支持的数据库类型: {db_type}")
     
     def collect(self) -> pd.DataFrame:
         """
