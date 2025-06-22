@@ -37,14 +37,18 @@ requests==2.31.0
 # 开发工具
 python-dotenv==1.0.0
 
+# 数据库支持 - MySQL数据库功能
+sqlalchemy==2.0.23
+pymysql==1.1.0
+alembic==1.13.1
+
+# 虚拟数据生成
+faker==20.1.0
+
 # 可选依赖（根据需要安装）
 # PDF生成（如果需要PDF输出）
 # weasyprint==60.2
 # reportlab==4.0.7
-
-# 数据库（如果需要持久化）
-# sqlalchemy==2.0.23
-# alembic==1.13.1
 
 # 缓存（如果需要缓存）
 # redis==5.0.1
