@@ -58,7 +58,7 @@ class SQLWorkspaceManager:
         
         logger.info("✅ SQL工作空间目录结构创建完成")
     
-    def load_database_config(self, config_file: str = "mysql_config.json") -> bool:
+    def load_database_config(self, config_file: str = "src/config/mysql_config.json") -> bool:
         """
         加载数据库配置
         
@@ -172,10 +172,10 @@ class SQLWorkspaceManager:
             safe_config = self.config.copy()
             safe_config['password'] = '***'
             
-            with open('mysql_config.json', 'w', encoding='utf-8') as f:
+            with open('src/config/mysql_config.json', 'w', encoding='utf-8') as f:
                 json.dump(safe_config, f, ensure_ascii=False, indent=2)
             
-            logger.info("✅ 数据库配置已保存到 mysql_config.json")
+            logger.info("✅ 数据库配置已保存到 src/config/mysql_config.json")
             
         except Exception as e:
             logger.error(f"❌ 数据库配置保存失败: {str(e)}")

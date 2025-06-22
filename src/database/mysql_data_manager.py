@@ -105,7 +105,7 @@ class ComprehensiveMySQLManager:
             
             elif choice == '3':
                 # 从配置文件加载
-                config_file = input("配置文件路径 (默认: mysql_config.json): ") or "mysql_config.json"
+                config_file = input("配置文件路径 (默认: src/config/mysql_config.json): ") or "src/config/mysql_config.json"
                 if os.path.exists(config_file):
                     with open(config_file, 'r', encoding='utf-8') as f:
                         self.config = json.load(f)
@@ -158,7 +158,7 @@ class ComprehensiveMySQLManager:
             safe_config = self.config.copy()
             safe_config['password'] = '***'
             
-            config_file = 'mysql_config.json'
+            config_file = 'src/config/mysql_config.json'
             with open(config_file, 'w', encoding='utf-8') as f:
                 json.dump(safe_config, f, ensure_ascii=False, indent=2)
             

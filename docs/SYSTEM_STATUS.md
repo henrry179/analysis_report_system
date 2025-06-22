@@ -40,7 +40,7 @@
 
 ## 📊 快速启动
 ```bash
-./run_system.sh
+./scripts/run_system.sh
 # 或
 python start_server.py
 ```

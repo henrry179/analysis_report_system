@@ -135,7 +135,7 @@ def setup_database_with_data():
         save_config_file(config)
         
         print("\n✅ MySQL数据库初始化完成！")
-        print("🔗 数据库连接信息已保存到 mysql_config.json")
+        print("🔗 数据库连接信息已保存到 src/config/mysql_config.json")
         print("📊 现在可以在报告系统中使用数据库功能了")
         
         return True
@@ -183,7 +183,7 @@ def save_config_file(config):
     safe_config = config.copy()
     safe_config['password'] = '***'
     
-    config_file = 'mysql_config.json'
+    config_file = 'src/config/mysql_config.json'
     with open(config_file, 'w', encoding='utf-8') as f:
         json.dump(safe_config, f, ensure_ascii=False, indent=2)
     

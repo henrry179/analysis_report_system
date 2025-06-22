@@ -28,7 +28,7 @@ fi
 # 启动系统
 echo "🌟 启动系统..."
 echo "=============================================="
-python start_server.py
+cd "$(dirname "$0")/.." && python scripts/start_server.py
 
 echo ""
 echo "👋 系统已关闭" 

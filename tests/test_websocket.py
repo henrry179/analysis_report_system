@@ -161,7 +161,7 @@ async def main():
             return
     except Exception as e:
         print(f"❌ 无法连接到服务器: {e}")
-        print("💡 请确保服务器正在运行: python start_server.py")
+        print("💡 请确保服务器正在运行: python scripts/start_server.py")
         return
     
     # 获取认证令牌

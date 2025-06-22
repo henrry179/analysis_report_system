@@ -581,7 +581,7 @@ def interactive_sql_manager():
     print("=" * 50)
     
     # 获取数据库配置
-    config_file = input("MySQL配置文件路径 (默认: mysql_config.json): ") or "mysql_config.json"
+    config_file = input("MySQL配置文件路径 (默认: src/config/mysql_config.json): ") or "src/config/mysql_config.json"
     
     config = None
     if os.path.exists(config_file):
