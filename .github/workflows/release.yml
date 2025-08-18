@@ -240,7 +240,7 @@ jobs:
           HEAD > release-assets/source-code.tar.gz
 
     - name: 🎉 创建GitHub Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         tag_name: ${{ needs.prepare-release.outputs.version }}
         name: 业务分析报告自动化系统 ${{ needs.prepare-release.outputs.version }}
