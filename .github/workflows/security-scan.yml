@@ -253,7 +253,7 @@ jobs:
 
     steps:
     - name: 📥 下载所有安全报告
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v5
 
     - name: 📊 生成综合安全报告
       run: |
