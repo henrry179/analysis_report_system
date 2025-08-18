@@ -1,0 +1,274 @@
+# Prometheus 告警规则
+# 业务分析报告自动化系统监控告警
+
+groups:
+  # 应用程序告警
+  - name: application.rules
+    rules:
+      # 应用服务不可用
+      - alert: ApplicationDown
+        expr: up{job="analysis-app"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: analysis-app
+        annotations:
+          summary: "业务分析应用服务不可用"
+          description: "应用服务 {{ $labels.instance }} 已经停止响应超过1分钟"
+
+      # HTTP请求错误率过高
+      - alert: HighErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          service: analysis-app
+        annotations:
+          summary: "HTTP错误率过高"
+          description: "过去5分钟内HTTP 5xx错误率为 {{ $value | humanizePercentage }}"
+
+      # API响应时间过长
+      - alert: HighResponseTime
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 2
+        for: 5m
+        labels:
+          severity: warning
+          service: analysis-app
+        annotations:
+          summary: "API响应时间过长"
+          description: "95%的请求响应时间超过2秒，当前为 {{ $value }}s"
+
+      # 内存使用率过高
+      - alert: HighMemoryUsage
+        expr: (process_resident_memory_bytes / process_virtual_memory_max_bytes) > 0.8
+        for: 10m
+        labels:
+          severity: warning
+          service: analysis-app
+        annotations:
+          summary: "应用内存使用率过高"
+          description: "内存使用率为 {{ $value | humanizePercentage }}，超过80%阈值"
+
+      # CPU使用率过高
+      - alert: HighCPUUsage
+        expr: rate(process_cpu_seconds_total[5m]) > 0.8
+        for: 10m
+        labels:
+          severity: warning
+          service: analysis-app
+        annotations:
+          summary: "应用CPU使用率过高"
+          description: "CPU使用率为 {{ $value | humanizePercentage }}，超过80%阈值"
+
+  # 数据库告警
+  - name: database.rules
+    rules:
+      # 数据库不可用
+      - alert: DatabaseDown
+        expr: up{job="postgres"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: database
+        annotations:
+          summary: "数据库服务不可用"
+          description: "PostgreSQL数据库 {{ $labels.instance }} 不可达"
+
+      # 数据库连接数过多
+      - alert: TooManyConnections
+        expr: pg_stat_activity_count > 80
+        for: 5m
+        labels:
+          severity: warning
+          service: database
+        annotations:
+          summary: "数据库连接数过多"
+          description: "当前连接数为 {{ $value }}，接近最大连接数限制"
+
+      # 数据库死锁
+      - alert: DatabaseDeadlocks
+        expr: rate(pg_stat_database_deadlocks[5m]) > 0
+        for: 1m
+        labels:
+          severity: warning
+          service: database
+        annotations:
+          summary: "检测到数据库死锁"
+          description: "过去5分钟内发生了 {{ $value }} 次死锁"
+
+      # 数据库慢查询
+      - alert: SlowQueries
+        expr: pg_stat_statements_mean_time_ms > 1000
+        for: 5m
+        labels:
+          severity: warning
+          service: database
+        annotations:
+          summary: "检测到慢查询"
+          description: "平均查询时间为 {{ $value }}ms，超过1秒阈值"
+
+  # Redis告警
+  - name: redis.rules
+    rules:
+      # Redis不可用
+      - alert: RedisDown
+        expr: up{job="redis"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: redis
+        annotations:
+          summary: "Redis服务不可用"
+          description: "Redis实例 {{ $labels.instance }} 不可达"
+
+      # Redis内存使用率过高
+      - alert: RedisHighMemoryUsage
+        expr: (redis_memory_used_bytes / redis_memory_max_bytes) > 0.9
+        for: 5m
+        labels:
+          severity: warning
+          service: redis
+        annotations:
+          summary: "Redis内存使用率过高"
+          description: "内存使用率为 {{ $value | humanizePercentage }}，超过90%阈值"
+
+      # Redis连接数过多
+      - alert: RedisHighConnections
+        expr: redis_connected_clients > 100
+        for: 5m
+        labels:
+          severity: warning
+          service: redis
+        annotations:
+          summary: "Redis连接数过多"
+          description: "当前连接数为 {{ $value }}，可能存在连接泄漏"
+
+      # Redis缓存命中率低
+      - alert: LowCacheHitRate
+        expr: (rate(redis_keyspace_hits_total[5m]) / (rate(redis_keyspace_hits_total[5m]) + rate(redis_keyspace_misses_total[5m]))) < 0.8
+        for: 10m
+        labels:
+          severity: warning
+          service: redis
+        annotations:
+          summary: "Redis缓存命中率过低"
+          description: "缓存命中率为 {{ $value | humanizePercentage }}，低于80%阈值"
+
+  # 系统资源告警
+  - name: system.rules
+    rules:
+      # 磁盘空间不足
+      - alert: DiskSpaceLow
+        expr: (node_filesystem_avail_bytes / node_filesystem_size_bytes) < 0.1
+        for: 5m
+        labels:
+          severity: critical
+          service: system
+        annotations:
+          summary: "磁盘空间不足"
+          description: "挂载点 {{ $labels.mountpoint }} 可用空间仅剩 {{ $value | humanizePercentage }}"
+
+      # 系统负载过高
+      - alert: HighSystemLoad
+        expr: node_load1 > 4
+        for: 10m
+        labels:
+          severity: warning
+          service: system
+        annotations:
+          summary: "系统负载过高"
+          description: "1分钟平均负载为 {{ $value }}，超过4.0阈值"
+
+      # 系统内存不足
+      - alert: SystemMemoryLow
+        expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) < 0.1
+        for: 5m
+        labels:
+          severity: warning
+          service: system
+        annotations:
+          summary: "系统内存不足"
+          description: "可用内存仅剩 {{ $value | humanizePercentage }}"
+
+  # 业务指标告警
+  - name: business.rules
+    rules:
+      # 报告生成失败率过高
+      - alert: HighReportFailureRate
+        expr: rate(report_generation_failed_total[5m]) / rate(report_generation_total[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          service: analysis-app
+        annotations:
+          summary: "报告生成失败率过高"
+          description: "过去5分钟内报告生成失败率为 {{ $value | humanizePercentage }}"
+
+      # WebSocket连接数异常
+      - alert: WebSocketConnectionsAbnormal
+        expr: websocket_connections_active < 1 or websocket_connections_active > 1000
+        for: 5m
+        labels:
+          severity: warning
+          service: analysis-app
+        annotations:
+          summary: "WebSocket连接数异常"
+          description: "当前WebSocket连接数为 {{ $value }}，可能存在异常"
+
+      # 数据分析任务积压
+      - alert: AnalysisTaskBacklog
+        expr: analysis_tasks_pending > 50
+        for: 10m
+        labels:
+          severity: warning
+          service: analysis-app
+        annotations:
+          summary: "分析任务积压"
+          description: "待处理的分析任务数量为 {{ $value }}，超过50个阈值"
+
+      # 用户登录失败率过高
+      - alert: HighLoginFailureRate
+        expr: rate(login_attempts_failed_total[5m]) / rate(login_attempts_total[5m]) > 0.3
+        for: 5m
+        labels:
+          severity: warning
+          service: analysis-app
+        annotations:
+          summary: "用户登录失败率过高"
+          description: "过去5分钟内登录失败率为 {{ $value | humanizePercentage }}，可能存在攻击"
+
+  # 安全告警
+  - name: security.rules
+    rules:
+      # 异常API访问
+      - alert: UnusualAPIAccess
+        expr: rate(http_requests_total{status="401"}[5m]) > 10
+        for: 2m
+        labels:
+          severity: warning
+          service: security
+        annotations:
+          summary: "检测到异常API访问"
+          description: "过去5分钟内401错误率为 {{ $value }}/s，可能存在暴力破解攻击"
+
+      # 大量4xx错误
+      - alert: HighClientErrors
+        expr: rate(http_requests_total{status=~"4.."}[5m]) > 50
+        for: 5m
+        labels:
+          severity: warning
+          service: security
+        annotations:
+          summary: "客户端错误率过高"
+          description: "过去5分钟内4xx错误率为 {{ $value }}/s"
+
+      # 异常文件上传
+      - alert: UnusualFileUploads
+        expr: rate(file_uploads_total[5m]) > 100
+        for: 5m
+        labels:
+          severity: warning
+          service: security
+        annotations:
+          summary: "检测到异常文件上传活动"
+          description: "过去5分钟内文件上传率为 {{ $value }}/s，超过正常阈值"

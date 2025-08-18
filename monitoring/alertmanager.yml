@@ -1,0 +1,195 @@
+# Alertmanager 配置
+# 业务分析报告自动化系统告警管理
+
+global:
+  # SMTP配置
+  smtp_smarthost: 'smtp.gmail.com:587'
+  smtp_from: 'alerts@your-company.com'
+  smtp_auth_username: 'alerts@your-company.com'
+  smtp_auth_password: 'your-email-password'
+  smtp_require_tls: true
+
+# 路由配置
+route:
+  group_by: ['alertname', 'service']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
+  receiver: 'default'
+  
+  routes:
+    # 关键服务告警 - 立即通知
+    - match:
+        severity: critical
+      receiver: 'critical-alerts'
+      group_wait: 0s
+      repeat_interval: 5m
+      
+    # 安全相关告警
+    - match:
+        service: security
+      receiver: 'security-team'
+      group_wait: 30s
+      repeat_interval: 30m
+      
+    # 数据库告警
+    - match:
+        service: database
+      receiver: 'database-team'
+      group_wait: 1m
+      repeat_interval: 15m
+      
+    # 应用程序告警
+    - match:
+        service: analysis-app
+      receiver: 'dev-team'
+      group_wait: 2m
+      repeat_interval: 30m
+
+# 告警接收器配置
+receivers:
+  # 默认接收器
+  - name: 'default'
+    email_configs:
+      - to: 'team@your-company.com'
+        subject: '📊 [{{ .Status | toUpper }}] 业务分析系统告警'
+        body: |
+          {{ range .Alerts }}
+          告警: {{ .Annotations.summary }}
+          描述: {{ .Annotations.description }}
+          服务: {{ .Labels.service }}
+          严重程度: {{ .Labels.severity }}
+          时间: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+          {{ end }}
+
+  # 关键告警接收器
+  - name: 'critical-alerts'
+    # Slack通知
+    slack_configs:
+      - api_url: 'https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK'
+        channel: '#critical-alerts'
+        title: '🚨 关键系统告警'
+        text: |
+          {{ range .Alerts }}
+          *告警*: {{ .Annotations.summary }}
+          *描述*: {{ .Annotations.description }}
+          *服务*: {{ .Labels.service }}
+          *时间*: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+          {{ end }}
+        actions:
+          - type: button
+            text: '查看详情'
+            url: '{{ template "slack.default.callbackurl" . }}'
+            
+    # 邮件通知
+    email_configs:
+      - to: 'oncall@your-company.com'
+        subject: '🚨 [CRITICAL] 业务分析系统关键告警'
+        body: |
+          关键告警触发，请立即处理！
+          
+          {{ range .Alerts }}
+          告警: {{ .Annotations.summary }}
+          描述: {{ .Annotations.description }}
+          服务: {{ .Labels.service }}
+          实例: {{ .Labels.instance }}
+          时间: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+          
+          {{ end }}
+          
+          请登录监控面板查看详细信息：
+          http://localhost:3000/
+          
+    # 企业微信通知
+    wechat_configs:
+      - api_url: 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=YOUR_WECHAT_KEY'
+        message: |
+          🚨 关键系统告警
+          {{ range .Alerts }}
+          告警: {{ .Annotations.summary }}
+          服务: {{ .Labels.service }}
+          时间: {{ .StartsAt.Format "15:04:05" }}
+          {{ end }}
+
+  # 安全团队接收器
+  - name: 'security-team'
+    slack_configs:
+      - api_url: 'https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK'
+        channel: '#security-alerts'
+        title: '🔒 安全告警'
+        text: |
+          {{ range .Alerts }}
+          *安全告警*: {{ .Annotations.summary }}
+          *描述*: {{ .Annotations.description }}
+          *时间*: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+          {{ end }}
+        color: 'danger'
+        
+    email_configs:
+      - to: 'security@your-company.com'
+        subject: '🔒 [SECURITY] 安全告警通知'
+        body: |
+          检测到安全相关告警，请及时处理。
+          
+          {{ range .Alerts }}
+          告警: {{ .Annotations.summary }}
+          描述: {{ .Annotations.description }}
+          实例: {{ .Labels.instance }}
+          时间: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+          {{ end }}
+
+  # 数据库团队接收器
+  - name: 'database-team'
+    email_configs:
+      - to: 'dba@your-company.com'
+        subject: '🗄️ [DATABASE] 数据库告警'
+        body: |
+          数据库相关告警，请检查数据库状态。
+          
+          {{ range .Alerts }}
+          告警: {{ .Annotations.summary }}
+          描述: {{ .Annotations.description }}
+          数据库: {{ .Labels.instance }}
+          时间: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+          {{ end }}
+
+  # 开发团队接收器
+  - name: 'dev-team'
+    slack_configs:
+      - api_url: 'https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK'
+        channel: '#dev-alerts'
+        title: '⚠️ 应用告警'
+        text: |
+          {{ range .Alerts }}
+          *应用告警*: {{ .Annotations.summary }}
+          *描述*: {{ .Annotations.description }}
+          *服务*: {{ .Labels.service }}
+          {{ end }}
+        color: 'warning'
+
+# 抑制规则
+inhibit_rules:
+  # 如果服务完全宕机，抑制其他相关告警
+  - source_match:
+      alertname: 'ApplicationDown'
+    target_match:
+      service: 'analysis-app'
+    equal: ['instance']
+    
+  # 如果数据库宕机，抑制应用相关告警
+  - source_match:
+      alertname: 'DatabaseDown'
+    target_match:
+      service: 'analysis-app'
+    equal: ['instance']
+    
+  # 如果系统负载过高，抑制CPU告警
+  - source_match:
+      alertname: 'HighSystemLoad'
+    target_match:
+      alertname: 'HighCPUUsage'
+    equal: ['instance']
+
+# 模板配置
+templates:
+  - '/etc/alertmanager/templates/*.tmpl'
