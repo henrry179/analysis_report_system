@@ -94,7 +94,7 @@ jobs:
         name: codecov-umbrella
 
     - name: 📋 生成测试报告
-      uses: dorny/test-reporter@v1
+      uses: dorny/test-reporter@v2
       if: success() || failure()
       with:
         name: 测试结果
