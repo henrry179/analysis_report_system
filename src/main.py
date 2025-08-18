@@ -14,7 +14,7 @@ project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 from fastapi import FastAPI, Request, HTTPException
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
@@ -40,6 +40,9 @@ from src.core.models import LoginRequest
 
 # 导入API路由
 from src.api.reports import router as reports_router
+
+# 导入监控指标
+from src.utils.metrics import metrics_collector, get_metrics, record_http_request
 
 
 @asynccontextmanager
@@ -105,6 +108,37 @@ templates = Jinja2Templates(directory=str(settings.TEMPLATES_DIR))
 
 # 注册API路由
 app.include_router(reports_router)
+
+# 添加指标端点
+@app.get("/metrics")
+async def metrics():
+    """Prometheus指标端点"""
+    from prometheus_client import CONTENT_TYPE_LATEST
+    try:
+        metrics_data = get_metrics()
+        return Response(content=metrics_data, media_type=CONTENT_TYPE_LATEST)
+    except Exception:
+        # 如果Prometheus不可用，返回简单指标
+        return Response(content="# Prometheus metrics not available\n", media_type="text/plain")
+
+# 添加HTTP请求监控中间件
+@app.middleware("http")
+async def metrics_middleware(request: Request, call_next):
+    """HTTP请求指标收集中间件"""
+    start_time = time.time()
+    
+    response = await call_next(request)
+    
+    # 记录请求指标
+    duration = time.time() - start_time
+    method = request.method
+    endpoint = request.url.path
+    status = response.status_code
+    
+    # 记录到Prometheus
+    record_http_request(method, endpoint, status, duration)
+    
+    return response
 
 
 # 异常处理器

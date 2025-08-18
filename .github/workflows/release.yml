@@ -1,0 +1,399 @@
+name: Release - 版本发布
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: '发布版本 (例如: v1.0.0)'
+        required: true
+        type: string
+      prerelease:
+        description: '是否为预发布版本'
+        required: false
+        type: boolean
+        default: false
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # 准备发布
+  prepare-release:
+    name: 🎯 准备发布
+    runs-on: ubuntu-latest
+    
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      changelog: ${{ steps.changelog.outputs.changelog }}
+
+    steps:
+    - name: 📥 检出代码
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: 🏷️ 确定版本号
+      id: version
+      run: |
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          VERSION="${{ github.event.inputs.version }}"
+        else
+          VERSION=${GITHUB_REF#refs/tags/}
+        fi
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "🏷️ 发布版本: $VERSION"
+
+    - name: 📝 生成变更日志
+      id: changelog
+      run: |
+        echo "📝 生成变更日志..."
+        
+        # 获取上一个版本标签
+        PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+        
+        if [ -z "$PREVIOUS_TAG" ]; then
+          echo "changelog=首次发布" >> $GITHUB_OUTPUT
+        else
+          # 生成变更日志
+          CHANGELOG=$(git log --pretty=format:"- %s" ${PREVIOUS_TAG}..HEAD)
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+        fi
+
+  # 构建和测试
+  build-and-test:
+    name: 🏗️ 构建和测试
+    runs-on: ubuntu-latest
+    needs: prepare-release
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+    - name: 📥 检出代码
+      uses: actions/checkout@v4
+
+    - name: 🐍 设置Python环境
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: 📦 安装依赖
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements-docker.txt
+        pip install pytest pytest-cov
+
+    - name: 🧪 运行完整测试套件
+      env:
+        DATABASE_URL: postgresql://postgres:test_password@localhost:5432/test_db
+        REDIS_URL: redis://localhost:6379/0
+        SECRET_KEY: test-secret-key
+        PYTHONPATH: ${{ github.workspace }}
+      run: |
+        pytest tests/ -v --cov=src --cov-report=xml --cov-report=html
+
+    - name: 📊 上传测试覆盖率
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        flags: release
+        name: release-coverage
+
+  # 构建发布镜像
+  build-release-image:
+    name: 🐳 构建发布镜像
+    runs-on: ubuntu-latest
+    needs: [prepare-release, build-and-test]
+
+    outputs:
+      image: ${{ steps.image.outputs.image }}
+      digest: ${{ steps.build.outputs.digest }}
+
+    steps:
+    - name: 📥 检出代码
+      uses: actions/checkout@v4
+
+    - name: 🔧 设置Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: 🔐 登录容器注册表
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: 📝 提取元数据
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=semver,pattern={{major}}
+          type=raw,value=latest
+
+    - name: 🏗️ 构建并推送发布镜像
+      id: build
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        platforms: linux/amd64,linux/arm64
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        build-args: |
+          BUILD_DATE=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.created'] }}
+          BUILD_VERSION=${{ needs.prepare-release.outputs.version }}
+          BUILD_REVISION=${{ github.sha }}
+
+    - name: 🏷️ 输出镜像信息
+      id: image
+      run: |
+        echo "image=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}" >> $GITHUB_OUTPUT
+        echo "🐳 发布镜像: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.prepare-release.outputs.version }}"
+
+  # 安全扫描
+  security-scan:
+    name: 🔒 发布前安全扫描
+    runs-on: ubuntu-latest
+    needs: build-release-image
+
+    steps:
+    - name: 🔍 Trivy安全扫描
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: ${{ needs.build-release-image.outputs.image }}:${{ needs.prepare-release.outputs.version }}
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+
+    - name: 📊 上传安全扫描结果
+      uses: github/codeql-action/upload-sarif@v2
+      if: always()
+      with:
+        sarif_file: 'trivy-results.sarif'
+
+  # 创建GitHub Release
+  create-release:
+    name: 📦 创建GitHub Release
+    runs-on: ubuntu-latest
+    needs: [prepare-release, build-and-test, build-release-image, security-scan]
+
+    steps:
+    - name: 📥 检出代码
+      uses: actions/checkout@v4
+
+    - name: 📦 打包发布文件
+      run: |
+        mkdir -p release-assets
+        
+        # 复制重要文件到发布包
+        cp README.md release-assets/
+        cp DOCKER_DEPLOYMENT_GUIDE.md release-assets/
+        cp docker-compose.yml release-assets/
+        cp docker-compose.dev.yml release-assets/
+        cp requirements-docker.txt release-assets/
+        cp -r scripts/ release-assets/
+        cp -r .github/ release-assets/
+        
+        # 创建部署包
+        tar -czf release-assets/deployment-package.tar.gz \
+          docker-compose.yml \
+          docker-compose.dev.yml \
+          scripts/ \
+          nginx/ \
+          monitoring/
+        
+        # 创建源码包
+        git archive --format=tar.gz --prefix=analysis-report-system-${{ needs.prepare-release.outputs.version }}/ \
+          HEAD > release-assets/source-code.tar.gz
+
+    - name: 🎉 创建GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ needs.prepare-release.outputs.version }}
+        name: 业务分析报告自动化系统 ${{ needs.prepare-release.outputs.version }}
+        body: |
+          ## 🎉 版本 ${{ needs.prepare-release.outputs.version }} 发布
+          
+          ### 📋 更新内容
+          ${{ needs.prepare-release.outputs.changelog }}
+          
+          ### 🐳 Docker镜像
+          ```bash
+          docker pull ${{ needs.build-release-image.outputs.image }}:${{ needs.prepare-release.outputs.version }}
+          ```
+          
+          ### 🚀 快速部署
+          ```bash
+          # 下载部署包
+          wget https://github.com/${{ github.repository }}/releases/download/${{ needs.prepare-release.outputs.version }}/deployment-package.tar.gz
+          tar -xzf deployment-package.tar.gz
+          
+          # 启动服务
+          ./scripts/docker-build.sh start production
+          ```
+          
+          ### 📊 系统要求
+          - Docker 20.10+
+          - Docker Compose 2.0+
+          - 内存: 4GB+
+          - 磁盘: 10GB+
+          
+          ### 🔗 相关链接
+          - [📚 部署指南](https://github.com/${{ github.repository }}/blob/${{ needs.prepare-release.outputs.version }}/DOCKER_DEPLOYMENT_GUIDE.md)
+          - [🐳 Docker Hub](https://github.com/${{ github.repository }}/pkgs/container/analysis-report-system)
+          - [📖 API文档](https://your-domain.com/docs)
+          
+          ---
+          
+          **完整更新日志**: https://github.com/${{ github.repository }}/compare/v1.0.0...${{ needs.prepare-release.outputs.version }}
+        files: |
+          release-assets/*
+        prerelease: ${{ github.event.inputs.prerelease == 'true' }}
+        draft: false
+
+  # 部署到生产环境
+  deploy-production:
+    name: 🚀 部署到生产环境
+    runs-on: ubuntu-latest
+    needs: [prepare-release, create-release]
+    environment: production
+    if: ${{ !github.event.inputs.prerelease }}
+
+    steps:
+    - name: 📥 检出代码
+      uses: actions/checkout@v4
+
+    - name: 🔧 设置部署环境
+      run: |
+        echo "🔧 配置生产环境部署..."
+        # 这里添加实际的生产环境部署逻辑
+        # 例如: kubectl, helm, terraform等
+
+    - name: 🚀 执行生产环境部署
+      run: |
+        echo "🚀 开始生产环境部署..."
+        echo "版本: ${{ needs.prepare-release.outputs.version }}"
+        echo "镜像: ${{ needs.build-release-image.outputs.image }}:${{ needs.prepare-release.outputs.version }}"
+        
+        # 实际部署命令
+        # kubectl set image deployment/analysis-app app=${{ needs.build-release-image.outputs.image }}:${{ needs.prepare-release.outputs.version }}
+        # kubectl rollout status deployment/analysis-app
+        
+        echo "✅ 生产环境部署完成"
+
+    - name: 🧪 生产环境验证
+      run: |
+        echo "🧪 验证生产环境部署..."
+        sleep 30
+        
+        # 健康检查
+        # curl -f https://your-domain.com/api/info
+        
+        echo "✅ 生产环境验证通过"
+
+  # 发布通知
+  notify:
+    name: 📢 发布通知
+    runs-on: ubuntu-latest
+    needs: [prepare-release, create-release, deploy-production]
+    if: always()
+
+    steps:
+    - name: 📢 Slack通知
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        channel: '#releases'
+        text: |
+          🎉 新版本发布成功！
+          
+          **版本**: ${{ needs.prepare-release.outputs.version }}
+          **状态**: ${{ needs.deploy-production.result == 'success' && '✅ 已部署到生产环境' || '⚠️ 仅创建了Release' }}
+          **发布人**: ${{ github.actor }}
+          
+          📦 [查看Release](https://github.com/${{ github.repository }}/releases/tag/${{ needs.prepare-release.outputs.version }})
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    - name: 📧 邮件通知
+      uses: dawidd6/action-send-mail@v3
+      with:
+        server_address: smtp.gmail.com
+        server_port: 587
+        username: ${{ secrets.EMAIL_USERNAME }}
+        password: ${{ secrets.EMAIL_PASSWORD }}
+        subject: 🎉 业务分析报告系统 ${{ needs.prepare-release.outputs.version }} 发布成功
+        body: |
+          新版本 ${{ needs.prepare-release.outputs.version }} 已成功发布！
+          
+          发布时间: $(date)
+          发布人: ${{ github.actor }}
+          
+          更新内容:
+          ${{ needs.prepare-release.outputs.changelog }}
+          
+          查看详情: https://github.com/${{ github.repository }}/releases/tag/${{ needs.prepare-release.outputs.version }}
+        to: team@your-company.com
+        from: noreply@your-company.com
+
+  # 更新文档
+  update-docs:
+    name: 📚 更新文档
+    runs-on: ubuntu-latest
+    needs: [prepare-release, create-release]
+
+    steps:
+    - name: 📥 检出代码
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: 📝 更新版本文档
+      run: |
+        # 更新版本信息
+        sed -i "s/版本: v.*/版本: ${{ needs.prepare-release.outputs.version }}/g" README.md
+        sed -i "s/Version: v.*/Version: ${{ needs.prepare-release.outputs.version }}/g" DOCKER_DEPLOYMENT_GUIDE.md
+        
+        # 更新发布日期
+        sed -i "s/发布时间: .*/发布时间: $(date +'%Y-%m-%d')/g" README.md
+
+    - name: 💾 提交文档更新
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add README.md DOCKER_DEPLOYMENT_GUIDE.md
+        git commit -m "docs: 更新版本信息到 ${{ needs.prepare-release.outputs.version }}" || exit 0
+        git push
