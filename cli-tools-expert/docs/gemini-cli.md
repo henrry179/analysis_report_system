@@ -351,5 +351,5 @@ gemini-cli generate-pipeline --type jenkins
 
 ---
 
-最后更新：2025年1月
+最后更新：2025年8月19日
 返回 [主页](../README.md)

@@ -98,8 +98,8 @@ gh repo create cli-tools-expert --public --source=. --push
 
 ## 更新时间
 
-- 项目创建：2025年1月
-- 最后更新：2025年1月
+- 项目创建：2025年8月19日
+- 最后更新：2025年8月19日 01:59 UTC
 
 ## 注意事项
 
