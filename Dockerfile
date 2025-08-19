@@ -2,7 +2,7 @@
 # 版本: v4.0 Production Ready
 # 基于Python 3.11 (兼容性更好)
 
-FROM python:3.11-slim
+FROM python:3.13-slim
 
 # 设置工作目录
 WORKDIR /app
