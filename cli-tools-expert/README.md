@@ -208,4 +208,4 @@ amazon-q-code create --template lambda-function --runtime python3.9
 
 ⭐ 如果这个项目对你有帮助，请给一个星标支持！
 
-最后更新：2024年1月
+最后更新：2025年1月
