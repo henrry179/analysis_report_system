@@ -2,12 +2,167 @@
 """
 数据模型定义
 包含系统所有的数据模型
+SQLAlchemy ORM模型 + Pydantic API模型
 """
 
 from typing import Optional, List, Dict, Any
 from datetime import datetime
 from enum import Enum
+from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime, Float, ForeignKey, JSON, Enum as SQLEnum
+from sqlalchemy.orm import DeclarativeBase, relationship, mapped_column
+from sqlalchemy.sql import func
 from pydantic import BaseModel, EmailStr, Field
+
+# SQLAlchemy 基础类
+class Base(DeclarativeBase):
+    """SQLAlchemy 基础模型类"""
+    pass
+
+
+# SQLAlchemy 数据库模型
+class UserDB(Base):
+    """用户数据库模型"""
+    __tablename__ = "users"
+
+    id = mapped_column(String, primary_key=True, default=func.gen_random_uuid())
+    username = mapped_column(String(50), unique=True, nullable=False)
+    email = mapped_column(String(100), unique=True, nullable=False)
+    hashed_password = mapped_column(String(255), nullable=False)
+    full_name = mapped_column(String(100))
+    is_active = mapped_column(Boolean, default=True)
+    is_superuser = mapped_column(Boolean, default=False)
+    created_at = mapped_column(DateTime, default=func.now())
+    updated_at = mapped_column(DateTime, default=func.now(), onupdate=func.now())
+    last_login = mapped_column(DateTime)
+
+    # 关联关系
+    reports = relationship("ReportDB", back_populates="created_by")
+    analysis_tasks = relationship("AnalysisTaskDB", back_populates="created_by")
+    data_sources = relationship("DataSourceDB", back_populates="created_by")
+    settings = relationship("UserSettingsDB", back_populates="user", uselist=False)
+
+    def __repr__(self):
+        return f"<User(id='{self.id}', username='{self.username}')>"
+
+
+class ReportDB(Base):
+    """报告数据库模型"""
+    __tablename__ = "reports"
+
+    id = mapped_column(String, primary_key=True, default=func.gen_random_uuid())
+    title = mapped_column(String(200), nullable=False)
+    description = mapped_column(Text)
+    industry = mapped_column(String(50), default='retail')
+    report_type = mapped_column(String(50), default='monthly')
+    status = mapped_column(String(20), default='draft')
+    content = mapped_column(JSON)
+    metadata = mapped_column(JSON)
+    file_path = mapped_column(String(500))
+    created_by_id = mapped_column(String, ForeignKey("users.id"))
+    created_at = mapped_column(DateTime, default=func.now())
+    updated_at = mapped_column(DateTime, default=func.now(), onupdate=func.now())
+
+    # 关联关系
+    created_by = relationship("UserDB", back_populates="reports")
+
+    def __repr__(self):
+        return f"<Report(id='{self.id}', title='{self.title}', status='{self.status}')>"
+
+
+class AnalysisTaskDB(Base):
+    """分析任务数据库模型"""
+    __tablename__ = "analysis_tasks"
+
+    id = mapped_column(String, primary_key=True, default=func.gen_random_uuid())
+    task_name = mapped_column(String(100), nullable=False)
+    task_type = mapped_column(String(50), nullable=False)
+    parameters = mapped_column(JSON)
+    status = mapped_column(String(20), default='pending')
+    result = mapped_column(JSON)
+    error_message = mapped_column(Text)
+    progress = mapped_column(Integer, default=0)
+    started_at = mapped_column(DateTime)
+    completed_at = mapped_column(DateTime)
+    created_by_id = mapped_column(String, ForeignKey("users.id"))
+    created_at = mapped_column(DateTime, default=func.now())
+
+    # 关联关系
+    created_by = relationship("UserDB", back_populates="analysis_tasks")
+
+    def __repr__(self):
+        return f"<AnalysisTask(id='{self.id}', task_name='{self.task_name}', status='{self.status}')>"
+
+
+class DataSourceDB(Base):
+    """数据源数据库模型"""
+    __tablename__ = "data_sources"
+
+    id = mapped_column(String, primary_key=True, default=func.gen_random_uuid())
+    name = mapped_column(String(100), nullable=False)
+    source_type = mapped_column(String(50), nullable=False)
+    connection_config = mapped_column(JSON)
+    schema_info = mapped_column(JSON)
+    is_active = mapped_column(Boolean, default=True)
+    created_by_id = mapped_column(String, ForeignKey("users.id"))
+    created_at = mapped_column(DateTime, default=func.now())
+    updated_at = mapped_column(DateTime, default=func.now(), onupdate=func.now())
+
+    # 关联关系
+    created_by = relationship("UserDB", back_populates="data_sources")
+
+    def __repr__(self):
+        return f"<DataSource(id='{self.id}', name='{self.name}', type='{self.source_type}')>"
+
+
+class UserSettingsDB(Base):
+    """用户设置数据库模型"""
+    __tablename__ = "user_settings"
+
+    id = mapped_column(String, primary_key=True, default=func.gen_random_uuid())
+    user_id = mapped_column(String, ForeignKey("users.id"), unique=True)
+    settings = mapped_column(JSON, default={})
+    created_at = mapped_column(DateTime, default=func.now())
+    updated_at = mapped_column(DateTime, default=func.now(), onupdate=func.now())
+
+    # 关联关系
+    user = relationship("UserDB", back_populates="settings")
+
+    def __repr__(self):
+        return f"<UserSettings(user_id='{self.user_id}')>"
+
+
+class SystemLogDB(Base):
+    """系统日志数据库模型"""
+    __tablename__ = "system_logs"
+
+    id = mapped_column(String, primary_key=True, default=func.gen_random_uuid())
+    level = mapped_column(String(20), nullable=False)
+    message = mapped_column(Text, nullable=False)
+    module = mapped_column(String(100))
+    user_id = mapped_column(String, ForeignKey("users.id"))
+    metadata = mapped_column(JSON)
+    created_at = mapped_column(DateTime, default=func.now())
+
+    def __repr__(self):
+        return f"<SystemLog(level='{self.level}', module='{self.module}')>"
+
+
+class APIAccessLogDB(Base):
+    """API访问日志数据库模型"""
+    __tablename__ = "api_access_logs"
+
+    id = mapped_column(String, primary_key=True, default=func.gen_random_uuid())
+    user_id = mapped_column(String, ForeignKey("users.id"))
+    endpoint = mapped_column(String(200), nullable=False)
+    method = mapped_column(String(10), nullable=False)
+    status_code = mapped_column(Integer)
+    response_time_ms = mapped_column(Integer)
+    ip_address = mapped_column(String(45))
+    user_agent = mapped_column(Text)
+    created_at = mapped_column(DateTime, default=func.now())
+
+    def __repr__(self):
+        return f"<APIAccessLog(endpoint='{self.endpoint}', method='{self.method}', status={self.status_code})>"
 
 
 class UserRole(str, Enum):

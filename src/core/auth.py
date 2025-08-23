@@ -10,6 +10,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from passlib.context import CryptContext
 from passlib.hash import bcrypt
+from jose import JWTError, jwt
 
 from src.config.settings import settings
 from src.utils.logger import system_logger
@@ -53,16 +54,41 @@ fake_users_db: Dict[str, UserInDB] = {
 
 class AuthService:
     """认证服务类"""
-    
+
     @staticmethod
     def verify_password(plain_password: str, hashed_password: str) -> bool:
         """验证密码"""
         return pwd_context.verify(plain_password, hashed_password)
-    
+
     @staticmethod
     def get_password_hash(password: str) -> str:
         """获取密码哈希值"""
         return pwd_context.hash(password)
+
+    @staticmethod
+    def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
+        """创建访问令牌"""
+        to_encode = data.copy()
+        if expires_delta:
+            expire = datetime.utcnow() + expires_delta
+        else:
+            expire = datetime.utcnow() + timedelta(minutes=settings.TOKEN_EXPIRE_MINUTES)
+
+        to_encode.update({"exp": expire})
+        encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm="HS256")
+        return encoded_jwt
+
+    @staticmethod
+    def verify_token(token: str) -> Optional[str]:
+        """验证JWT令牌"""
+        try:
+            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+            username: str = payload.get("sub")
+            if username is None:
+                return None
+            return username
+        except JWTError:
+            return None
     
     @staticmethod
     def get_user(username: str) -> Optional[UserInDB]:
@@ -202,16 +228,20 @@ def get_current_user(token: str = Depends(oauth2_scheme)) -> Optional[User]:
     """获取当前用户依赖"""
     if not token:
         return None
-    
+
     try:
-        # 在简化版本中，token就是用户名
-        user_data = fake_users_db.get(token)
+        # 验证JWT token
+        username = AuthService.verify_token(token)
+        if not username:
+            raise TokenError("Token无效或已过期")
+
+        user_data = fake_users_db.get(username)
         if not user_data:
-            raise TokenError("Token无效")
-        
+            raise TokenError("用户不存在")
+
         if not user_data.is_active:
             raise AuthenticationError("用户已禁用")
-        
+
         return User(
             username=user_data.username,
             role=user_data.role,
@@ -220,7 +250,9 @@ def get_current_user(token: str = Depends(oauth2_scheme)) -> Optional[User]:
             created_at=user_data.created_at,
             updated_at=user_data.updated_at
         )
-        
+
+    except JWTError:
+        raise TokenError("Token无效或已过期")
     except Exception as e:
         system_logger.error("获取当前用户失败", error=e, token=token)
         raise AuthenticationError("认证失败")
@@ -270,16 +302,19 @@ async def login_user(form_data: OAuth2PasswordRequestForm) -> dict:
         if not user:
             system_logger.warning("登录失败", username=form_data.username, reason="用户名或密码错误")
             raise AuthenticationError("用户名或密码错误")
-        
-        # 在简化版本中，返回用户名作为token
-        # 实际项目中应该使用JWT或其他token机制
-        access_token = user.username
-        
+
+        # 创建JWT访问令牌
+        access_token_expires = timedelta(minutes=settings.TOKEN_EXPIRE_MINUTES)
+        access_token = AuthService.create_access_token(
+            data={"sub": user.username}, expires_delta=access_token_expires
+        )
+
         system_logger.info("用户登录成功", username=user.username, role=user.role)
-        
+
         return {
             "access_token": access_token,
             "token_type": "bearer",
+            "expires_in": int(access_token_expires.total_seconds()),
             "user_info": {
                 "username": user.username,
                 "role": user.role,
@@ -289,7 +324,7 @@ async def login_user(form_data: OAuth2PasswordRequestForm) -> dict:
                 )
             }
         }
-        
+
     except AuthenticationError:
         raise
     except Exception as e:
