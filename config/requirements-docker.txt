@@ -46,7 +46,7 @@ asyncpg==0.28.0
 psycopg2-binary==2.9.7
 
 # 缓存支持
-redis==4.6.0
+redis==6.4.0
 hiredis==2.2.3
 
 # 监控和指标
