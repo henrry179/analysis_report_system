@@ -9,7 +9,7 @@ pydantic==2.5.0
 pydantic-settings==2.1.0
 
 # 模板和静态文件
-jinja2==3.1.2
+jinja2==3.1.6
 
 # 认证和安全
 passlib[bcrypt]==1.7.4
