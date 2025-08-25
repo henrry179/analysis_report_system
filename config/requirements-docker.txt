@@ -50,7 +50,7 @@ redis==4.6.0
 hiredis==2.2.3
 
 # 监控和指标
-prometheus-client==0.17.1
+prometheus-client==0.22.1
 
 # 测试工具
 pytest==7.4.2
