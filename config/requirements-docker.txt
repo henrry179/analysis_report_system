@@ -33,7 +33,7 @@ scipy==1.11.1
 psutil==5.9.5
 
 # HTTP客户端
-httpx==0.25.0
+httpx==0.28.1
 requests==2.31.0
 
 # 开发工具
