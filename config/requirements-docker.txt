@@ -22,7 +22,7 @@ numpy==1.24.3
 
 # 可视化
 matplotlib==3.7.2
-plotly==5.17.0
+plotly==6.3.0
 seaborn==0.12.2
 
 # 科学计算和机器学习
