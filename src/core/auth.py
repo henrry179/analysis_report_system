@@ -12,10 +12,10 @@ from passlib.context import CryptContext
 from passlib.hash import bcrypt
 from jose import JWTError, jwt
 
-from src.config.settings import settings
-from src.utils.logger import system_logger
-from src.utils.exceptions import AuthenticationError, TokenError, PermissionError
-from src.core.models import User, UserInDB
+from config.settings import settings
+from utils.logger import system_logger
+from utils.exceptions import AuthenticationError, TokenError, PermissionError
+from core.models import User, UserInDB
 
 # OAuth2设置
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token", auto_error=False)

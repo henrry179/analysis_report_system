@@ -56,7 +56,7 @@ class ReportDB(Base):
     report_type = mapped_column(String(50), default='monthly')
     status = mapped_column(String(20), default='draft')
     content = mapped_column(JSON)
-    metadata = mapped_column(JSON)
+    report_metadata = mapped_column(JSON)
     file_path = mapped_column(String(500))
     created_by_id = mapped_column(String, ForeignKey("users.id"))
     created_at = mapped_column(DateTime, default=func.now())
@@ -140,7 +140,7 @@ class SystemLogDB(Base):
     message = mapped_column(Text, nullable=False)
     module = mapped_column(String(100))
     user_id = mapped_column(String, ForeignKey("users.id"))
-    metadata = mapped_column(JSON)
+    log_metadata = mapped_column(JSON)
     created_at = mapped_column(DateTime, default=func.now())
 
     def __repr__(self):

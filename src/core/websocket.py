@@ -10,10 +10,10 @@ from datetime import datetime
 
 from fastapi import WebSocket, WebSocketDisconnect
 
-from src.config.settings import settings
-from src.utils.logger import websocket_logger, system_logger
-from src.utils.exceptions import WebSocketError
-from src.core.models import WebSocketMessage
+from config.settings import settings
+from utils.logger import websocket_logger, system_logger
+from utils.exceptions import WebSocketError
+from core.models import WebSocketMessage
 
 
 class ConnectionManager:

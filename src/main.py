@@ -6,6 +6,7 @@
 
 import asyncio
 import sys
+import time
 from pathlib import Path
 from contextlib import asynccontextmanager
 
@@ -24,25 +25,25 @@ from fastapi import Depends
 import uvicorn
 
 # 导入配置和工具
-from src.config.settings import settings
-from src.utils.logger import (
+from config.settings import settings
+from utils.logger import (
     system_logger, 
     log_startup_info, 
     log_shutdown_info,
     performance_logger
 )
-from src.utils.exceptions import BaseSystemException
+from utils.exceptions import BaseSystemException
 
 # 导入核心模块
-from src.core.auth import login_user, init_default_users
-from src.core.websocket import websocket_endpoint, start_websocket_maintenance, manager
-from src.core.models import LoginRequest
+from core.auth import login_user, init_default_users
+from core.websocket import websocket_endpoint, start_websocket_maintenance, manager
+from core.models import LoginRequest
 
 # 导入API路由
-from src.api.reports import router as reports_router
+from api.reports import router as reports_router
 
 # 导入监控指标
-from src.utils.metrics import metrics_collector, get_metrics, record_http_request
+from utils.metrics import metrics_collector, get_metrics, record_http_request
 
 
 @asynccontextmanager

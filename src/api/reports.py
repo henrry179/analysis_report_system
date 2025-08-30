@@ -12,21 +12,21 @@ from typing import List, Optional, Dict, Any
 from fastapi import APIRouter, HTTPException, Depends, BackgroundTasks, UploadFile, File, Form, Body
 from fastapi.responses import JSONResponse, FileResponse, HTMLResponse
 
-from src.config.settings import settings
-from src.utils.logger import system_logger, performance_logger
-from src.utils.exceptions import (
+from config.settings import settings
+from utils.logger import system_logger, performance_logger
+from utils.exceptions import (
     DataNotFoundError, 
     ReportGenerationError,
     FileNotFoundError,
     BusinessError
 )
-from src.core.auth import get_current_user, User
-from src.core.models import BatchReportRequest, BatchReportStatus
-from src.core.websocket import manager
+from core.auth import get_current_user, User
+from core.models import BatchReportRequest, BatchReportStatus
+from core.websocket import manager
 
 # 导入报告生成器
 try:
-    from src.reports.multi_industry_report_generator import MultiIndustryReportGenerator
+    from reports.multi_industry_report_generator import MultiIndustryReportGenerator
 except ImportError as e:
     system_logger.warning("报告生成器导入失败，将使用简化版本", error=str(e))
     

@@ -43,12 +43,14 @@ class MetricsCollector:
         Args:
             registry: Prometheus注册表，默认使用全局注册表
         """
-        self.registry = registry or REGISTRY
         self.enabled = HAS_PROMETHEUS
         
         if not self.enabled:
             logger.warning("Prometheus客户端未安装，指标收集将被禁用")
+            self.registry = None
             return
+        
+        self.registry = registry or REGISTRY
         
         # HTTP请求指标
         self.http_requests_total = Counter(

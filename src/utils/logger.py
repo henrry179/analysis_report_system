@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Optional
 from datetime import datetime
 
-from src.config.settings import settings
+from config.settings import settings
 
 
 class Logger:
@@ -27,7 +27,10 @@ class Logger:
         
         # 创建日志记录器
         logger = logging.getLogger(name)
-        logger.setLevel(getattr(logging, level or settings.LOG_LEVEL))
+        log_level = level or settings.LOG_LEVEL
+        if callable(log_level):
+            log_level = 'INFO'  # 默认级别
+        logger.setLevel(getattr(logging, log_level.upper()))
         
         # 避免重复添加处理器
         if not logger.handlers:

@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Dict, Any
 
 # 项目根目录
-PROJECT_ROOT = Path(__file__).parent.parent.parent
+PROJECT_ROOT = Path(__file__).parent.parent
 SRC_ROOT = PROJECT_ROOT / "src"
 
 class Settings:
