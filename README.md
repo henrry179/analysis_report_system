@@ -1,7 +1,7 @@
 # AI-Coding-rules / AI 编程规则
 
 > 一个开源的 AI 编程规则说明手册项目 / An open-source AI coding rules manual project  
-> 最后更新 / Last updated: 2025年01月15日 14:30:25
+> 最后更新 / Last updated: 2025年09月02日 11:09:34
 
 ---
 
@@ -117,5 +117,5 @@ If this project helps you, please give us a ⭐ Star!
 
 ---
 
-*最后更新 / Last updated: 2025年01月15日 14:30:25*  
+*最后更新 / Last updated: 2025年09月02日 11:09:34*  
 *项目版本 / Project version: 1.0.0*

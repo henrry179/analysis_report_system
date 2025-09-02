@@ -168,9 +168,9 @@ Following these prompting tips will help you:
 ### 示例格式 / Example Format
 
 ```markdown
-*最后更新 / Last updated: 2025年01月15日 14:30:25*
+*最后更新 / Last updated: 2025年09月02日 11:09:34*
 ```
 
 ---
 
-*最后更新 / Last updated: 2025年01月15日 14:30:25*
+*最后更新 / Last updated: 2025年09月02日 11:09:34*
