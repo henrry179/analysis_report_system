@@ -151,4 +151,26 @@ Following these prompting tips will help you:
 
 ---
 
-*最后更新 / Last updated: 2025年09月02日 10:16:00*
+---
+
+## 📅 开发进度时间表更新规则 / Development Progress Timestamp Update Rules
+
+> **铁律 / Iron Rule**: 每次开发更新时，时间进度表必须使用本机电脑当前的实时日期时间  
+> **Iron Rule**: Every development update must use the current real-time date and time from the local computer
+
+### 规则说明 / Rule Description
+
+1. **时间来源 / Time Source**: 必须使用本机电脑当前的系统时间，而非手动输入或固定时间
+2. **更新频率 / Update Frequency**: 每次对文档进行实质性修改后，必须更新最后修改时间
+3. **格式要求 / Format Requirement**: 时间格式统一为 `YYYY年MM月DD日 HH:MM:SS`
+4. **自动化要求 / Automation Requirement**: 建议使用脚本或工具自动获取本机时间并更新
+
+### 示例格式 / Example Format
+
+```markdown
+*最后更新 / Last updated: 2025年01月15日 14:30:25*
+```
+
+---
+
+*最后更新 / Last updated: 2025年01月15日 14:30:25*
