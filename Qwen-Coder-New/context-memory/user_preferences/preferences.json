@@ -1,0 +1,12 @@
+{
+  "coding_style": {
+    "indentation": "2_spaces",
+    "line_width": 80,
+    "quote_style": "double"
+  },
+  "framework_choices": {
+    "frontend": "react",
+    "backend": "nodejs",
+    "database": "mongodb"
+  }
+}
