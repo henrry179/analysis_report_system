@@ -1,0 +1,75 @@
+# QWCoder Bash Configuration
+# Source this file in your ~/.bashrc
+
+# Load QWCoder Environment
+if [ -f "$QWCODER_HOME/config/environment.env" ]; then
+    source "$QWCODER_HOME/config/environment.env"
+fi
+
+# Enhanced Prompt
+if [ "$TERM" != "dumb" ]; then
+    export PS1='\[\e[32m\]\u@\h\[\e[m\] \[\e[33m\]\w\[\e[m\] \[\e[36m\]$(__git_ps1 "(%s)")\[\e[m\] \[\e[35m\]$ \[\e[m\]'
+fi
+
+# History Configuration
+export HISTSIZE=10000
+export HISTFILESIZE=20000
+export HISTCONTROL=ignoredups:ignorespace
+export HISTIGNORE="ls:cd:exit:clear:history"
+shopt -s histappend
+shopt -s cmdhist
+
+# Auto-completion
+if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+    . /etc/bash_completion
+fi
+
+# Directory Navigation
+shopt -s autocd
+shopt -s dirspell
+shopt -s cdspell
+
+# Load Custom Functions
+if [ -f "$QWCODER_HOME/scripts/functions.sh" ]; then
+    source "$QWCODER_HOME/scripts/functions.sh"
+fi
+
+# Load Aliases
+if [ -f "$QWCODER_HOME/config/aliases.sh" ]; then
+    source "$QWCODER_HOME/config/aliases.sh"
+fi
+
+# Load Git Integration
+if [ -f "$QWCODER_HOME/config/git-integration.sh" ]; then
+    source "$QWCODER_HOME/config/git-integration.sh"
+fi
+
+# NVM (Node Version Manager)
+if [ -f "$NVM_DIR/nvm.sh" ]; then
+    source "$NVM_DIR/nvm.sh"
+    source "$NVM_DIR/bash_completion"
+fi
+
+# Pyenv (Python Version Manager)
+if command -v pyenv >/dev/null 2>&1; then
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+fi
+
+# RVM (Ruby Version Manager)
+if [ -f "$HOME/.rvm/scripts/rvm" ]; then
+    source "$HOME/.rvm/scripts/rvm"
+fi
+
+# SDKMAN (Java Version Manager)
+if [ -f "$HOME/.sdkman/bin/sdkman-init.sh" ]; then
+    source "$HOME/.sdkman/bin/sdkman-init.sh"
+fi
+
+# Welcome Message
+cat << 'EOF'
+╔════════════════════════════════════════════════════════════════╗
+║                      Welcome to QWCoder                      ║
+║                    Terminal Environment                      ║
+╚════════════════════════════════════════════════════════════════╝
+EOF

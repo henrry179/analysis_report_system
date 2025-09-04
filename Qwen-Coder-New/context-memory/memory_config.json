@@ -1,0 +1,23 @@
+{
+  "session_storage": {
+    "enabled": true,
+    "retention_days": 30,
+    "max_sessions": 100
+  },
+  "project_knowledge": {
+    "auto_update": true,
+    "update_frequency_hours": 24
+  },
+  "user_preferences": {
+    "load_on_startup": true
+  },
+  "global_cache": {
+    "enabled": true,
+    "expiration_days": 7
+  },
+  "excluded_file_patterns": [
+    "*.log",
+    "node_modules/*",
+    ".git/*"
+  ]
+}
