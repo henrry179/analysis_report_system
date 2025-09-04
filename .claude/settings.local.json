@@ -50,7 +50,9 @@
       "Read(\\d\\Gitstars/**)",
       "Read(\\d\\Gitstars/**)",
       "Read(\\d\\Gitstars/**)",
-      "Read(\\d\\Gitstars/**)"
+      "Read(\\d\\Gitstars/**)",
+      "Bash(git remote set-url:*)",
+      "Bash(git submodule:*)"
     ],
     "deny": [],
     "ask": []
