@@ -1,0 +1,15 @@
+﻿【1】2025-09-04 20:03:47,病毒防护,文件实时监控,发现病毒Trojan/Donut.e, 已处理
+
+病毒名称：Trojan/Donut.e
+病毒ID：626643CE1E428E6D
+病毒路径：C:\Windows\SystemTemp\chrome_Unpacker_BeginUnzipping15084_2049050643\UpdaterSetup.exe
+操作类型：修改 
+操作结果：已处理，删除文件
+
+进程ID：15084
+操作进程：C:\Program Files (x86)\Google\GoogleUpdater\141.0.7340.0\updater.exe
+操作进程命令行："C:\Program Files (x86)\Google\GoogleUpdater\141.0.7340.0\updater.exe" --system --windows-service --service=update
+父进程ID：1248
+父进程：C:\Windows\System32\services.exe
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
