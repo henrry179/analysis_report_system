@@ -1,0 +1,1110 @@
+{
+  "numStartups": 43,
+  "installMethod": "global",
+  "autoUpdates": true,
+  "theme": "dark-ansi",
+  "hasSeenTasksHint": true,
+  "customApiKeyResponses": {
+    "approved": [
+      "AkWV_1M1eVw-Jis-jgAA"
+    ],
+    "rejected": []
+  },
+  "tipsHistory": {
+    "ide-hotkey": 34,
+    "shift-enter": 35,
+    "memory-command": 30,
+    "theme-command": 35,
+    "status-line": 40,
+    "prompt-queue": 38,
+    "enter-to-steer-in-relatime": 35,
+    "todo-list": 36,
+    "# for memory": 38,
+    "install-github-app": 38,
+    "permissions": 38,
+    "drag-and-drop-images": 38,
+    "double-esc": 38,
+    "continue": 38,
+    "custom-commands": 32,
+    "shift-tab": 38,
+    "image-paste": 38,
+    "custom-agents": 34,
+    "plan-mode-for-complex-tasks": 42
+  },
+  "promptQueueUseCount": 5,
+  "showExpandedTodos": true,
+  "cachedStatsigGates": {
+    "tengu_disable_bypass_permissions_mode": false,
+    "tengu_use_file_checkpoints": false
+  },
+  "firstStartTime": "2025-08-31T05:19:54.254Z",
+  "userID": "0bf7e493adafa0b9c96aa52f2b4e79273e04b231f90b98321681776c11132330",
+  "projects": {
+    "D:\\Gitstars\\Claudeconfig": {
+      "allowedTools": [],
+      "history": [
+        {
+          "display": "更新今天的上下文到本机电脑的上下文记忆系统中",
+          "pastedContents": {}
+        },
+        {
+          "display": "推送github更新",
+          "pastedContents": {}
+        },
+        {
+          "display": "推送到远程github仓库中",
+          "pastedContents": {}
+        },
+        {
+          "display": "我的意思是对推送到github的远程仓库的api秘钥匿名化处理，而不是本地的api秘钥做处理，这里要做一个区别，不要搞错了",
+          "pastedContents": {}
+        },
+        {
+          "display": "检查推送github的远程仓库文件夹的api秘钥是否全部匿名化处理，帮我全面检查下远程github仓库的api秘钥",
+          "pastedContents": {}
+        },
+        {
+          "display": "检查推送github的远程仓库的文件夹的api迷糊是否全部匿名化处理，帮我全面检查下",
+          "pastedContents": {}
+        },
+        {
+          "display": "检查文件夹的api迷糊是否全部匿名化处理，帮我全面检查下",
+          "pastedContents": {}
+        },
+        {
+          "display": "远程仓库的api秘钥帮我采取匿名化处理，重新更新远程仓库的文件",
+          "pastedContents": {}
+        },
+        {
+          "display": "更新git的配置，全局配置到本机电脑，方便以后更新推送其他项目文件可以直接使用已经配置好的git配置，git username: henrry179, git email: hui14790@gmail.com,记住这个是本机电脑的git全局配置，帮我更新下，另外将本次claude文件夹的更新同步到新的远程github仓库：https://github.com/henrry179/claude-private-config.git",
+          "pastedContents": {}
+        },
+        {
+          "display": "检查文件夹是否推送远程github，并告诉我推送哪个github仓库",
+          "pastedContents": {}
+        },
+        {
+          "display": "将以上分析 报告同步更新到claude.md的文件中",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我全面深入的检查下claude.md这个文件的内容，并给我一个深度分析报告，告诉我这个文件是关于什么的",
+          "pastedContents": {}
+        },
+        {
+          "display": "更新文件夹的全部开发进度时间表为本机电脑的实时日期时间进度，要求全部更新",
+          "pastedContents": {}
+        },
+        {
+          "display": "更新开发进度的日期时间，开发的进度 时间表的日期时间以本机电脑的实时日期时间为主，而不是规则中的2024年的时间，需要个更新下这个开发进度的日期时间",
+          "pastedContents": {}
+        },
+        {
+          "display": "不错，然后将这个文件claude.md的规则文件配置到全局的claude code的规则当中，帮我实现它，然后将这个文件夹整体推送到github仓库，但是要求推送到远程github仓库时保持api的隐私性，制定todos清单进行实现",
+          "pastedContents": {}
+        },
+        {
+          "display": "将文件内容中的GPT-5 for coding的GPT-5全部换成Claude-sonnet，保持内容的原本意思不变，只是换了一个模型的名字而已",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我针对这个新增加的claude.md的文件内容进行内容格式的优化，例如文件有些内容的格式排版有问题，另外将文件内容中提到的GPT-5换成claude的模型",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我将文件夹中的claude.md的规则文件更新完善到目前所在的全局配置中，首先检测这个claude.md的新文件",
+          "pastedContents": {}
+        },
+        {
+          "display": "确定是可以了吗",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我检测claudeconfig这个项目的文件结构，然后按照这个配置结构帮我创建一个关于openai的配置服务，也是调用deepseek的api接口，然后调用方式是参考下面的python脚本配置",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我检查问题",
+          "pastedContents": {}
+        },
+        {
+          "display": "检查本项目配置",
+          "pastedContents": {}
+        },
+        {
+          "display": "检查所在项目文件结构",
+          "pastedContents": {}
+        },
+        {
+          "display": "修复",
+          "pastedContents": {}
+        },
+        {
+          "display": "check connect",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我检查这个claude 的配置文件是否完善",
+          "pastedContents": {}
+        },
+        {
+          "display": "检查本配置服务",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我检测claudeconfig这个项目的文件结构",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我把这新的api完善下：\\\nsk-f310671842d947248ff14a665d90c298",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我完善这个claude code的配置文件夹",
+          "pastedContents": {}
+        }
+      ],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 4,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "hasCompletedProjectOnboarding": true
+    },
+    "D:\\Gitstars": {
+      "allowedTools": [],
+      "history": [
+        {
+          "display": "根据下面的需求拆解成执行todos任务清单： 1.检查是否已经完成搜索本机电脑所有关于.claude.md、.codeboddy.md以及qwencoder.md相关cli  的cli config配置工具的上下文记忆系统文件夹的任务，2.搜索完成后需要将上面输入的上下文提示信息和这些上下文记忆系统的文件内容一起推送到远程仓库https://github.com/henrry179/AI-Coding-rules这个远程项目仓库中，3.需要重新整理AI-Coding-rules这个项目的文件夹结构和架构",
+          "pastedContents": {}
+        },
+        {
+          "display": " 1.检查是否已经完成搜索本机电脑所有关于.claude.md、.codeboddy.md以及qwencoder.md相关cli  的cli config配置工具的上下文记忆系统文件夹的任务，2.搜索完成后需要将上面输入的上下文提示信息和这些上下文记忆系统的文件内容一起推送到远程仓库https://github.com/henrry179/AI-Coding-rules这个远程项目仓库中，3.需要重新整理AI-Coding-rules这个项目的文件夹结构和架构",
+          "pastedContents": {}
+        },
+        {
+          "display": "1.搜索本机电脑所有关于claude、codeboddy cli以及qwencoder相关cli工具的上下文记忆系统文件夹，2.需要将上面输入的上下文提示信息和这些上下文记忆系统的文件内容一起推送到远程仓库https://github.com/henrry179/AI-Coding-rules这个远程项目仓库中，3.重新整理AI-Coding-rules这个项目的文件夹结构和架构",
+          "pastedContents": {}
+        },
+        {
+          "display": "自动更新上下文信息到上下文记忆系统中",
+          "pastedContents": {}
+        },
+        {
+          "display": "1.在项目中的13个文件夹TradingReviewsRecords中增加一个本文件夹的README.md文档，总结本文件夹中的所有核心内容，2.并增加一个超链接到项目主文档中，可以直接触达到13的文件夹中，帮我制定计划并实现上面2个需求，然后维护时间是维护为本机电脑最新的当前时间，4.最后同步推送到远程仓库github中",
+          "pastedContents": {}
+        },
+        {
+          "display": "我现在要出门十几分钟，需要开启plan mode 计划模式，分析我的需求，制定任务todos清单，按照需求制定todos清单任务，自动按照制定好的todos任务清单执行任务，希望我回来的时候可以看到任务已经完成， 最后帮我将提示词的信息更新同步到claude.md的上下文记忆系统当中，并将这个完成的进度更新推送到远程仓库github中，按我的需求实现以上的想法，我的需求：我想更新D盘Gitstars里面的ITPM-2025-UPDATE这个项目主文档的展示内容，要求展示各个文件夹中的各个主要文件的核心内容，而不是展示项目的开发内容展示，另外给我增加项目主文档的视觉美化效果和排版，拆解我以上的需求，帮我实现它，然后更新推送远程仓库，可以做到吗？",
+          "pastedContents": {}
+        },
+        {
+          "display": "开启plan mode 计划模式，分析我的需求，制定任务todos、我想更新D盘Gitstars里面的ITPM-2025-UPDATE这个项目主文档的展示内容，要求展示各个文件夹中的各个主要文件的核心内容，而不是展示项目的开发内容展示，另外给我增加项目主文档的视觉美化效果和排版，拆解我以上的需求，帮我实现它，然后更新推送远程仓库，可以做到吗？",
+          "pastedContents": {}
+        },
+        {
+          "display": "我想更新D盘Gitstars里面的ITPM-2025-UPDATE这个项目主文档的展示内容，要求展示各个文件夹中的各个主要文件的核心内容，而不是展示项目的开发内容展示，另外给我增加项目主文档的视觉美化效果和排版，拆解我以上的需求，帮我实现它，然后更新推送远程仓库，可以做到吗？",
+          "pastedContents": {}
+        },
+        {
+          "display": "更新上下文提示词信息到上下文记忆系统中",
+          "pastedContents": {}
+        },
+        {
+          "display": "/clear ",
+          "pastedContents": {}
+        },
+        {
+          "display": "是否完成更新和完成推，帮我完成最新项目开发进度的跟新和推送",
+          "pastedContents": {}
+        },
+        {
+          "display": "是否完成更新和完成推送",
+          "pastedContents": {}
+        },
+        {
+          "display": "继续完成todos清单的任务，最后更新项目主文档内容，完成推送远程仓库",
+          "pastedContents": {}
+        },
+        {
+          "display": "我想更新项目主文档的展示内容，要求展示各个文件夹中的各个主要文件的核心内容，而不是展示项目的开发内容展示，另外给我增加项目主文档的视觉美化效果和排版，拆解我以上的需求，帮我实现它，然后更新推送远程仓库，可以做到吗？",
+          "pastedContents": {}
+        },
+        {
+          "display": "思考我的需求，我想帮我整理项目中零散的文件，将不必要的零散文件按照不同的功能和模块放进不同的文件夹中，然后保持整理项目结构和文件夹结构清晰明了，不希望看到乱糟糟的文件夹结构",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我完成添加并推送",
+          "pastedContents": {}
+        },
+        {
+          "display": "按照探索分析项目开发进度概况，规划制定todos任务清单，帮我按照git的提交记录检查下是否按照todos任务执行，1.更新项目文件结构和架构信息，2.整理零散文件归纳到不同功能或者模块的文件夹中，并给出说明文档，3.按照本机电脑的当前实时时间同步最新项目开发进度到项目主文档并推送到远程仓库中，4.最后检查是否将项目最新的开发进度推送到远程仓库中",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我查看ITPM-2025-UPDATE这个项目的开发进度情况，要求是查看最新的进度",
+          "pastedContents": {}
+        },
+        {
+          "display": "/model ",
+          "pastedContents": {}
+        },
+        {
+          "display": "/status ",
+          "pastedContents": {}
+        },
+        {
+          "display": "/model ",
+          "pastedContents": {}
+        },
+        {
+          "display": "!cd .",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我全面清理电脑的垃圾文件，首先全面分析电脑C盘系统盘和D盘的磁盘使用情况，然后根据电脑缓存和文件类型区分可以清理和待确认清理的文件，制定todos清单",
+          "pastedContents": {}
+        },
+        {
+          "display": "!cd .",
+          "pastedContents": {}
+        },
+        {
+          "display": "!cd ..",
+          "pastedContents": {}
+        },
+        {
+          "display": "!ls",
+          "pastedContents": {}
+        },
+        {
+          "display": "!cd ..",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我全面清理电脑的垃圾文件，首先全面分析电脑C盘系统盘和D盘的磁盘使用情况，然后根据电脑缓存和文件类型区分可以清理和待确认清理的文件，制定todos清单",
+          "pastedContents": {}
+        },
+        {
+          "display": "/model ",
+          "pastedContents": {}
+        },
+        {
+          "display": "/status ",
+          "pastedContents": {}
+        },
+        {
+          "display": "完成推送远程仓库",
+          "pastedContents": {}
+        },
+        {
+          "display": "再次做个全面的深入的分析检查，并给我提供一个更新的项目体检报告，包括最近更新的哪些内容等，保存到深度分析报告的文件夹中",
+          "pastedContents": {}
+        },
+        {
+          "display": "检查本地ssh的配置服务，告诉我选择ssh方式推送远程github需要什么配置，需要什么操作流程，给我提供一个清晰的ssh推送的步骤",
+          "pastedContents": {}
+        },
+        {
+          "display": "采用ssh方式推送，采用ssh方式推送需要什么步骤和操作",
+          "pastedContents": {}
+        },
+        {
+          "display": "重新推送",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我检查ITPM-2025-update的项目更新进展是否已经全部更新完毕，并推送到远程仓库中，记住我的项目是关于开发维护ITPM-2025-update这个项目，推送远程仓库也是关于将这个项目在本地的新增文件夹和文件以及更新推送到远程 仓库",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我检查ITPM-2025-update项目的最新开发进度，分析项目最新增加了哪些需求和文件内容，将最近更新的内容同步到项目主文档readme.md中，以本机电脑当前的实时时间为开发时间，最后帮我推送到远程仓库中，远程仓库地址：https://github.com/henrr179/ITPM-2025-update.git",
+          "pastedContents": {}
+        },
+        {
+          "display": "auto-updating",
+          "pastedContents": {}
+        },
+        {
+          "display": "/status ",
+          "pastedContents": {}
+        },
+        {
+          "display": "/agents ",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我整理规划下开发进度的todos清单任务，我想了解下接下来需要开始完成哪些核心功能和模块，规划好等我的提示再开始执行",
+          "pastedContents": {}
+        },
+        {
+          "display": "给我最新的项目开发进度情况深度分析报告，文件夹和功能、模块，代码数量、文件类型的数量的量化分析报告",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我打开ai-hedge-fund这个项目文件，深度分析这个项目文件的文件和目录结构，核心功能模块和核心等，按照数字序号展示",
+          "pastedContents": {}
+        },
+        {
+          "display": "/clear ",
+          "pastedContents": {}
+        },
+        {
+          "display": "怎么在claudeconfig里面修改deepseek调用的模型",
+          "pastedContents": {}
+        },
+        {
+          "display": "/model ",
+          "pastedContents": {}
+        },
+        {
+          "display": "set model to deepseek-reasoner",
+          "pastedContents": {}
+        },
+        {
+          "display": "/model ",
+          "pastedContents": {}
+        },
+        {
+          "display": "关机",
+          "pastedContents": {}
+        },
+        {
+          "display": "推送",
+          "pastedContents": {}
+        },
+        {
+          "display": "将全部的开发进度时间表更新为本机电脑最新的日期，推送",
+          "pastedContents": {}
+        },
+        {
+          "display": "是不是应该帮我完成本地的更新和远程的合并，另外将全部的开发进度时间表更新为本机电脑最新的日期",
+          "pastedContents": {}
+        },
+        {
+          "display": "继续完成推送",
+          "pastedContents": {}
+        },
+        {
+          "display": "继续",
+          "pastedContents": {}
+        },
+        {
+          "display": "推送到远程仓库",
+          "pastedContents": {}
+        },
+        {
+          "display": "更新项目主文档的更新时间状态，更新为本机电脑当前的实时时间，帮我完成更新",
+          "pastedContents": {}
+        },
+        {
+          "display": "继续",
+          "pastedContents": {}
+        },
+        {
+          "display": "同步推送的github仓库地址错了，远程仓库地址：https://github.com/henrry179/analysis_report_system.git，这个地址，帮我完成同步最新更新后，完成推送",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我先完成同步更新和推送github仓库吧",
+          "pastedContents": {}
+        },
+        {
+          "display": "/clear ",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我先完成同步更新和推送github仓库吧",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我同步项目主文档readme.md，然后推送到github仓库",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我启动",
+          "pastedContents": {}
+        },
+        {
+          "display": "前端界面可以登录，但 是后端界面好像无法启动，另外api文档界面也没有启动",
+          "pastedContents": {}
+        },
+        {
+          "display": "本地前后端启动没有效果啊，界面登录没有页面",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我打开 ",
+          "pastedContents": {}
+        },
+        {
+          "display": "前后端界面可以开启吗",
+          "pastedContents": {}
+        },
+        {
+          "display": "开始实现吧",
+          "pastedContents": {}
+        },
+        {
+          "display": "那就开始探索项目整体情况，思考下如何根据现在的项目开发情况规划todos清单任务，继续按照todos清单开始实现，不过需要先同步所有的更新到项目主文档readme.md中，并要求更新开发时间进度表为本机电脑当前的实时时间",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我优化前端网页界面的年份显示为2024年的问题，应该是本机电脑当前的2025年的年份吧，继续完善丰富下各个核心功能模块的开发",
+          "pastedContents": {}
+        },
+        {
+          "display": "后端界面和web 界面似乎无法打开",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我自动启动前后端界面",
+          "pastedContents": {}
+        },
+        {
+          "display": "现在是不是可以登录前后端界面，展示具体的前后端的开发效果等",
+          "pastedContents": {}
+        },
+        {
+          "display": "你是不是没有理解我的意思，那这样，你帮我把整个项目的开发进度展示下，包括具体开发进展时间表等，给我一个项目深度分析报告概览",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我开始打开analysis-report-system这个项目，并且开始制定思考项目目前的开发进度和具体后续执行计划，规划待完成todos清单开始开发",
+          "pastedContents": {}
+        },
+        {
+          "display": "ls",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我分析trion.txt是什么文件，为什么会被视为病毒处理",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我关机吧，1分钟内自动关机",
+          "pastedContents": {}
+        },
+        {
+          "display": "水平不太行啊，还没有claude-4厉害",
+          "pastedContents": {}
+        },
+        {
+          "display": "为什么不是DeepseekV3.1",
+          "pastedContents": {}
+        },
+        {
+          "display": "你目前是哪个公司的模型，相当于claude sonnet4还是claude opus4？",
+          "pastedContents": {}
+        },
+        {
+          "display": "重命名缺乏数字编号的文件夹，除了配置文件除外",
+          "pastedContents": {}
+        },
+        {
+          "display": "进入D盘中的Gitstars文件夹中Claudeconfig文件夹，查看这个文件夹的文件夹结构，修改里面deepseek调用的模型改成：deepseek-reasoner的模型，而不是deepseek-chat的模型，帮我在这个文件夹的deepseek的json文件中更新",
+          "pastedContents": {}
+        },
+        {
+          "display": "进入D盘中的Gitstars文件夹中Claude-config文件夹，查看这个文件夹的文件夹结构",
+          "pastedContents": {}
+        },
+        {
+          "display": "我的 意思是将以上的开发进度时间表的更新也要展示在项目主文档README.MD中，帮我继续完成同步并推送",
+          "pastedContents": {}
+        },
+        {
+          "display": "将本文件夹的QWCoder相关的文件夹全部推送到远程github仓库，仓库地址：https://github.com/henrry179/AI-Coding-rules.git这个远程仓库中，QWENCoder开头的文件夹有2个，可以一个一个的推送到仓库中",
+          "pastedContents": {}
+        },
+        {
+          "display": "增加一个维护更新的进度时间表，按照本机电脑当前的实时日期时间进度他同步到远程github仓库，然后再次推送",
+          "pastedContents": {}
+        },
+        {
+          "display": "完成推送",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我梳理目前推送到远程仓库的claude-private-config项目，我想整理下这个项目文件夹的主文档，包括重新整理项目的文件夹结构和零散的文件，给我提供结构化的方式整理",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我将本机电脑配置的上下文记忆系统文件夹全部更新推送到远程仓库当中，然后将上下文记忆系统中的个人隐私信息、api秘钥都保持匿名化处理，帮我进行完成同步更新，并完成推送github仓库，仓库地址：https://github.com/henrry179/claude-private-config.git",
+          "pastedContents": {}
+        },
+        {
+          "display": "这个上下文记忆系统是否支持所有的项目开发的上下文记忆能力",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我检查下目前claude-memory-config这个文件夹的完善进度，给我提供详细的分析报告",
+          "pastedContents": {}
+        },
+        {
+          "display": "我想将claude-memory-config全局配置到本机电脑，方便后面新建项目的时候可以直接调用这个上下文记忆系统的上下文记忆的功能",
+          "pastedContents": {}
+        },
+        {
+          "display": "ls",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我使用deepseek的api接口按照下面的python脚本调用open ai的接口：",
+          "pastedContents": {}
+        },
+        {
+          "display": "返回 Gitstars目录",
+          "pastedContents": {}
+        },
+        {
+          "display": "进入02-cli-tools-expert的文件夹，然后梳理02文件夹的目前的开发进度",
+          "pastedContents": {}
+        },
+        {
+          "display": "进入02的文件夹，然后梳理02文件夹的目前的开发进度",
+          "pastedContents": {}
+        },
+        {
+          "display": "返回进入cli-tools-algodata-mldl文件夹",
+          "pastedContents": {}
+        },
+        {
+          "display": "进入claudeconfig文件夹",
+          "pastedContents": {}
+        }
+      ],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 5,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "lastTotalWebSearchRequests": 0
+    },
+    "D:\\": {
+      "allowedTools": [],
+      "history": [
+        {
+          "display": "/exit",
+          "pastedContents": {}
+        },
+        {
+          "display": "你对电脑磁盘还能做什么优化服务",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我完成c盘清理，要保持c盘的系统资料和其他重要系统资源和其他重要的文件资料，清理可以清理的缓存和垃圾文件，先进行C盘系统盘的整体磁盘分析，按照系统资源和重要文件资源，其他资源以及可以清理的资源",
+          "pastedContents": {}
+        },
+        {
+          "display": "/model ",
+          "pastedContents": {}
+        },
+        {
+          "display": "/status ",
+          "pastedContents": {}
+        },
+        {
+          "display": "/exit",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我完成gemini cli的配置",
+          "pastedContents": {}
+        },
+        {
+          "display": "cd config",
+          "pastedContents": {}
+        },
+        {
+          "display": "!cd config",
+          "pastedContents": {}
+        },
+        {
+          "display": "/exit",
+          "pastedContents": {}
+        },
+        {
+          "display": "!/exit",
+          "pastedContents": {}
+        },
+        {
+          "display": "/model ",
+          "pastedContents": {}
+        },
+        {
+          "display": "/status ",
+          "pastedContents": {}
+        },
+        {
+          "display": "/model ",
+          "pastedContents": {}
+        },
+        {
+          "display": "/clear ",
+          "pastedContents": {}
+        },
+        {
+          "display": "!bash",
+          "pastedContents": {}
+        },
+        {
+          "display": "/clear ",
+          "pastedContents": {}
+        },
+        {
+          "display": "安装gemini cli",
+          "pastedContents": {}
+        },
+        {
+          "display": "不错不错，帮我关机",
+          "pastedContents": {}
+        },
+        {
+          "display": "在远程仓库主文档需要增加一个开发维护的最后更新时间，每次更新时间都为本机电脑当前的实时时间，帮我拉取远程仓库看，同步更新我的最后更新时间的需求",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我将以上的更新进度和新建的文件夹同步推送到github仓库，仓库地址：https://github.com/henrry179/claude-private-config.git",
+          "pastedContents": {}
+        },
+        {
+          "display": "需要",
+          "pastedContents": {}
+        },
+        {
+          "display": "好吧，将今天的上下文记录同步更新到本机电脑的claude code的上下文记忆系统当中，方便以后查看",
+          "pastedContents": {}
+        },
+        {
+          "display": "./view_sql.sh 14-出货.sql",
+          "pastedContents": {}
+        },
+        {
+          "display": "./view_sql.sh -c",
+          "pastedContents": {}
+        },
+        {
+          "display": "./view_sql.sh -l ",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我写一个直接查看sql源代码的脚本，方便我每次使用终端命令可以直接打开查看sql源代码",
+          "pastedContents": {}
+        },
+        {
+          "display": "cat 14-出货.sql",
+          "pastedContents": {}
+        },
+        {
+          "display": "1.帮我列出这些SQL代码的文件名，2.我想根据这些sql文件名查看源代码里面具体的SQL",
+          "pastedContents": {}
+        },
+        {
+          "display": "claude code终端不能直接查看SQL源代码吗，",
+          "pastedContents": {}
+        },
+        {
+          "display": "终端无法直接查看这些SQL源代码吗",
+          "pastedContents": {}
+        },
+        {
+          "display": "不可以直接查看sql的代码吗",
+          "pastedContents": {}
+        },
+        {
+          "display": "我想查看SQL源代码可以看到吗",
+          "pastedContents": {}
+        },
+        {
+          "display": "查看 sql 代码",
+          "pastedContents": {}
+        },
+        {
+          "display": "我想查看具体的SQL代码",
+          "pastedContents": {}
+        },
+        {
+          "display": "打开看看",
+          "pastedContents": {}
+        },
+        {
+          "display": "我想查看具体的SQL代码，按照下面2个子文件夹的SQL代码给我查看里面SQL的完整SQL代码",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我在这个文件夹里面查询一个文件夹名称是：SQLConnect的文件夹，里面是一些SQL的代码，我想查看下具体的SQL代码",
+          "pastedContents": {}
+        },
+        {
+          "display": "Gitstars",
+          "pastedContents": {}
+        },
+        {
+          "display": "我想查看D盘所有的文件夹",
+          "pastedContents": {}
+        },
+        {
+          "display": "我想知道在D盘的文件夹下面的2个文件夹，c和d文件夹分别是什么东西",
+          "pastedContents": {}
+        },
+        {
+          "display": "ls",
+          "pastedContents": {}
+        },
+        {
+          "display": "按照待完成todos清单执行开发需求",
+          "pastedContents": {}
+        },
+        {
+          "display": "继续",
+          "pastedContents": {}
+        },
+        {
+          "display": "进入D盘的Gitstars文件夹，再次进入8-financial-management-systems文件夹，然后检查项目的文件结构和开发进度概况，梳理出已完成todos清单和未完成todos清单",
+          "pastedContents": {}
+        },
+        {
+          "display": "重新对本机的磁盘做一个最新的深度分析，以系统资源，重要不可删除资源以及重要文件资源和其他资源的大小进行全面深度的分析",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我在C盘搜索文件名为Ollama的文件，然后彻底清理掉，另外将github的cli文件一起清理掉",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我完成c盘清理，要保持c盘的系统资料和其他重要系统资源和其他重要的文件资料，清理可以清理的缓存和垃圾文件，先进行C盘系统盘的整体磁盘分析，按照系统资源和重要文件资源，其他资源以及可以清理的资源",
+          "pastedContents": {}
+        },
+        {
+          "display": "真棒",
+          "pastedContents": {}
+        },
+        {
+          "display": "你可以帮我全面深入的分析我的磁盘吗",
+          "pastedContents": {}
+        }
+      ],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 4,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "lastTotalWebSearchRequests": 0,
+      "lastCost": 3.679885799999999,
+      "lastAPIDuration": 526223,
+      "lastToolDuration": 139054,
+      "lastDuration": 870090,
+      "lastLinesAdded": 0,
+      "lastLinesRemoved": 0,
+      "lastTotalInputTokens": 1089435,
+      "lastTotalOutputTokens": 6256,
+      "lastTotalCacheCreationInputTokens": 0,
+      "lastTotalCacheReadInputTokens": 1059136,
+      "lastSessionId": "3ff8400c-20be-4d7d-bf1c-df9346d2e667"
+    },
+    "D:\\Gitstars\\8-financial-management-systems": {
+      "allowedTools": [],
+      "history": [
+        {
+          "display": "登录正常，帮我将更新同步推送到github，但是为什么我在github的主文档中登录就失败了",
+          "pastedContents": {}
+        },
+        {
+          "display": "登录失败",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我完善项目的前端启动界面，制定完善开发的todos清单任务，按照todos清单开始实现开发",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我将开发进度推送到github",
+          "pastedContents": {}
+        },
+        {
+          "display": "推送",
+          "pastedContents": {}
+        },
+        {
+          "display": "git username：henrry179， git email:hui14790@gmail.com, github 地址:https://github.com/henrry179/financial-management-systems",
+          "pastedContents": {}
+        },
+        {
+          "display": "继续修复，如果修复不成功，就将今天的所有开发进度都同步到项目主文档readme中，然后推送到远程github仓库假如",
+          "pastedContents": {}
+        },
+        {
+          "display": "登录失败",
+          "pastedContents": {}
+        },
+        {
+          "display": "运行前端试下",
+          "pastedContents": {}
+        },
+        {
+          "display": "继续开发实现",
+          "pastedContents": {}
+        },
+        {
+          "display": "开始继续financial-management-systems项目的未完成todos清单的开发实现",
+          "pastedContents": {}
+        },
+        {
+          "display": "是不是完成了最新的推送",
+          "pastedContents": {}
+        },
+        {
+          "display": "我想说的是，推送到github仓库的claude 记忆系统文件是否可以复制到D盘中的Gitstars文件夹中，从复制过来的Claude 记忆系统文件夹就跟其他常规项目文件夹一样，是不是推送到远程github仓库就方便一些，而放在本机电脑C盘系统盘的claude 记忆系统文件推送到远程github仓库本身就有权限的约束",
+          "pastedContents": {}
+        },
+        {
+          "display": "我想说的是，推送到github仓库的cladue、",
+          "pastedContents": {}
+        },
+        {
+          "display": "分析推送失败的原因",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我继续推送刚才的cladue 记忆系统的images文件夹，然后将其他零散的cladue的配置文件放在一个单独的文件夹中，区别images文件夹",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我重新推送下，我在这个文件夹里面加了一个images的文件夹，需要一起推送到远程仓库中",
+          "pastedContents": {}
+        },
+        {
+          "display": "我已经有一个git配置了，帮我检索本机的git配置，git username：henrry179, git email: hui14790@gmail.com, 远程github仓库地址：https://github.com/henrry179/claude-private-config.git",
+          "pastedContents": {}
+        },
+        {
+          "display": "我忘记了一件事情，我想先将claude的记忆系统的配置文件夹推送到新建的远程github仓库中，避免我下次本机电脑换了要重新找回claude的记忆系统的配置，可以帮我实现吗",
+          "pastedContents": {}
+        },
+        {
+          "display": "开始继续实现financial-management-systems项目文件的待完成todos清单的任务吧，每次完成一个todos及时同步到项目主文档readme中，所有的todos清单完成后要求进行一次确认检查",
+          "pastedContents": {}
+        },
+        {
+          "display": "我每次打开终端命令行需要怎么操作打开这个全局配置的记忆0配置系统，给我提供一个md文档的流程说明和打开说明",
+          "pastedContents": {}
+        },
+        {
+          "display": "是否可以进行本机电脑全局配置，我希望每次打开新的终端命令行可以通过claude的记忆功能来了解每次开发的上下文",
+          "pastedContents": {}
+        },
+        {
+          "display": "给我一个claude记忆的配置服务",
+          "pastedContents": {}
+        }
+      ],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 5,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false
+    },
+    "C:\\Users\\Lenovo": {
+      "allowedTools": [],
+      "history": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": false,
+      "projectOnboardingSeenCount": 0,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false
+    },
+    "D:\\Gitstars\\1-ai-hedge-fund": {
+      "allowedTools": [],
+      "history": [
+        {
+          "display": "继续完成推送",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我检查本项目的开发更新进度，然后同步最新的开发进度到项目主文档readme.md，更新时间为最新的本机电脑的实时开发时间，然后推送到远程github仓库，远程仓库地址：https://github.com/henrry179/ai-hedge-fund.git，帮我玩车同步推送，并更新最新的远程从仓库的开发时间时间表",
+          "pastedContents": {}
+        }
+      ],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": false,
+      "projectOnboardingSeenCount": 1,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false
+    },
+    "D:\\Gitstars\\financial-management-systems": {
+      "allowedTools": [],
+      "history": [
+        {
+          "display": "是否同步到远程github仓库",
+          "pastedContents": {}
+        },
+        {
+          "display": "同步最新的更新到项目主文档中，最后推送远程仓库",
+          "pastedContents": {}
+        },
+        {
+          "display": "保存本次对话的上下文到本机电脑的上下文记忆系统",
+          "pastedContents": {}
+        },
+        {
+          "display": "界面无法登录",
+          "pastedContents": {}
+        },
+        {
+          "display": "分别启动前后端界面",
+          "pastedContents": {}
+        },
+        {
+          "display": "现在的待完成任务todos清单是启动前后端的登录界面，api文档登录界面，修复以上的界面无法启动的问题，如果无法正常登录，就继续检查项目核心功能模块，暂时的开发进度以启动前后端界面为主",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我检查本机电脑的claude memory的配置服务，将这次的上下文记忆同步到本机的claude momory系统当中",
+          "pastedContents": {}
+        },
+        {
+          "display": "/memory ",
+          "pastedContents": {}
+        },
+        {
+          "display": "似乎启动界面没有效果",
+          "pastedContents": {}
+        },
+        {
+          "display": "自动启动前端和后端界面",
+          "pastedContents": {}
+        },
+        {
+          "display": "是否可以自动启动前后端启动界面，登录前后端界面",
+          "pastedContents": {}
+        },
+        {
+          "display": "记住以上的上下文记忆，更新到claude的上下文记忆系统当中",
+          "pastedContents": {}
+        },
+        {
+          "display": "前端启动界面无法启动，帮我完成修复",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我启动前后端界面",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我完成 启动前后端界面和api文档界面，制定todos任务需求",
+          "pastedContents": {}
+        },
+        {
+          "display": "帮我检查目前项目的开发进度，按照项目主文档readme.md的项目开发进度时间表检查项目的开发进展，规划项目开发的待完成todos清单，按照待完成todos任务清单开始实现开发，优先完成前后端启动界面和api文档的更新，将项目主文档readme.mde的文档内容放在api文档的后面，按我以上的需求开始实现，另外所有的开发进展需要要按照1.探索项目开发进度-2.规划todos任务清单-3.执行todos任务清单具体任务-4.同步开发进度任务，并更新最新开发进度，确认是否已经完成所有待完成todos任务清单需求，帮我推送到远程github仓库",
+          "pastedContents": {}
+        },
+        {
+          "display": "set model to deepseek-reasoner",
+          "pastedContents": {}
+        },
+        {
+          "display": "/model ",
+          "pastedContents": {}
+        }
+      ],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 10,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false
+    },
+    "D:\\Gitstars\\ITPM-2025-update": {
+      "allowedTools": [],
+      "history": [
+        {
+          "display": "!cd ..",
+          "pastedContents": {}
+        },
+        {
+          "display": "/model ",
+          "pastedContents": {}
+        },
+        {
+          "display": "/agents ",
+          "pastedContents": {}
+        },
+        {
+          "display": "set model to deepseek-reasoner",
+          "pastedContents": {}
+        },
+        {
+          "display": "/model ",
+          "pastedContents": {}
+        },
+        {
+          "display": "!ls",
+          "pastedContents": {}
+        }
+      ],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": false,
+      "projectOnboardingSeenCount": 3,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false
+    },
+    "D:\\config": {
+      "allowedTools": [],
+      "history": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": false,
+      "projectOnboardingSeenCount": 2,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false
+    }
+  },
+  "shiftEnterKeyBindingInstalled": true,
+  "hasCompletedOnboarding": true,
+  "lastOnboardingVersion": "1.0.98",
+  "hasOpusPlanDefault": false,
+  "subscriptionNoticeCount": 0,
+  "hasAvailableSubscription": false,
+  "isQualifiedForDataSharing": false,
+  "cachedChangelog": "# Changelog\n\n## 1.0.120\n\n- Fix input lag during typing, especially noticeable with large prompts\n\n## 1.0.119\n\n- Fix Windows issue where process visually freezes on entering interactive mode\n- Support dynamic headers for MCP servers via headersHelper configuration\n- Fix thinking mode not working in headless sessions\n- Fix slash commands now properly update allowed tools instead of replacing them\n\n## 1.0.117\n\n- Add Ctrl-R history search to recall previous commands like bash/zsh\n- Fix input lag while typing, especially on Windows\n- Add sed command to auto-allowed commands in acceptEdits mode\n- Fix Windows PATH comparison to be case-insensitive for drive letters\n- Add permissions management hint to /add-dir output\n\n## 1.0.115\n\n- Improve thinking mode display with enhanced visual effects\n- Type /t to temporarily disable thinking mode in your prompt\n- Improve path validation for glob and grep tools\n- Show condensed output for post-tool hooks to reduce visual clutter\n- Fix visual feedback when loading state completes\n- Improve UI consistency for permission request dialogs\n\n## 1.0.113\n\n- Deprecated piped input in interactive mode\n- Move Ctrl+R keybinding for toggling transcript to Ctrl+O\n\n## 1.0.112\n\n- Transcript mode (Ctrl+R): Added the model used to generate each assistant message\n- Addressed issue where some Claude Max users were incorrectly recognized as Claude Pro users\n- Hooks: Added systemMessage support for SessionEnd hooks\n- Added `spinnerTipsEnabled` setting to disable spinner tips\n- IDE: Various improvements and bug fixes\n\n## 1.0.111\n\n- /model now validates provided model names\n- Fixed Bash tool crashes caused by malformed shell syntax parsing\n\n## 1.0.110\n\n- /terminal-setup command now supports WezTerm\n- MCP: OAuth tokens now proactively refresh before expiration\n- Fixed reliability issues with background Bash processes\n\n## 1.0.109\n\n- SDK: Added partial message streaming support via `--include-partial-messages` CLI flag\n\n## 1.0.106\n\n- Windows: Fixed path permission matching to consistently use POSIX format (e.g., `Read(//c/Users/...)`)\n\n## 1.0.97\n\n- Settings: /doctor now validates permission rule syntax and suggests corrections\n\n## 1.0.94\n\n- Vertex: add support for global endpoints for supported models\n- /memory command now allows direct editing of all imported memory files\n- SDK: Add custom tools as callbacks\n- Added /todos command to list current todo items\n\n## 1.0.93\n\n- Windows: Add alt + v shortcut for pasting images from clipboard\n- Support NO_PROXY environment variable to bypass proxy for specified hostnames and IPs\n\n## 1.0.90\n\n- Settings file changes take effect immediately - no restart required\n\n## 1.0.88\n\n- Fixed issue causing \"OAuth authentication is currently not supported\"\n- Status line input now includes `exceeds_200k_tokens`\n- Fixed incorrect usage tracking in /cost.\n- Introduced `ANTHROPIC_DEFAULT_SONNET_MODEL` and `ANTHROPIC_DEFAULT_OPUS_MODEL` for controlling model aliases opusplan, opus, and sonnet.\n- Bedrock: Updated default Sonnet model to Sonnet 4\n\n## 1.0.86\n\n- Added /context to help users self-serve debug context issues\n- SDK: Added UUID support for all SDK messages\n- SDK: Added `--replay-user-messages` to replay user messages back to stdout\n\n## 1.0.85\n\n- Status line input now includes session cost info\n- Hooks: Introduced SessionEnd hook\n\n## 1.0.84\n\n- Fix tool_use/tool_result id mismatch error when network is unstable\n- Fix Claude sometimes ignoring real-time steering when wrapping up a task\n- @-mention: Add ~/.claude/\\* files to suggestions for easier agent, output style, and slash command editing\n- Use built-in ripgrep by default; to opt out of this behavior, set USE_BUILTIN_RIPGREP=0\n\n## 1.0.83\n\n- @-mention: Support files with spaces in path\n- New shimmering spinner\n\n## 1.0.82\n\n- SDK: Add request cancellation support\n- SDK: New additionalDirectories option to search custom paths, improved slash command processing\n- Settings: Validation prevents invalid fields in .claude/settings.json files\n- MCP: Improve tool name consistency\n- Bash: Fix crash when Claude tries to automatically read large files\n\n## 1.0.81\n\n- Released output styles, including new built-in educational output styles \"Explanatory\" and \"Learning\". Docs: https://docs.claude.com/en/docs/claude-code/output-styles\n- Agents: Fix custom agent loading when agent files are unparsable\n\n## 1.0.80\n\n- UI improvements: Fix text contrast for custom subagent colors and spinner rendering issues\n\n## 1.0.77\n\n- Bash tool: Fix heredoc and multiline string escaping, improve stderr redirection handling\n- SDK: Add session support and permission denial tracking\n- Fix token limit errors in conversation summarization\n- Opus Plan Mode: New setting in `/model` to run Opus only in plan mode, Sonnet otherwise\n\n## 1.0.73\n\n- MCP: Support multiple config files with `--mcp-config file1.json file2.json`\n- MCP: Press Esc to cancel OAuth authentication flows\n- Bash: Improved command validation and reduced false security warnings\n- UI: Enhanced spinner animations and status line visual hierarchy\n- Linux: Added support for Alpine and musl-based distributions (requires separate ripgrep installation)\n\n## 1.0.72\n\n- Ask permissions: have Claude Code always ask for confirmation to use specific tools with /permissions\n\n## 1.0.71\n\n- Background commands: (Ctrl-b) to run any Bash command in the background so Claude can keep working (great for dev servers, tailing logs, etc.)\n- Customizable status line: add your terminal prompt to Claude Code with /statusline\n\n## 1.0.70\n\n- Performance: Optimized message rendering for better performance with large contexts\n- Windows: Fixed native file search, ripgrep, and subagent functionality\n- Added support for @-mentions in slash command arguments\n\n## 1.0.69\n\n- Upgraded Opus to version 4.1\n\n## 1.0.68\n\n- Fix incorrect model names being used for certain commands like `/pr-comments`\n- Windows: improve permissions checks for allow / deny tools and project trust. This may create a new project entry in `.claude.json` - manually merge the history field if desired.\n- Windows: improve sub-process spawning to eliminate \"No such file or directory\" when running commands like pnpm\n- Enhanced /doctor command with CLAUDE.md and MCP tool context for self-serve debugging\n- SDK: Added canUseTool callback support for tool confirmation\n- Added `disableAllHooks` setting\n- Improved file suggestions performance in large repos\n\n## 1.0.65\n\n- IDE: Fixed connection stability issues and error handling for diagnostics\n- Windows: Fixed shell environment setup for users without .bashrc files\n\n## 1.0.64\n\n- Agents: Added model customization support - you can now specify which model an agent should use\n- Agents: Fixed unintended access to the recursive agent tool\n- Hooks: Added systemMessage field to hook JSON output for displaying warnings and context\n- SDK: Fixed user input tracking across multi-turn conversations\n- Added hidden files to file search and @-mention suggestions\n\n## 1.0.63\n\n- Windows: Fixed file search, @agent mentions, and custom slash commands functionality\n\n## 1.0.62\n\n- Added @-mention support with typeahead for custom agents. @<your-custom-agent> to invoke it\n- Hooks: Added SessionStart hook for new session initialization\n- /add-dir command now supports typeahead for directory paths\n- Improved network connectivity check reliability\n\n## 1.0.61\n\n- Transcript mode (Ctrl+R): Changed Esc to exit transcript mode rather than interrupt\n- Settings: Added `--settings` flag to load settings from a JSON file\n- Settings: Fixed resolution of settings files paths that are symlinks\n- OTEL: Fixed reporting of wrong organization after authentication changes\n- Slash commands: Fixed permissions checking for allowed-tools with Bash\n- IDE: Added support for pasting images in VSCode MacOS using ⌘+V\n- IDE: Added `CLAUDE_CODE_AUTO_CONNECT_IDE=false` for disabling IDE auto-connection\n- Added `CLAUDE_CODE_SHELL_PREFIX` for wrapping Claude and user-provided shell commands run by Claude Code\n\n## 1.0.60\n\n- You can now create custom subagents for specialized tasks! Run /agents to get started\n\n## 1.0.59\n\n- SDK: Added tool confirmation support with canUseTool callback\n- SDK: Allow specifying env for spawned process\n- Hooks: Exposed PermissionDecision to hooks (including \"ask\")\n- Hooks: UserPromptSubmit now supports additionalContext in advanced JSON output\n- Fixed issue where some Max users that specified Opus would still see fallback to Sonnet\n\n## 1.0.58\n\n- Added support for reading PDFs\n- MCP: Improved server health status display in 'claude mcp list'\n- Hooks: Added CLAUDE_PROJECT_DIR env var for hook commands\n\n## 1.0.57\n\n- Added support for specifying a model in slash commands\n- Improved permission messages to help Claude understand allowed tools\n- Fix: Remove trailing newlines from bash output in terminal wrapping\n\n## 1.0.56\n\n- Windows: Enabled shift+tab for mode switching on versions of Node.js that support terminal VT mode\n- Fixes for WSL IDE detection\n- Fix an issue causing awsRefreshHelper changes to .aws directory not to be picked up\n\n## 1.0.55\n\n- Clarified knowledge cutoff for Opus 4 and Sonnet 4 models\n- Windows: fixed Ctrl+Z crash\n- SDK: Added ability to capture error logging\n- Add --system-prompt-file option to override system prompt in print mode\n\n## 1.0.54\n\n- Hooks: Added UserPromptSubmit hook and the current working directory to hook inputs\n- Custom slash commands: Added argument-hint to frontmatter\n- Windows: OAuth uses port 45454 and properly constructs browser URL\n- Windows: mode switching now uses alt + m, and plan mode renders properly\n- Shell: Switch to in-memory shell snapshot to fix file-related errors\n\n## 1.0.53\n\n- Updated @-mention file truncation from 100 lines to 2000 lines\n- Add helper script settings for AWS token refresh: awsAuthRefresh (for foreground operations like aws sso login) and awsCredentialExport (for background operation with STS-like response).\n\n## 1.0.52\n\n- Added support for MCP server instructions\n\n## 1.0.51\n\n- Added support for native Windows (requires Git for Windows)\n- Added support for Bedrock API keys through environment variable AWS_BEARER_TOKEN_BEDROCK\n- Settings: /doctor can now help you identify and fix invalid setting files\n- `--append-system-prompt` can now be used in interactive mode, not just --print/-p.\n- Increased auto-compact warning threshold from 60% to 80%\n- Fixed an issue with handling user directories with spaces for shell snapshots\n- OTEL resource now includes os.type, os.version, host.arch, and wsl.version (if running on Windows Subsystem for Linux)\n- Custom slash commands: Fixed user-level commands in subdirectories\n- Plan mode: Fixed issue where rejected plan from sub-task would get discarded\n\n## 1.0.48\n\n- Fixed a bug in v1.0.45 where the app would sometimes freeze on launch\n- Added progress messages to Bash tool based on the last 5 lines of command output\n- Added expanding variables support for MCP server configuration\n- Moved shell snapshots from /tmp to ~/.claude for more reliable Bash tool calls\n- Improved IDE extension path handling when Claude Code runs in WSL\n- Hooks: Added a PreCompact hook\n- Vim mode: Added c, f/F, t/T\n\n## 1.0.45\n\n- Redesigned Search (Grep) tool with new tool input parameters and features\n- Disabled IDE diffs for notebook files, fixing \"Timeout waiting after 1000ms\" error\n- Fixed config file corruption issue by enforcing atomic writes\n- Updated prompt input undo to Ctrl+\\_ to avoid breaking existing Ctrl+U behavior, matching zsh's undo shortcut\n- Stop Hooks: Fixed transcript path after /clear and fixed triggering when loop ends with tool call\n- Custom slash commands: Restored namespacing in command names based on subdirectories. For example, .claude/commands/frontend/component.md is now /frontend:component, not /component.\n\n## 1.0.44\n\n- New /export command lets you quickly export a conversation for sharing\n- MCP: resource_link tool results are now supported\n- MCP: tool annotations and tool titles now display in /mcp view\n- Changed Ctrl+Z to suspend Claude Code. Resume by running `fg`. Prompt input undo is now Ctrl+U.\n\n## 1.0.43\n\n- Fixed a bug where the theme selector was saving excessively\n- Hooks: Added EPIPE system error handling\n\n## 1.0.42\n\n- Added tilde (`~`) expansion support to `/add-dir` command\n\n## 1.0.41\n\n- Hooks: Split Stop hook triggering into Stop and SubagentStop\n- Hooks: Enabled optional timeout configuration for each command\n- Hooks: Added \"hook_event_name\" to hook input\n- Fixed a bug where MCP tools would display twice in tool list\n- New tool parameters JSON for Bash tool in `tool_decision` event\n\n## 1.0.40\n\n- Fixed a bug causing API connection errors with UNABLE_TO_GET_ISSUER_CERT_LOCALLY if `NODE_EXTRA_CA_CERTS` was set\n\n## 1.0.39\n\n- New Active Time metric in OpenTelemetry logging\n\n## 1.0.38\n\n- Released hooks. Special thanks to community input in https://github.com/anthropics/claude-code/issues/712. Docs: https://docs.claude.com/en/docs/claude-code/hooks\n\n## 1.0.37\n\n- Remove ability to set `Proxy-Authorization` header via ANTHROPIC_AUTH_TOKEN or apiKeyHelper\n\n## 1.0.36\n\n- Web search now takes today's date into context\n- Fixed a bug where stdio MCP servers were not terminating properly on exit\n\n## 1.0.35\n\n- Added support for MCP OAuth Authorization Server discovery\n\n## 1.0.34\n\n- Fixed a memory leak causing a MaxListenersExceededWarning message to appear\n\n## 1.0.33\n\n- Improved logging functionality with session ID support\n- Added prompt input undo functionality (Ctrl+Z and vim 'u' command)\n- Improvements to plan mode\n\n## 1.0.32\n\n- Updated loopback config for litellm\n- Added forceLoginMethod setting to bypass login selection screen\n\n## 1.0.31\n\n- Fixed a bug where ~/.claude.json would get reset when file contained invalid JSON\n\n## 1.0.30\n\n- Custom slash commands: Run bash output, @-mention files, enable thinking with thinking keywords\n- Improved file path autocomplete with filename matching\n- Added timestamps in Ctrl-r mode and fixed Ctrl-c handling\n- Enhanced jq regex support for complex filters with pipes and select\n\n## 1.0.29\n\n- Improved CJK character support in cursor navigation and rendering\n\n## 1.0.28\n\n- Slash commands: Fix selector display during history navigation\n- Resizes images before upload to prevent API size limit errors\n- Added XDG_CONFIG_HOME support to configuration directory\n- Performance optimizations for memory usage\n- New attributes (terminal.type, language) in OpenTelemetry logging\n\n## 1.0.27\n\n- Streamable HTTP MCP servers are now supported\n- Remote MCP servers (SSE and HTTP) now support OAuth\n- MCP resources can now be @-mentioned\n- /resume slash command to switch conversations within Claude Code\n\n## 1.0.25\n\n- Slash commands: moved \"project\" and \"user\" prefixes to descriptions\n- Slash commands: improved reliability for command discovery\n- Improved support for Ghostty\n- Improved web search reliability\n\n## 1.0.24\n\n- Improved /mcp output\n- Fixed a bug where settings arrays got overwritten instead of merged\n\n## 1.0.23\n\n- Released TypeScript SDK: import @anthropic-ai/claude-code to get started\n- Released Python SDK: pip install claude-code-sdk to get started\n\n## 1.0.22\n\n- SDK: Renamed `total_cost` to `total_cost_usd`\n\n## 1.0.21\n\n- Improved editing of files with tab-based indentation\n- Fix for tool_use without matching tool_result errors\n- Fixed a bug where stdio MCP server processes would linger after quitting Claude Code\n\n## 1.0.18\n\n- Added --add-dir CLI argument for specifying additional working directories\n- Added streaming input support without require -p flag\n- Improved startup performance and session storage performance\n- Added CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR environment variable to freeze working directory for bash commands\n- Added detailed MCP server tools display (/mcp)\n- MCP authentication and permission improvements\n- Added auto-reconnection for MCP SSE connections on disconnect\n- Fixed issue where pasted content was lost when dialogs appeared\n\n## 1.0.17\n\n- We now emit messages from sub-tasks in -p mode (look for the parent_tool_use_id property)\n- Fixed crashes when the VS Code diff tool is invoked multiple times quickly\n- MCP server list UI improvements\n- Update Claude Code process title to display \"claude\" instead of \"node\"\n\n## 1.0.11\n\n- Claude Code can now also be used with a Claude Pro subscription\n- Added /upgrade for smoother switching to Claude Max plans\n- Improved UI for authentication from API keys and Bedrock/Vertex/external auth tokens\n- Improved shell configuration error handling\n- Improved todo list handling during compaction\n\n## 1.0.10\n\n- Added markdown table support\n- Improved streaming performance\n\n## 1.0.8\n\n- Fixed Vertex AI region fallback when using CLOUD_ML_REGION\n- Increased default otel interval from 1s -> 5s\n- Fixed edge cases where MCP_TIMEOUT and MCP_TOOL_TIMEOUT weren't being respected\n- Fixed a regression where search tools unnecessarily asked for permissions\n- Added support for triggering thinking non-English languages\n- Improved compacting UI\n\n## 1.0.7\n\n- Renamed /allowed-tools -> /permissions\n- Migrated allowedTools and ignorePatterns from .claude.json -> settings.json\n- Deprecated claude config commands in favor of editing settings.json\n- Fixed a bug where --dangerously-skip-permissions sometimes didn't work in --print mode\n- Improved error handling for /install-github-app\n- Bugfixes, UI polish, and tool reliability improvements\n\n## 1.0.6\n\n- Improved edit reliability for tab-indented files\n- Respect CLAUDE_CONFIG_DIR everywhere\n- Reduced unnecessary tool permission prompts\n- Added support for symlinks in @file typeahead\n- Bugfixes, UI polish, and tool reliability improvements\n\n## 1.0.4\n\n- Fixed a bug where MCP tool errors weren't being parsed correctly\n\n## 1.0.1\n\n- Added `DISABLE_INTERLEAVED_THINKING` to give users the option to opt out of interleaved thinking.\n- Improved model references to show provider-specific names (Sonnet 3.7 for Bedrock, Sonnet 4 for Console)\n- Updated documentation links and OAuth process descriptions\n\n## 1.0.0\n\n- Claude Code is now generally available\n- Introducing Sonnet 4 and Opus 4 models\n\n## 0.2.125\n\n- Breaking change: Bedrock ARN passed to `ANTHROPIC_MODEL` or `ANTHROPIC_SMALL_FAST_MODEL` should no longer contain an escaped slash (specify `/` instead of `%2F`)\n- Removed `DEBUG=true` in favor of `ANTHROPIC_LOG=debug`, to log all requests\n\n## 0.2.117\n\n- Breaking change: --print JSON output now returns nested message objects, for forwards-compatibility as we introduce new metadata fields\n- Introduced settings.cleanupPeriodDays\n- Introduced CLAUDE_CODE_API_KEY_HELPER_TTL_MS env var\n- Introduced --debug mode\n\n## 0.2.108\n\n- You can now send messages to Claude while it works to steer Claude in real-time\n- Introduced BASH_DEFAULT_TIMEOUT_MS and BASH_MAX_TIMEOUT_MS env vars\n- Fixed a bug where thinking was not working in -p mode\n- Fixed a regression in /cost reporting\n- Deprecated MCP wizard interface in favor of other MCP commands\n- Lots of other bugfixes and improvements\n\n## 0.2.107\n\n- CLAUDE.md files can now import other files. Add @path/to/file.md to ./CLAUDE.md to load additional files on launch\n\n## 0.2.106\n\n- MCP SSE server configs can now specify custom headers\n- Fixed a bug where MCP permission prompt didn't always show correctly\n\n## 0.2.105\n\n- Claude can now search the web\n- Moved system & account status to /status\n- Added word movement keybindings for Vim\n- Improved latency for startup, todo tool, and file edits\n\n## 0.2.102\n\n- Improved thinking triggering reliability\n- Improved @mention reliability for images and folders\n- You can now paste multiple large chunks into one prompt\n\n## 0.2.100\n\n- Fixed a crash caused by a stack overflow error\n- Made db storage optional; missing db support disables --continue and --resume\n\n## 0.2.98\n\n- Fixed an issue where auto-compact was running twice\n\n## 0.2.96\n\n- Claude Code can now also be used with a Claude Max subscription (https://claude.ai/upgrade)\n\n## 0.2.93\n\n- Resume conversations from where you left off from with \"claude --continue\" and \"claude --resume\"\n- Claude now has access to a Todo list that helps it stay on track and be more organized\n\n## 0.2.82\n\n- Added support for --disallowedTools\n- Renamed tools for consistency: LSTool -> LS, View -> Read, etc.\n\n## 0.2.75\n\n- Hit Enter to queue up additional messages while Claude is working\n- Drag in or copy/paste image files directly into the prompt\n- @-mention files to directly add them to context\n- Run one-off MCP servers with `claude --mcp-config <path-to-file>`\n- Improved performance for filename auto-complete\n\n## 0.2.74\n\n- Added support for refreshing dynamically generated API keys (via apiKeyHelper), with a 5 minute TTL\n- Task tool can now perform writes and run bash commands\n\n## 0.2.72\n\n- Updated spinner to indicate tokens loaded and tool usage\n\n## 0.2.70\n\n- Network commands like curl are now available for Claude to use\n- Claude can now run multiple web queries in parallel\n- Pressing ESC once immediately interrupts Claude in Auto-accept mode\n\n## 0.2.69\n\n- Fixed UI glitches with improved Select component behavior\n- Enhanced terminal output display with better text truncation logic\n\n## 0.2.67\n\n- Shared project permission rules can be saved in .claude/settings.json\n\n## 0.2.66\n\n- Print mode (-p) now supports streaming output via --output-format=stream-json\n- Fixed issue where pasting could trigger memory or bash mode unexpectedly\n\n## 0.2.63\n\n- Fixed an issue where MCP tools were loaded twice, which caused tool call errors\n\n## 0.2.61\n\n- Navigate menus with vim-style keys (j/k) or bash/emacs shortcuts (Ctrl+n/p) for faster interaction\n- Enhanced image detection for more reliable clipboard paste functionality\n- Fixed an issue where ESC key could crash the conversation history selector\n\n## 0.2.59\n\n- Copy+paste images directly into your prompt\n- Improved progress indicators for bash and fetch tools\n- Bugfixes for non-interactive mode (-p)\n\n## 0.2.54\n\n- Quickly add to Memory by starting your message with '#'\n- Press ctrl+r to see full output for long tool results\n- Added support for MCP SSE transport\n\n## 0.2.53\n\n- New web fetch tool lets Claude view URLs that you paste in\n- Fixed a bug with JPEG detection\n\n## 0.2.50\n\n- New MCP \"project\" scope now allows you to add MCP servers to .mcp.json files and commit them to your repository\n\n## 0.2.49\n\n- Previous MCP server scopes have been renamed: previous \"project\" scope is now \"local\" and \"global\" scope is now \"user\"\n\n## 0.2.47\n\n- Press Tab to auto-complete file and folder names\n- Press Shift + Tab to toggle auto-accept for file edits\n- Automatic conversation compaction for infinite conversation length (toggle with /config)\n\n## 0.2.44\n\n- Ask Claude to make a plan with thinking mode: just say 'think' or 'think harder' or even 'ultrathink'\n\n## 0.2.41\n\n- MCP server startup timeout can now be configured via MCP_TIMEOUT environment variable\n- MCP server startup no longer blocks the app from starting up\n\n## 0.2.37\n\n- New /release-notes command lets you view release notes at any time\n- `claude config add/remove` commands now accept multiple values separated by commas or spaces\n\n## 0.2.36\n\n- Import MCP servers from Claude Desktop with `claude mcp add-from-claude-desktop`\n- Add MCP servers as JSON strings with `claude mcp add-json <n> <json>`\n\n## 0.2.34\n\n- Vim bindings for text input - enable with /vim or /config\n\n## 0.2.32\n\n- Interactive MCP setup wizard: Run \"claude mcp add\" to add MCP servers with a step-by-step interface\n- Fix for some PersistentShell issues\n\n## 0.2.31\n\n- Custom slash commands: Markdown files in .claude/commands/ directories now appear as custom slash commands to insert prompts into your conversation\n- MCP debug mode: Run with --mcp-debug flag to get more information about MCP server errors\n\n## 0.2.30\n\n- Added ANSI color theme for better terminal compatibility\n- Fixed issue where slash command arguments weren't being sent properly\n- (Mac-only) API keys are now stored in macOS Keychain\n\n## 0.2.26\n\n- New /approved-tools command for managing tool permissions\n- Word-level diff display for improved code readability\n- Fuzzy matching for slash commands\n\n## 0.2.21\n\n- Fuzzy matching for /commands\n",
+  "changelogLastFetched": 1758444653214,
+  "lastReleaseNotesSeen": "1.0.120",
+  "hasIdeOnboardingBeenShown": {
+    "vscode": true
+  },
+  "hasAcknowledgedCostThreshold": true,
+  "oauthAccount": {
+    "accountUuid": "602693b1-53a5-4c8c-b8bd-be43190f7951",
+    "emailAddress": "hui14790@gmail.com",
+    "organizationUuid": "db2d67e2-39b3-43af-9720-93d6fdd40a4f"
+  },
+  "recommendedSubscription": "",
+  "lastPlanModeUse": 1758444667221
+}
