@@ -1,0 +1,2 @@
+## CodeBuddy Added Memories
+- 用户要求：将我的提示词更新到codebuddy的上下文记忆系统当中。这表明用户希望将特定的提示词信息保存到CodeBuddy的记忆系统中，以便后续的CodeBuddy实例能够记住和使用这些提示词。
